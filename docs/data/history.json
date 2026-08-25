@@ -3,7 +3,6 @@
     "angiechack": "angiechack.jpg",
     "b_yanggg": "b_yanggg.jpg",
     "brucedao.str": "brucedao.str.jpg",
-    "bry.trieu": "bry.trieu.jpg",
     "caroline.c.rei": "caroline.c.rei.jpg",
     "ringoyippp": "ringoyippp.jpg",
     "signed.angela": "signed.angela.jpg",
@@ -27,9 +26,8 @@
         "status": "ok"
       },
       "bry.trieu": {
-        "permalink": "https://www.instagram.com/p/DcKW_atmvZc/",
-        "posted": true,
-        "status": "ok"
+        "message": "Asset asset://laser.provider/ig_business_category_subvertical has been deleted. You cannot use this schema; HTML fallback failed: could not find numeric user id on profile page",
+        "status": "error"
       },
       "caroline.c.rei": {
         "permalink": "https://www.instagram.com/p/DcKsnksld5P/",
@@ -65,9 +63,8 @@
         "status": "ok"
       },
       "bry.trieu": {
-        "permalink": "https://www.instagram.com/p/DcNecDpsmoZ/",
-        "posted": true,
-        "status": "ok"
+        "message": "Asset asset://laser.provider/ig_business_category_subvertical has been deleted. You cannot use this schema; HTML fallback failed: could not find numeric user id on profile page",
+        "status": "error"
       },
       "caroline.c.rei": {
         "permalink": "https://www.instagram.com/p/DcNHStkxyQZ/",
@@ -106,9 +103,8 @@
         "status": "ok"
       },
       "bry.trieu": {
-        "permalink": "https://www.instagram.com/p/DcQA2S2Qc9R/",
-        "posted": true,
-        "status": "ok"
+        "message": "Asset asset://laser.provider/ig_business_category_subvertical has been deleted. You cannot use this schema; HTML fallback failed: could not find numeric user id on profile page",
+        "status": "error"
       },
       "caroline.c.rei": {
         "permalink": "https://www.instagram.com/p/DcQI56RRtyu/",
@@ -145,9 +141,8 @@
         "status": "ok"
       },
       "bry.trieu": {
-        "permalink": "https://www.instagram.com/p/DcSW4OCt5RT/",
-        "posted": true,
-        "status": "ok"
+        "message": "Asset asset://laser.provider/ig_business_category_subvertical has been deleted. You cannot use this schema; HTML fallback failed: could not find numeric user id on profile page",
+        "status": "error"
       },
       "caroline.c.rei": {
         "posted": false,
@@ -183,9 +178,8 @@
         "status": "ok"
       },
       "bry.trieu": {
-        "permalink": "https://www.instagram.com/p/DcVI3YashXy/",
-        "posted": true,
-        "status": "ok"
+        "message": "Asset asset://laser.provider/ig_business_category_subvertical has been deleted. You cannot use this schema; HTML fallback failed: could not find numeric user id on profile page",
+        "status": "error"
       },
       "caroline.c.rei": {
         "permalink": "https://www.instagram.com/p/DcVC-J-lbgX/",
@@ -221,9 +215,8 @@
         "status": "ok"
       },
       "bry.trieu": {
-        "permalink": "https://www.instagram.com/p/DcWpja0P2rm/",
-        "posted": true,
-        "status": "ok"
+        "message": "Asset asset://laser.provider/ig_business_category_subvertical has been deleted. You cannot use this schema; HTML fallback failed: could not find numeric user id on profile page",
+        "status": "error"
       },
       "caroline.c.rei": {
         "posted": false,
@@ -259,9 +252,8 @@
         "status": "ok"
       },
       "bry.trieu": {
-        "permalink": "https://www.instagram.com/p/DcZ1AQpJKwA/",
-        "posted": true,
-        "status": "ok"
+        "message": "Asset asset://laser.provider/ig_business_category_subvertical has been deleted. You cannot use this schema; HTML fallback failed: could not find numeric user id on profile page",
+        "status": "error"
       },
       "caroline.c.rei": {
         "posted": false,
@@ -281,13 +273,109 @@
         "status": "ok"
       }
     },
-    "2026-08-24": {},
-    "2026-08-25": {},
-    "2026-08-26": {},
-    "2026-08-27": {},
-    "2026-08-28": {},
-    "2026-08-29": {},
-    "2026-08-30": {}
+    "2026-08-24": {
+      "angiechack": {
+        "posted": false,
+        "status": "ok"
+      },
+      "b_yanggg": {
+        "permalink": "https://www.instagram.com/p/Dcca3oeMp8J/",
+        "posted": true,
+        "status": "ok"
+      },
+      "brucedao.str": {
+        "permalink": "https://www.instagram.com/p/DcbqxVPpLXA/",
+        "posted": true,
+        "status": "ok"
+      },
+      "bry.trieu": {
+        "message": "Asset asset://laser.provider/ig_business_category_subvertical has been deleted. You cannot use this schema; HTML fallback failed: could not find numeric user id on profile page",
+        "status": "error"
+      },
+      "caroline.c.rei": {
+        "permalink": "https://www.instagram.com/p/DccnoeORbNq/",
+        "posted": true,
+        "status": "ok"
+      },
+      "ringoyippp": {
+        "permalink": "https://www.instagram.com/p/DcbqxVPpLXA/",
+        "posted": true,
+        "status": "ok"
+      },
+      "signed.angela": {
+        "permalink": "https://www.instagram.com/p/DccflmCN2_v/",
+        "posted": true,
+        "status": "ok"
+      },
+      "torch_boy": {
+        "posted": false,
+        "status": "ok"
+      }
+    },
+    "2026-08-25": {
+      "angiechack": {
+        "posted": false,
+        "status": "ok"
+      },
+      "b_yanggg": {
+        "posted": false,
+        "status": "ok"
+      },
+      "brucedao.str": {
+        "posted": false,
+        "status": "ok"
+      },
+      "bry.trieu": {
+        "message": "Asset asset://laser.provider/ig_business_category_subvertical has been deleted. You cannot use this schema; HTML fallback failed: could not find numeric user id on profile page",
+        "status": "error"
+      },
+      "caroline.c.rei": {
+        "posted": false,
+        "status": "ok"
+      },
+      "ringoyippp": {
+        "posted": false,
+        "status": "ok"
+      },
+      "signed.angela": {
+        "posted": false,
+        "status": "ok"
+      },
+      "torch_boy": {
+        "posted": false,
+        "status": "ok"
+      }
+    },
+    "2026-08-26": {
+      "bry.trieu": {
+        "message": "Asset asset://laser.provider/ig_business_category_subvertical has been deleted. You cannot use this schema; HTML fallback failed: could not find numeric user id on profile page",
+        "status": "error"
+      }
+    },
+    "2026-08-27": {
+      "bry.trieu": {
+        "message": "Asset asset://laser.provider/ig_business_category_subvertical has been deleted. You cannot use this schema; HTML fallback failed: could not find numeric user id on profile page",
+        "status": "error"
+      }
+    },
+    "2026-08-28": {
+      "bry.trieu": {
+        "message": "Asset asset://laser.provider/ig_business_category_subvertical has been deleted. You cannot use this schema; HTML fallback failed: could not find numeric user id on profile page",
+        "status": "error"
+      }
+    },
+    "2026-08-29": {
+      "bry.trieu": {
+        "message": "Asset asset://laser.provider/ig_business_category_subvertical has been deleted. You cannot use this schema; HTML fallback failed: could not find numeric user id on profile page",
+        "status": "error"
+      }
+    },
+    "2026-08-30": {
+      "bry.trieu": {
+        "message": "Asset asset://laser.provider/ig_business_category_subvertical has been deleted. You cannot use this schema; HTML fallback failed: could not find numeric user id on profile page",
+        "status": "error"
+      }
+    }
   },
   "handles": [
     "torch_boy",
@@ -299,5 +387,5 @@
     "b_yanggg",
     "ringoyippp"
   ],
-  "updated_at": "2026-08-24T17:55:03.619625-07:00"
+  "updated_at": "2026-08-25T09:53:02.571112-07:00"
 }
