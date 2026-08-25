@@ -58,6 +58,7 @@ def test_fill_gaps_with_error_never_overwrites_a_good_row(conn):
 
     db.fill_gaps_with_error(
         conn, "torch_boy", [date(2026, 8, 17), date(2026, 8, 18)], "rate limited", "bad-run",
+        today=date(2026, 8, 20),
     )
 
     rows = {
@@ -78,8 +79,8 @@ def test_fill_gaps_with_error_never_overwrites_a_good_row(conn):
 def test_fill_gaps_with_error_does_not_overwrite_an_earlier_error_either(conn):
     """DO NOTHING means exactly that - even error-to-error, the first
     message wins rather than being silently replaced."""
-    db.fill_gaps_with_error(conn, "torch_boy", [date(2026, 8, 17)], "first error", "run-1")
-    db.fill_gaps_with_error(conn, "torch_boy", [date(2026, 8, 17)], "second error", "run-2")
+    db.fill_gaps_with_error(conn, "torch_boy", [date(2026, 8, 17)], "first error", "run-1", today=date(2026, 8, 20))
+    db.fill_gaps_with_error(conn, "torch_boy", [date(2026, 8, 17)], "second error", "run-2", today=date(2026, 8, 20))
 
     row = conn.execute(
         "SELECT message, checked_at FROM checks WHERE handle = ? AND check_date = ?",
@@ -88,9 +89,52 @@ def test_fill_gaps_with_error_does_not_overwrite_an_earlier_error_either(conn):
     assert row == ("first error", "run-1")
 
 
+def test_fill_gaps_with_error_never_marks_today_or_later_as_errored(conn):
+    """The real production bug: a handle whose resolve fails for a
+    WINDOW_START_DATE window reaching up to the present day must not get
+    today (still in progress) or future days marked as a permanent
+    "error" - only fully-elapsed past days are fair game."""
+    window = [date(2026, 8, 22), date(2026, 8, 23), date(2026, 8, 24), date(2026, 8, 25), date(2026, 8, 26)]
+    today = date(2026, 8, 24)
+
+    db.fill_gaps_with_error(conn, "bry.trieu", window, "resolve failed", "t", today=today)
+
+    rows = {
+        r[0]: r[1]
+        for r in conn.execute(
+            "SELECT check_date, status FROM checks WHERE handle = ?", ("bry.trieu",)
+        )
+    }
+    assert set(rows) == {"2026-08-22", "2026-08-23"}, "only fully-elapsed past days should be filled"
+    assert "2026-08-24" not in rows, "today is still in progress"
+    assert "2026-08-25" not in rows and "2026-08-26" not in rows, "these haven't happened yet"
+
+
+def test_purge_future_dates_removes_today_and_later_regardless_of_status(conn):
+    db.upsert_ok(conn, "a", {"2026-08-24": {"status": "ok", "posted": False}}, "t")
+    db.upsert_ok(conn, "a", {"2026-08-25": {"status": "ok", "posted": True, "permalink": "https://x/"}}, "t")
+    db.fill_gaps_with_error(conn, "a", [date(2026, 8, 20)], "boom", "t", today=date(2026, 8, 24))
+
+    deleted = db.purge_future_dates(conn, today=date(2026, 8, 24))
+
+    assert deleted == 2  # the 08-24 and 08-25 rows, not the 08-20 error row
+    remaining = {r[0] for r in conn.execute("SELECT check_date FROM checks WHERE handle = ?", ("a",))}
+    assert remaining == {"2026-08-20"}
+
+
+def test_purge_future_dates_is_idempotent(conn):
+    db.upsert_ok(conn, "a", {"2026-08-20": {"status": "ok", "posted": True}}, "t")
+
+    first = db.purge_future_dates(conn, today=date(2026, 8, 24))
+    second = db.purge_future_dates(conn, today=date(2026, 8, 24))
+
+    assert first == 0  # 08-20 is before today, nothing to purge
+    assert second == 0
+
+
 def test_export_window_shape_distinguishes_ok_error_and_no_data(conn):
     db.upsert_ok(conn, "a", {"2026-08-17": {"status": "ok", "posted": True, "permalink": "https://p/"}}, "t")
-    db.fill_gaps_with_error(conn, "a", [date(2026, 8, 18)], "boom", "t")
+    db.fill_gaps_with_error(conn, "a", [date(2026, 8, 18)], "boom", "t", today=date(2026, 8, 20))
     window = [date(2026, 8, 17), date(2026, 8, 18), date(2026, 8, 19)]
 
     snapshot = db.export_window(conn, ["a"], window)

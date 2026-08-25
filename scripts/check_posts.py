@@ -240,9 +240,9 @@ def resolve_window(tz: ZoneInfo) -> list[date]:
     fixed start, e.g. for setting up a clean HISTORY_DAYS-day reference
     window from a specific date even if some of it is already in the past
     - the days before "today" just won't have a check run for them, and
-    days after "today" haven't happened yet. Either way, check_handle
-    never writes results for a date past "today" - see its own `today`
-    guard.
+    today itself plus anything after it hasn't fully happened yet. Either
+    way, check_handle never writes results for today or a later date -
+    see bucket_media_by_day's own `today` guard.
     """
     start_override = os.environ.get("WINDOW_START_DATE")
     if start_override:
@@ -515,10 +515,16 @@ def bucket_media_by_day(
     that point (true for web_profile_info's embedded list and for
     feed/user pagination, per their own docstrings).
 
-    A date after `today` never gets an entry either way - it hasn't
-    happened yet, so there's nothing to assert about it in either
-    direction. Pass `today` explicitly (rather than computing it here)
-    so this function stays a pure, deterministic unit to test.
+    `today` itself never gets an entry either, same as a date after it -
+    it's still in progress, and a snapshot taken partway through the day
+    would read as a false "didn't post" for anyone who simply hasn't
+    posted *yet*. The tracker only ever asserted "yesterday" in its
+    original rolling-window design for exactly this reason; a
+    WINDOW_START_DATE window that reaches up to the present day inherits
+    the same rule rather than a special case. Only a fully-elapsed day
+    (strictly before `today`) is safe to call "didn't post." Pass `today`
+    explicitly (rather than computing it here) so this function stays a
+    pure, deterministic unit to test.
     """
     media = media or []
     full_history_reached = feed_exhausted or (total_post_count is not None and total_post_count <= len(media))
@@ -544,8 +550,8 @@ def bucket_media_by_day(
 
     results = {}
     for d in window:
-        if d > today:
-            continue  # hasn't happened yet - nothing to assert either way
+        if d >= today:
+            continue  # today's not over yet, and later dates haven't happened at all - nothing to assert
         if coverage_start is None or d < coverage_start:
             continue
         if d in permalink_by_date:
@@ -650,6 +656,11 @@ def main() -> None:
 
     conn = db.connect(DB_FILE)
 
+    today = datetime.now(tz).date()
+    purged = db.purge_future_dates(conn, today)
+    if purged:
+        print(f"purged {purged} stale row(s) for today or later ({today.isoformat()})", file=sys.stderr)
+
     persisted_state = db.load_session_cookies(conn)
     if persisted_state:
         print("loaded persisted browser state from a prior run")
@@ -688,7 +699,7 @@ def main() -> None:
                 db.fill_gaps_with_error(
                     conn, handle, window,
                     "skipped: stopped early after repeated blocking from Instagram this run",
-                    checked_at,
+                    checked_at, today,
                 )
                 i += 1
                 continue
@@ -714,7 +725,7 @@ def main() -> None:
                 stopped_early = True
 
             if error:
-                db.fill_gaps_with_error(conn, handle, window, error, checked_at)
+                db.fill_gaps_with_error(conn, handle, window, error, checked_at, today)
                 print(f"  [{display_i}/{len(handles)}] {handle}: error - {error}")
             else:
                 posted_count = sum(1 for r in results_by_date.values() if r.get("posted"))

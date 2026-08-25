@@ -97,17 +97,35 @@ def test_total_post_count_exceeding_fetched_count_only_covers_from_oldest_post()
     assert set(results) == {"2026-08-15", "2026-08-16"}
 
 
-def test_future_dates_never_get_an_entry_even_under_full_coverage():
-    """For a WINDOW_START_DATE reference window that extends past today,
-    days that haven't happened yet must stay unasserted - not False."""
+def test_today_and_future_dates_never_get_an_entry_even_under_full_coverage():
+    """For a WINDOW_START_DATE reference window that reaches up to the
+    present day, today itself and every day after it must stay
+    unasserted - not False. This is the real bug hit in production: a
+    run at 9am checked "did they post today," found nothing *yet* (the
+    day wasn't over), and wrote a false "didn't post" for a day that was
+    still in progress."""
     window = _window(date(2026, 8, 17), 14)  # Aug 17..30
     today = date(2026, 8, 24)
 
     results = bucket_media_by_day([], window, UTC, today=today, total_post_count=0)
 
-    assert set(results) == {d.isoformat() for d in _window(date(2026, 8, 17), 8)}  # Aug 17..24 inclusive
-    for d in _window(date(2026, 8, 25), 6):  # Aug 25..30
+    assert set(results) == {d.isoformat() for d in _window(date(2026, 8, 17), 7)}  # Aug 17..23 - today excluded
+    for d in _window(date(2026, 8, 24), 7):  # Aug 24 (today)..30
         assert d.isoformat() not in results
+
+
+def test_today_itself_is_never_asserted_even_when_it_actually_posted():
+    """A post that landed earlier today must not retroactively make today
+    a "confirmed posted" day either - today isn't final until it's over,
+    so it stays unasserted regardless of which way the evidence points."""
+    window = _window(date(2026, 8, 20), 5)  # Aug 20..24
+    today = date(2026, 8, 24)
+    media = [_post(date(2026, 8, 24))]  # posted earlier today
+
+    results = bucket_media_by_day(media, window, UTC, today=today, feed_exhausted=True)
+
+    assert "2026-08-24" not in results
+    assert set(results) == {"2026-08-20", "2026-08-21", "2026-08-22", "2026-08-23"}
 
 
 def test_post_before_window_extends_coverage_without_appearing_in_results():

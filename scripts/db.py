@@ -234,9 +234,24 @@ def upsert_ok(conn: sqlite3.Connection, handle: str, results_by_date: dict, chec
     conn.commit()
 
 
-def fill_gaps_with_error(conn: sqlite3.Connection, handle: str, window: list[date], message: str, checked_at: str) -> None:
-    """Only fills dates with no existing row - never overwrites previously-good data."""
-    rows = [(handle, d.isoformat(), "error", None, None, message, checked_at) for d in window]
+def fill_gaps_with_error(
+    conn: sqlite3.Connection, handle: str, window: list[date], message: str, checked_at: str, today: date,
+) -> None:
+    """Only fills dates with no existing row - never overwrites previously-good data.
+
+    `today` and anything after it are skipped entirely - a failed run has
+    no more business asserting anything about today (still in progress)
+    or a later date (hasn't happened) than a successful one does (see
+    bucket_media_by_day in check_posts.py for the success-path equivalent
+    of this rule). Concretely: an account whose id resolution fails for a
+    WINDOW_START_DATE window that reaches up to the present day must not
+    get today and every remaining future day marked as a permanent
+    "error" - this was a real bug (see purge_future_dates for the
+    matching cleanup of rows it already wrote before the fix).
+    """
+    rows = [(handle, d.isoformat(), "error", None, None, message, checked_at) for d in window if d < today]
+    if not rows:
+        return
     conn.executemany(
         """
         INSERT INTO checks (handle, check_date, status, posted, permalink, message, checked_at)
@@ -246,6 +261,20 @@ def fill_gaps_with_error(conn: sqlite3.Connection, handle: str, window: list[dat
         rows,
     )
     conn.commit()
+
+
+def purge_future_dates(conn: sqlite3.Connection, today: date) -> int:
+    """Deletes any `checks` row for `today` or later, regardless of handle
+    or status - a defensive, idempotent cleanup for rows written by the
+    fill_gaps_with_error/bucket_media_by_day future-date bug (see
+    fill_gaps_with_error's docstring) before this fix landed. No row
+    should ever exist for today (still in progress) or a later date; this
+    makes that true again if it's ever violated, instead of requiring
+    manual DB surgery. Returns the number of rows deleted (0 in the
+    common case, once the initial corrupted rows are cleared)."""
+    cursor = conn.execute("DELETE FROM checks WHERE check_date >= ?", (today.isoformat(),))
+    conn.commit()
+    return cursor.rowcount
 
 
 def export_window(conn: sqlite3.Connection, handles: list[str], window: list[date]) -> dict:
