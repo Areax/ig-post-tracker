@@ -1,0 +1,33 @@
+name: Tests
+
+on:
+  push:
+    branches: ["**"]
+  pull_request: {}
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Python test dependencies
+        # check_posts.py imports playwright.sync_api at module level, so
+        # the package itself is needed to even import it for testing -
+        # but not the browser binaries (playwright install), since these
+        # tests mock every Playwright call and never launch a real browser.
+        run: pip install -r scripts/requirements-dev.txt
+
+      - name: Run Python tests
+        run: python3 -m pytest scripts/tests/ -v
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Run frontend tests
+        run: node --test scripts/tests/*.mjs

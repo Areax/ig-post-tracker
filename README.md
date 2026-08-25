@@ -264,7 +264,45 @@ if you'd rather it wait through cooldowns instead (up to
   `check_posts.py` is the file to look at first — the fix is usually a
   matching update in [instaloader](https://github.com/instaloader/instaloader)
   you can mirror here.
-- Resolving a handle now costs a fixed 3 requests (id lookup + 2 feed
-  pages), plus 1 more on its first-ever run for the avatar fetch, instead
-  of the earlier single request - more accurate, but correspondingly
-  slower. See "Scaling to ~100 handles" below.
+- A routine daily check costs 1 request per handle (`web_profile_info`
+  only), plus 1 more on its first-ever run for the avatar fetch. A deep
+  backfill (`MAX_FEED_PAGES > 1`) costs 1 + up to `MAX_FEED_PAGES - 1`
+  more for `feed/user` pagination. See "Scaling to ~100 handles" below.
+
+## Testing
+
+```bash
+pip install -r scripts/requirements-dev.txt
+python3 -m pytest scripts/tests/ -v
+
+node --test scripts/tests/*.mjs
+```
+
+Runs on every push via `.github/workflows/tests.yml`. Everything here is
+fast and network-free - Playwright/Instagram calls are mocked throughout,
+so there's nothing here that can trigger a 401 or need a real browser.
+
+What's covered, roughly in order of how much it matters if it breaks:
+
+- `bucket_media_by_day` (`scripts/check_posts.py`) - the coverage rule
+  that decides which dates a run actually has evidence for. Two real
+  production incidents were both this exact bug (a routine run silently
+  overwriting a previously-confirmed "posted" day with a false "didn't
+  post"), so this file exists specifically to keep that fixed.
+- `docs/cell-status.js` - the frontend counterpart: a day with no data at
+  all must render as "pending," never as a false "missed." Shared between
+  the live page and its Node tests so there's exactly one implementation
+  to keep correct, not two that can drift apart.
+- `scripts/db.py` - the self-healing DB contract (`upsert_ok` is
+  authoritative for the dates it covers; `fill_gaps_with_error` never
+  overwrites a good row) plus the read/write correctness of every table.
+- `resolve_window`, `fetch_media_paginated`'s pagination/exhaustion
+  logic, `load_handles`'s CSV parsing, and `check_handle`'s wiring
+  (error short-circuiting, the `MAX_FEED_PAGES` gate on `feed/user`,
+  non-fatal pagination failures).
+
+Not covered, deliberately: the actual network calls (`fetch_in_page`,
+`resolve_identity`'s real HTTP/browser behavior) and anything Playwright-
+specific. Those were validated empirically against real Instagram traffic
+instead (see "Why a real browser" above) - mocking a real anti-bot
+endpoint's behavior in a unit test would just be testing the mock.

@@ -194,6 +194,7 @@
   </div>
   <div class="error-popover" id="error-popover"></div>
 
+  <script src="./cell-status.js"></script>
   <script>
     const DATA_URL = "./data/history.json";
     const CHECK_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
@@ -211,16 +212,7 @@
 
     function renderStats(handles, days, dates) {
       const container = document.getElementById("stats");
-      let totalPosted = 0, totalChecked = 0, errorCount = 0;
-      for (const h of handles) {
-        for (const d of dates) {
-          const r = (days[d] || {})[h];
-          if (!r) continue;
-          if (r.status === "error") errorCount++;
-          else { totalChecked++; if (r.posted) totalPosted++; }
-        }
-      }
-      const rate = totalChecked ? Math.round((totalPosted / totalChecked) * 100) : 0;
+      const { rate, errorCount } = CellStatus.computeOverallStats(handles, days, dates);
       const tiles = [
         { value: handles.length, label: handles.length === 1 ? "Handle tracked" : "Handles tracked" },
         { value: `${dates.length}d`, label: "Window" },
@@ -277,11 +269,7 @@
       for (const handle of handles) {
         const row = document.createElement("tr");
 
-        let postedCount = 0, checkedCount = 0;
-        for (const d of dates) {
-          const r = (days[d] || {})[handle];
-          if (r && r.status !== "error") { checkedCount++; if (r.posted) postedCount++; }
-        }
+        const { postedCount, checkedCount } = CellStatus.computeHandleStats(days, dates, handle);
 
         const avatarFile = avatars[handle];
         const initial = handle.charAt(0);
@@ -304,13 +292,14 @@
           const td = document.createElement("td");
           td.className = "day-col";
 
-          if (!result) {
+          const status = CellStatus.classifyCell(result);
+          if (status.cls === "pending") {
             td.innerHTML = `<span class="cell pending" title="No data yet for ${d}">${PENDING_ICON}</span>`;
-          } else if (result.status === "error") {
-            const msg = (result.message || "unknown error").replace(/"/g, "&quot;");
+          } else if (status.cls === "error") {
+            const msg = status.message.replace(/"/g, "&quot;");
             td.innerHTML = `<button type="button" class="cell error" data-msg="${msg}">${WARN_ICON}</button>`;
-          } else if (result.posted) {
-            const href = result.permalink || `https://instagram.com/${handle}`;
+          } else if (status.cls === "posted") {
+            const href = status.permalink || `https://instagram.com/${handle}`;
             td.innerHTML = `<a class="cell posted" href="${href}" target="_blank" rel="noopener" title="Posted ${d}">${CHECK_ICON}</a>`;
           } else {
             td.innerHTML = `<span class="cell missed" title="No post on ${d}">${X_ICON}</span>`;

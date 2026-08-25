@@ -481,19 +481,89 @@ def fetch_media_paginated(
     return all_media, profile_pic_url, None, False, exhausted
 
 
+def bucket_media_by_day(
+    media: list[dict],
+    window: list[date],
+    tz: ZoneInfo,
+    today: date,
+    total_post_count: int | None = None,
+    feed_exhausted: bool = False,
+) -> dict[str, dict]:
+    """Buckets fetched posts into a per-day results dict, writing an entry
+    only for dates within actual fetch coverage.
+
+    This is the core data-integrity rule for the whole tracker: a date
+    with no matching post is only "didn't post" if we know our fetch
+    actually reached that far back. Otherwise it's just unknown, and gets
+    no entry at all - the caller (check_handle -> db.upsert_ok) then
+    leaves whatever was already stored for that date untouched, rather
+    than overwriting a previously-confirmed "posted" day with a false
+    "didn't post" just because this run's fetch didn't reach back that
+    far. This exact failure mode hit production once already (see
+    check_posts.py's module docstring / README's "How it works").
+
+    Coverage is "full" (every window day gets an entry, oldest to newest)
+    when either:
+      - `feed_exhausted` is True - Instagram itself gave a real "no more
+        data" signal during feed/user pagination (see
+        fetch_media_paginated's own `exhausted`), or
+      - `total_post_count` (the account's all-time post count, from
+        web_profile_info) is <= len(media) - the fetched list already IS
+        the account's entire history, regardless of pagination.
+    Otherwise coverage only extends back to the oldest fetched post's
+    date - `media` is assumed to be a contiguous, no-gaps list back to
+    that point (true for web_profile_info's embedded list and for
+    feed/user pagination, per their own docstrings).
+
+    A date after `today` never gets an entry either way - it hasn't
+    happened yet, so there's nothing to assert about it in either
+    direction. Pass `today` explicitly (rather than computing it here)
+    so this function stays a pure, deterministic unit to test.
+    """
+    media = media or []
+    full_history_reached = feed_exhausted or (total_post_count is not None and total_post_count <= len(media))
+
+    window_set = set(window)
+    permalink_by_date: dict[date, str | None] = {}
+    dates_with_data: list[date] = []
+    for node in media:
+        ts = node.get("taken_at")
+        if ts is None:
+            continue
+        posted_date = datetime.fromtimestamp(ts, tz=tz).date()
+        dates_with_data.append(posted_date)
+        if posted_date in window_set and posted_date not in permalink_by_date:
+            permalink_by_date[posted_date] = node.get("permalink")
+
+    if full_history_reached:
+        coverage_start = window[0] if window else None
+    elif dates_with_data:
+        coverage_start = min(dates_with_data)
+    else:
+        coverage_start = None  # no usable evidence at all - don't touch any existing rows
+
+    results = {}
+    for d in window:
+        if d > today:
+            continue  # hasn't happened yet - nothing to assert either way
+        if coverage_start is None or d < coverage_start:
+            continue
+        if d in permalink_by_date:
+            results[d.isoformat()] = {"status": "ok", "posted": True, "permalink": permalink_by_date[d]}
+        else:
+            results[d.isoformat()] = {"status": "ok", "posted": False}
+    return results
+
+
 def check_handle(
     handle: str, window: list[date], tz: ZoneInfo, page: Page, conn: sqlite3.Connection
 ) -> tuple[dict[str, dict] | None, str | None, bool, str | None]:
     """Returns (results_by_iso_date, error_message, was_blocked, profile_pic_url).
 
     On success, only dates we actually have evidence for get an entry
-    (posted True/False) - see the coverage note below. Dates outside that
-    coverage are simply omitted from the returned dict, which means
-    db.upsert_ok leaves whatever was already stored for them untouched,
-    rather than overwriting a previously-confirmed "posted" day with a
-    false "didn't post" just because this run's fetch didn't reach back
-    that far. On failure, returns (None, error_message, was_blocked, None)
-    and the caller decides how to handle gaps.
+    (posted True/False) - see bucket_media_by_day for the coverage rule.
+    On failure, returns (None, error_message, was_blocked, None) and the
+    caller decides how to handle gaps.
     """
     # Always resolve via web_profile_info - the endpoint confirmed
     # reliable through a real browser - rather than skipping it when the
@@ -508,14 +578,7 @@ def check_handle(
     db.save_user_id(conn, handle, user_id, datetime.now(tz).isoformat())
 
     media = media or []
-    # True only once we have a real "no more data past this point" signal
-    # from Instagram - see fetch_media_paginated's `exhausted`. Until then,
-    # a date with no matching post is "unknown", not "didn't post": the
-    # ~12-post embedded list (or a budget-limited feed/user pagination)
-    # simply might not reach that far back. The one exception: if the
-    # account's own all-time post count is <= what we already fetched, the
-    # embedded list already IS the whole history, regardless of pagination.
-    full_history_reached = total_post_count is not None and total_post_count <= len(media)
+    feed_exhausted = False
 
     # Only paginate feed/user when explicitly asked for deeper coverage
     # than the ~12 embedded posts already give us (backfills). Daily
@@ -531,9 +594,9 @@ def check_handle(
             # embedded posts from web_profile_info above, which is real,
             # usable data even if the deeper backfill couldn't complete.
             print(f"    feed/user pagination failed (keeping embedded posts): {feed_error}", file=sys.stderr)
+            feed_exhausted = False
         else:
             media = media + (extra_media or [])
-            full_history_reached = full_history_reached or feed_exhausted
             if profile_pic_url is None:
                 profile_pic_url = feed_profile_pic_url
 
@@ -548,36 +611,8 @@ def check_handle(
     if media:
         db.save_posts(conn, handle, media, datetime.now(tz).isoformat())
 
-    window_set = set(window)
-    permalink_by_date: dict[date, str | None] = {}
-    dates_with_data: list[date] = []
-    for node in media:
-        ts = node.get("taken_at")
-        if ts is None:
-            continue
-        posted_date = datetime.fromtimestamp(ts, tz=tz).date()
-        dates_with_data.append(posted_date)
-        if posted_date in window_set and posted_date not in permalink_by_date:
-            permalink_by_date[posted_date] = node.get("permalink")
-
-    if full_history_reached:
-        coverage_start = window[0]
-    elif dates_with_data:
-        coverage_start = min(dates_with_data)
-    else:
-        coverage_start = None  # no usable evidence at all - don't touch any existing rows
-
     today = datetime.now(tz).date()
-    results = {}
-    for d in window:
-        if d > today:
-            continue  # hasn't happened yet - nothing to assert either way
-        if coverage_start is None or d < coverage_start:
-            continue
-        if d in permalink_by_date:
-            results[d.isoformat()] = {"status": "ok", "posted": True, "permalink": permalink_by_date[d]}
-        else:
-            results[d.isoformat()] = {"status": "ok", "posted": False}
+    results = bucket_media_by_day(media, window, tz, today, total_post_count, feed_exhausted)
     return results, None, was_blocked, profile_pic_url
 
 
