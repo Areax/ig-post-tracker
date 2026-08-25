@@ -197,6 +197,7 @@ USER_ID_PATTERN = re.compile(r'"profilePage_(\d+)"')
 # Pacific time no matter what TRACKER_TIMEZONE says.
 ACCESSIBILITY_CAPTION_TZ = ZoneInfo("America/Los_Angeles")
 ACCESSIBILITY_DATE_PATTERN = re.compile(r"on ([A-Za-z]+ \d{1,2}, \d{4})\.")
+POST_CODE_PATTERN = re.compile(r"/(?:p|reel)/([^/?]+)")
 FEED_ITEM_COUNT = 30
 MAX_FEED_PAGES = int(os.environ.get("MAX_FEED_PAGES", "2"))
 HEADLESS = os.environ.get("HEADLESS", "1") != "0"
@@ -378,6 +379,86 @@ def _find_key(obj, key: str):
     return None
 
 
+def extract_grid_timeline(
+    page: Page, max_attempts: int = 4, retry_interval_ms: int = 1500
+) -> tuple[str | None, list[dict]]:
+    """Recovers (user_id, media) from the *visible* rendered page - the
+    same content a human looking at the profile actually sees - rather
+    than from an internal data blob. Two independent pieces, both reused
+    from the already-loaded page (see goto_profile), no extra request:
+
+      - The numeric user id via USER_ID_PATTERN, searched against the
+        page's own full HTML (page.content()) instead of a separate
+        crawler-UA HTTP request - see resolve_identity's final fallback
+        tier, which makes that separate request and can fail on its own
+        for reasons unrelated to this one (confirmed: it failed
+        independently of this method in production for the same account).
+      - Post dates from each grid thumbnail's own <img alt="..."> text -
+        the same "... on August 14, 2026." pattern as
+        extract_embedded_timeline's accessibility_caption (same
+        Pacific-time caveat applies, see ACCESSIBILITY_CAPTION_TZ), just
+        read off the actual rendered `<img>` tag instead of a nested
+        Relay JSON payload. Deliberately simpler and structurally
+        different from extract_embedded_timeline - the point of having
+        both is that a rendering quirk that empties out one data path
+        doesn't necessarily empty out the other.
+
+    Retries like extract_embedded_timeline, for the same reason: no
+    guarantee the grid has finished rendering the instant goto_profile's
+    settle wait ends.
+    """
+    for attempt in range(1, max_attempts + 1):
+        try:
+            html = page.content()
+            items = page.eval_on_selector_all(
+                "a[href*='/p/'], a[href*='/reel/']",
+                "els => els.map(e => ({href: e.getAttribute('href'), "
+                "alt: (e.querySelector('img') || {}).alt || ''}))",
+            )
+        except PlaywrightError as exc:
+            print(f"    grid-timeline fallback: page read failed: {exc}", file=sys.stderr)
+            return None, []
+
+        id_match = USER_ID_PATTERN.search(html)
+        user_id = id_match.group(1) if id_match else None
+
+        media = []
+        for item in items:
+            code_match = POST_CODE_PATTERN.search(item.get("href") or "")
+            if not code_match:
+                continue
+            date_match = ACCESSIBILITY_DATE_PATTERN.search(item.get("alt") or "")
+            if not date_match:
+                continue
+            try:
+                post_date = datetime.strptime(date_match.group(1), "%B %d, %Y").date()
+            except ValueError:
+                continue
+            taken_at = int(
+                datetime(post_date.year, post_date.month, post_date.day, 12, tzinfo=ACCESSIBILITY_CAPTION_TZ)
+                .timestamp()
+            )
+            media.append({
+                "taken_at": taken_at,
+                "code": code_match.group(1),
+                "media_type": None,
+                "product_type": None,
+            })
+
+        if user_id or media:
+            return user_id, media
+
+        if attempt < max_attempts:
+            page.wait_for_timeout(retry_interval_ms)
+
+    print(
+        f"    grid-timeline fallback: no user id or dated posts found in the rendered "
+        f"page after {max_attempts} attempts",
+        file=sys.stderr,
+    )
+    return None, []
+
+
 def extract_embedded_timeline(
     page: Page, max_attempts: int = 4, retry_interval_ms: int = 1500
 ) -> tuple[str | None, list[dict]]:
@@ -513,13 +594,19 @@ def resolve_identity(
 
     For accounts where web_profile_info fails outright (see module
     docstring for why - it's a real, per-account failure mode, not just
-    rate limiting), falls back in two tiers:
-      1. extract_embedded_timeline - scrapes the id *and* real post dates
+    rate limiting), falls back in three tiers, each independent enough
+    that one failing doesn't imply the others will too (confirmed in
+    production: tiers 1 and 2 have each failed on their own, on different
+    runs, for the same account):
+      1. extract_grid_timeline - reads the id and dated posts straight
+         off the rendered page a human actually sees. No extra request.
+      2. extract_embedded_timeline - scrapes the id *and* real post dates
          out of the same already-loaded page's own embedded Relay preload
-         JSON, no extra request. Preferred when it works.
-      2. A plain HTTP request (crawler UA, not the browser - never needed
+         JSON instead. No extra request.
+      3. A plain HTTP request (crawler UA, not the browser - never needed
          JS) scraping just the numeric id out of the rendered HTML. Last
-         resort - can't recover any post data, only the id.
+         resort - can't recover any post data, only the id, and is itself
+         a wholly separate request that can fail independently of 1 and 2.
     """
     nav_error = goto_profile(page, handle)
     if nav_error:
@@ -544,11 +631,18 @@ def resolve_identity(
         error = "no user data returned (account may not exist)"
 
     # web_profile_info failed outright - try recovering both the id and
-    # real post data from the same already-loaded page's own embedded
-    # Relay preload JSON before falling further back to the id-only HTML
-    # scrape below. No extra request (the page from goto_profile above is
-    # reused as-is); see extract_embedded_timeline's docstring for the
-    # Pacific-time caveat on the dates it returns.
+    # real post data from the same already-loaded page (no extra request
+    # either way), in two independent, structurally different ways before
+    # falling further back to a separate id-only HTTP request below. Grid
+    # first: it reads the actual rendered page a human sees, which has
+    # proven more resilient in practice than the deeply-nested Relay
+    # preload JSON extract_embedded_timeline depends on (both target the
+    # same "... on August 14, 2026." style dates - see
+    # ACCESSIBILITY_CAPTION_TZ for the shared Pacific-time caveat).
+    grid_user_id, grid_media = extract_grid_timeline(page)
+    if grid_user_id:
+        return grid_user_id, None, grid_media, None, False, None
+
     embedded_user_id, embedded_media = extract_embedded_timeline(page)
     if embedded_user_id:
         return embedded_user_id, None, embedded_media, None, False, None
