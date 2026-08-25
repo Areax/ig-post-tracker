@@ -312,70 +312,12 @@
         "status": "ok"
       }
     },
-    "2026-08-25": {
-      "angiechack": {
-        "posted": false,
-        "status": "ok"
-      },
-      "b_yanggg": {
-        "posted": false,
-        "status": "ok"
-      },
-      "brucedao.str": {
-        "posted": false,
-        "status": "ok"
-      },
-      "bry.trieu": {
-        "message": "Asset asset://laser.provider/ig_business_category_subvertical has been deleted. You cannot use this schema; HTML fallback failed: could not find numeric user id on profile page",
-        "status": "error"
-      },
-      "caroline.c.rei": {
-        "posted": false,
-        "status": "ok"
-      },
-      "ringoyippp": {
-        "posted": false,
-        "status": "ok"
-      },
-      "signed.angela": {
-        "posted": false,
-        "status": "ok"
-      },
-      "torch_boy": {
-        "posted": false,
-        "status": "ok"
-      }
-    },
-    "2026-08-26": {
-      "bry.trieu": {
-        "message": "Asset asset://laser.provider/ig_business_category_subvertical has been deleted. You cannot use this schema; HTML fallback failed: could not find numeric user id on profile page",
-        "status": "error"
-      }
-    },
-    "2026-08-27": {
-      "bry.trieu": {
-        "message": "Asset asset://laser.provider/ig_business_category_subvertical has been deleted. You cannot use this schema; HTML fallback failed: could not find numeric user id on profile page",
-        "status": "error"
-      }
-    },
-    "2026-08-28": {
-      "bry.trieu": {
-        "message": "Asset asset://laser.provider/ig_business_category_subvertical has been deleted. You cannot use this schema; HTML fallback failed: could not find numeric user id on profile page",
-        "status": "error"
-      }
-    },
-    "2026-08-29": {
-      "bry.trieu": {
-        "message": "Asset asset://laser.provider/ig_business_category_subvertical has been deleted. You cannot use this schema; HTML fallback failed: could not find numeric user id on profile page",
-        "status": "error"
-      }
-    },
-    "2026-08-30": {
-      "bry.trieu": {
-        "message": "Asset asset://laser.provider/ig_business_category_subvertical has been deleted. You cannot use this schema; HTML fallback failed: could not find numeric user id on profile page",
-        "status": "error"
-      }
-    }
+    "2026-08-25": {},
+    "2026-08-26": {},
+    "2026-08-27": {},
+    "2026-08-28": {},
+    "2026-08-29": {},
+    "2026-08-30": {}
   },
   "handles": [
     "torch_boy",
@@ -387,5 +329,5 @@
     "b_yanggg",
     "ringoyippp"
   ],
-  "updated_at": "2026-08-25T09:53:02.571112-07:00"
+  "updated_at": "2026-08-25T12:12:18.946606-07:00"
 }
