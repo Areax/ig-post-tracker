@@ -401,20 +401,29 @@ def extract_embedded_timeline(page: Page) -> tuple[str | None, list[dict]]:
         blocks = page.eval_on_selector_all(
             "script[type='application/json']", "els => els.map(e => e.textContent)"
         )
-    except PlaywrightError:
+    except PlaywrightError as exc:
+        print(f"    embedded-timeline fallback: eval_on_selector_all failed: {exc}", file=sys.stderr)
         return None, []
 
+    marker_blocks = 0
     for raw in blocks:
         if "polaris_ordered_timeline_connection" not in raw:
             continue
+        marker_blocks += 1
         try:
             data = json.loads(raw)
-        except ValueError:
+        except ValueError as exc:
+            print(f"    embedded-timeline fallback: marker block wasn't valid JSON: {exc}", file=sys.stderr)
             continue
 
         conn = _find_key(data, "polaris_ordered_timeline_connection")
         edges = (conn or {}).get("edges")
         if not edges:
+            print(
+                "    embedded-timeline fallback: marker block had no usable "
+                "polaris_ordered_timeline_connection.edges",
+                file=sys.stderr,
+            )
             continue
 
         user_id = None
@@ -447,7 +456,17 @@ def extract_embedded_timeline(page: Page) -> tuple[str | None, list[dict]]:
 
         if user_id or media:
             return user_id, media
+        print(
+            "    embedded-timeline fallback: found edges but recovered neither a user id nor any dated post",
+            file=sys.stderr,
+        )
 
+    if marker_blocks == 0:
+        print(
+            f"    embedded-timeline fallback: none of {len(blocks)} application/json blocks "
+            "contained the expected marker",
+            file=sys.stderr,
+        )
     return None, []
 
 
