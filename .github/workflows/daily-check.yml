@@ -1,0 +1,115 @@
+name: Daily Instagram post check
+
+# GitHub Actions cron is UTC-only and does not shift for daylight saving,
+# so we fire twice a day (covering both PST and PDT) and let the guard step
+# below decide which firing is the "real" one for the configured local time.
+# Default target: 00:30 America/Los_Angeles.
+#   00:30 PST (UTC-8, ~Nov-Mar) = 08:30 UTC
+#   00:30 PDT (UTC-7, ~Mar-Nov) = 07:30 UTC
+#
+# To change the target local time or timezone:
+#   1. Update the `vars.TARGET_LOCAL_TIME` / `vars.TRACKER_TIMEZONE` repo
+#      variables (Settings > Secrets and variables > Actions > Variables).
+#   2. Update the two cron lines below to bracket the new UTC time so one of
+#      them still lands within the guard's tolerance window.
+on:
+  schedule:
+    - cron: "30 8 * * *"
+    - cron: "30 7 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Guard - only proceed near the configured local run time
+        id: guard
+        env:
+          TZ_NAME: ${{ vars.TRACKER_TIMEZONE || 'America/Los_Angeles' }}
+          TARGET_LOCAL_TIME: ${{ vars.TARGET_LOCAL_TIME || '00:30' }}
+          TOLERANCE_MINUTES: "20"
+        run: |
+          python3 - <<'PY' >> "$GITHUB_OUTPUT"
+          import os
+          from datetime import datetime
+          from zoneinfo import ZoneInfo
+
+          tz = ZoneInfo(os.environ["TZ_NAME"])
+          target_h, target_m = (int(x) for x in os.environ["TARGET_LOCAL_TIME"].split(":"))
+          tolerance = int(os.environ["TOLERANCE_MINUTES"])
+
+          now = datetime.now(tz)
+          target_minutes = target_h * 60 + target_m
+          now_minutes = now.hour * 60 + now.minute
+          delta = min(abs(now_minutes - target_minutes), 1440 - abs(now_minutes - target_minutes))
+
+          should_run = delta <= tolerance
+          print(f"local time is {now.isoformat()}, target {os.environ['TARGET_LOCAL_TIME']}, delta {delta}m -> should_run={should_run}")
+          print(f"should_run={'true' if should_run else 'false'}")
+          PY
+
+      - name: Install dependencies
+        if: steps.guard.outputs.should_run == 'true'
+        run: pip install -r scripts/requirements.txt
+
+      - name: Install Playwright's Chromium browser
+        if: steps.guard.outputs.should_run == 'true'
+        run: python3 -m playwright install --with-deps chromium
+
+      # data/tracker.db (post history + the persisted browser session) is
+      # never committed - it holds Instagram session cookies alongside the
+      # data, and this repo is public. It's persisted purely as a CI cache
+      # across runs instead. Restore uses a prefix match to pick up the
+      # most recent save; save always writes under a new run-specific key
+      # since a given cache key is immutable once created. Stale entries
+      # age out automatically (GitHub evicts caches unused for 7+ days).
+      - name: Restore tracker DB cache
+        if: steps.guard.outputs.should_run == 'true'
+        uses: actions/cache/restore@v4
+        with:
+          path: data/tracker.db
+          key: tracker-db-${{ github.run_id }}
+          restore-keys: |
+            tracker-db-
+
+      - name: Check handles
+        if: steps.guard.outputs.should_run == 'true'
+        env:
+          TRACKER_TIMEZONE: ${{ vars.TRACKER_TIMEZONE || 'America/Los_Angeles' }}
+          # Daily runs only need to catch yesterday's post, which the most
+          # recent page (~12 posts) almost always covers - deeper
+          # pagination is for backfills/manual runs (see MAX_FEED_PAGES in
+          # scripts/check_posts.py). Override with a repo variable if a
+          # tracked account posts frequently enough that 1 page risks
+          # missing yesterday's post.
+          MAX_FEED_PAGES: ${{ vars.MAX_FEED_PAGES || '1' }}
+        run: python3 scripts/check_posts.py
+
+      - name: Save tracker DB cache
+        if: steps.guard.outputs.should_run == 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: data/tracker.db
+          key: tracker-db-${{ github.run_id }}
+
+      - name: Commit updated history
+        if: steps.guard.outputs.should_run == 'true'
+        run: |
+          git config user.name "ig-post-tracker-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add docs/data/history.json docs/data/avatars
+          if git diff --cached --quiet; then
+            echo "no changes to commit"
+          else
+            git commit -m "Update post history"
+            git push
+          fi

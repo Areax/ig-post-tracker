@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Instagram Post Tracker</title>
+<style>
+  :root {
+    color-scheme: light;
+    --bg: #ffffff;
+    --surface: #ffffff;
+    --surface-2: #fafbfc;
+    --fg: #13161c;
+    --muted: #6b7280;
+    --faint: #9aa1ac;
+    --border: #e8eaee;
+    --accent: #4f46e5;
+    --accent-soft: #eef0fe;
+    --posted: #059669;
+    --posted-bg: #d3f5e8;
+    --posted-ring: #10b98155;
+    --missed-bg: #fdeaea;
+    --missed-fg: #dc2626;
+    --error: #b45309;
+    --error-bg: #fdecc8;
+    --shadow: 0 1px 2px rgba(16, 24, 40, 0.04), 0 1px 3px rgba(16, 24, 40, 0.06);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 2.5rem 1.5rem 4rem;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 980px; margin: 0 auto; }
+
+  header { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.75rem; }
+  h1 { font-size: 1.5rem; font-weight: 700; margin: 0; letter-spacing: -0.01em; }
+  .updated { color: var(--faint); font-size: 0.8rem; }
+
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0.75rem; margin-bottom: 1.5rem; }
+  .stat-tile {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 0.9rem 1.1rem;
+    box-shadow: var(--shadow);
+  }
+  .stat-tile .value { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.02em; }
+  .stat-tile .label { color: var(--muted); font-size: 0.75rem; margin-top: 0.15rem; }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  .table-scroll { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; min-width: 680px; font-size: 0.85rem; }
+  thead th {
+    text-align: center;
+    padding: 0.85rem 0.5rem 0.6rem;
+    color: var(--faint);
+    font-weight: 600;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  thead th .weekday { display: block; font-size: 0.62rem; opacity: 0.75; font-weight: 500; text-transform: none; margin-top: 1px; }
+  th.handle-col, td.handle-col {
+    text-align: left;
+    position: sticky;
+    left: 0;
+    background: var(--surface);
+    z-index: 1;
+  }
+  tbody tr { transition: background-color 120ms ease; }
+  tbody tr:hover { background: var(--surface-2); }
+  tbody tr:hover td.handle-col { background: var(--surface-2); }
+  tbody tr:not(:last-child) td { border-bottom: 1px solid var(--border); }
+
+  td.handle-col { padding: 0.7rem 1rem; min-width: 200px; }
+  .handle-name { display: flex; align-items: center; gap: 0.65rem; }
+  .avatar {
+    width: 1.9rem;
+    height: 1.9rem;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+    background: var(--surface-2);
+    box-shadow: inset 0 0 0 1px var(--border);
+  }
+  .avatar-fallback {
+    width: 1.9rem;
+    height: 1.9rem;
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+  .handle-link { color: var(--fg); text-decoration: none; font-weight: 600; font-size: 0.9rem; }
+  .handle-link:hover { color: var(--accent); }
+  .rate-badge {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.3rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--muted);
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 0.15rem 0.55rem;
+  }
+  .rate-badge b { color: var(--fg); font-size: 0.75rem; }
+
+  td.day-col { padding: 0.5rem 0.4rem; text-align: center; }
+  .cell {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.85rem;
+    height: 1.85rem;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: transform 120ms ease, box-shadow 120ms ease;
+  }
+  .cell.posted { background: var(--posted-bg); color: var(--posted); box-shadow: inset 0 0 0 1px var(--posted-ring); }
+  .cell.posted:hover { transform: scale(1.14); box-shadow: 0 0 0 3px var(--posted-ring); }
+  .cell.missed { background: var(--missed-bg); color: var(--missed-fg); }
+  .cell.missed:hover { transform: scale(1.1); }
+  .cell.error {
+    background: var(--error-bg);
+    color: var(--error);
+    font-weight: 700;
+    border: none;
+    padding: 0;
+    font-family: inherit;
+    cursor: pointer;
+  }
+  .cell.error:hover { transform: scale(1.1); }
+  .cell svg { width: 0.95rem; height: 0.95rem; }
+
+  .error-popover {
+    position: absolute;
+    max-width: 280px;
+    background: var(--fg);
+    color: var(--bg);
+    font-size: 0.78rem;
+    line-height: 1.4;
+    padding: 0.6rem 0.75rem;
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(16, 24, 40, 0.18);
+    z-index: 10;
+    display: none;
+  }
+  .error-popover.visible { display: block; }
+
+  .legend { display: flex; gap: 1.5rem; margin-top: 1.25rem; font-size: 0.78rem; color: var(--muted); flex-wrap: wrap; }
+  .legend span { display: inline-flex; align-items: center; gap: 0.45rem; }
+  .legend .swatch { width: 0.85rem; height: 0.85rem; border-radius: 5px; display: inline-block; }
+
+  .empty { color: var(--muted); padding: 3rem 1.5rem; text-align: center; font-size: 0.9rem; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>Instagram Post Tracker</h1>
+      <span class="updated" id="updated"></span>
+    </header>
+    <div id="stats" class="stats"></div>
+    <div id="content"></div>
+    <div class="legend" id="legend" style="display:none">
+      <span><i class="swatch" style="background: var(--posted-bg); box-shadow: inset 0 0 0 1px var(--posted-ring)"></i> Posted &mdash; click to view</span>
+      <span><i class="swatch" style="background: var(--missed-bg)"></i> No post that day</span>
+      <span><i class="swatch" style="background: var(--error-bg); box-shadow: inset 0 0 0 1px var(--error)"></i> Couldn't check &mdash; tap for reason</span>
+    </div>
+  </div>
+  <div class="error-popover" id="error-popover"></div>
+
+  <script>
+    const DATA_URL = "./data/history.json";
+    const CHECK_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+    const WARN_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"></path></svg>';
+    const X_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>';
+
+    function fmtDayLabel(isoDate) {
+      const d = new Date(isoDate + "T00:00:00");
+      return {
+        date: d.toLocaleDateString(undefined, { month: "short", day: "numeric" }),
+        weekday: d.toLocaleDateString(undefined, { weekday: "short" }),
+      };
+    }
+
+    function renderStats(handles, days, dates) {
+      const container = document.getElementById("stats");
+      let totalPosted = 0, totalChecked = 0, errorCount = 0;
+      for (const h of handles) {
+        for (const d of dates) {
+          const r = (days[d] || {})[h];
+          if (!r) continue;
+          if (r.status === "error") errorCount++;
+          else { totalChecked++; if (r.posted) totalPosted++; }
+        }
+      }
+      const rate = totalChecked ? Math.round((totalPosted / totalChecked) * 100) : 0;
+      const tiles = [
+        { value: handles.length, label: handles.length === 1 ? "Handle tracked" : "Handles tracked" },
+        { value: `${dates.length}d`, label: "Window" },
+        { value: `${rate}%`, label: "Overall posting rate" },
+      ];
+      if (errorCount > 0) tiles.push({ value: errorCount, label: "Failed checks" });
+      container.innerHTML = tiles
+        .map((t) => `<div class="stat-tile"><div class="value">${t.value}</div><div class="label">${t.label}</div></div>`)
+        .join("");
+    }
+
+    async function render() {
+      const updatedEl = document.getElementById("updated");
+      const content = document.getElementById("content");
+
+      let data;
+      try {
+        const res = await fetch(DATA_URL, { cache: "no-store" });
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        data = await res.json();
+      } catch (err) {
+        content.innerHTML = '<div class="card"><p class="empty">Couldn\'t load tracker data.<br>' + String(err) + "</p></div>";
+        return;
+      }
+
+      const handles = data.handles || [];
+      const days = data.days || {};
+      const avatars = data.avatars || {};
+      const dates = Object.keys(days).sort();
+
+      if (handles.length === 0 || dates.length === 0) {
+        content.innerHTML = '<div class="card"><p class="empty">Waiting on the first daily check to run.</p></div>';
+        return;
+      }
+
+      updatedEl.textContent = data.updated_at ? `Updated ${new Date(data.updated_at).toLocaleString()}` : "";
+      renderStats(handles, days, dates);
+      document.getElementById("legend").style.display = "flex";
+
+      const table = document.createElement("table");
+
+      const thead = document.createElement("thead");
+      const headRow = document.createElement("tr");
+      let headHtml = '<th class="handle-col">Handle</th>';
+      for (const d of dates) {
+        const { date, weekday } = fmtDayLabel(d);
+        headHtml += `<th>${date}<span class="weekday">${weekday}</span></th>`;
+      }
+      headRow.innerHTML = headHtml;
+      thead.appendChild(headRow);
+      table.appendChild(thead);
+
+      const tbody = document.createElement("tbody");
+      for (const handle of handles) {
+        const row = document.createElement("tr");
+
+        let postedCount = 0, checkedCount = 0;
+        for (const d of dates) {
+          const r = (days[d] || {})[handle];
+          if (r && r.status !== "error") { checkedCount++; if (r.posted) postedCount++; }
+        }
+
+        const avatarFile = avatars[handle];
+        const initial = handle.charAt(0);
+        const avatarHtml = avatarFile
+          ? `<img class="avatar" src="./data/avatars/${avatarFile}" alt="" loading="lazy" onerror="this.outerHTML='<span class=&quot;avatar-fallback&quot;>${initial}</span>'">`
+          : `<span class="avatar-fallback">${initial}</span>`;
+
+        const handleCell = document.createElement("td");
+        handleCell.className = "handle-col";
+        handleCell.innerHTML = `
+          <div class="handle-name">
+            ${avatarHtml}
+            <a class="handle-link" href="https://instagram.com/${handle}" target="_blank" rel="noopener">@${handle}</a>
+            <span class="rate-badge"><b>${postedCount}</b>/${checkedCount || dates.length}</span>
+          </div>`;
+        row.appendChild(handleCell);
+
+        for (const d of dates) {
+          const result = (days[d] || {})[handle];
+          const td = document.createElement("td");
+          td.className = "day-col";
+
+          if (!result) {
+            td.innerHTML = `<span class="cell missed">${X_ICON}</span>`;
+          } else if (result.status === "error") {
+            const msg = (result.message || "unknown error").replace(/"/g, "&quot;");
+            td.innerHTML = `<button type="button" class="cell error" data-msg="${msg}">${WARN_ICON}</button>`;
+          } else if (result.posted) {
+            const href = result.permalink || `https://instagram.com/${handle}`;
+            td.innerHTML = `<a class="cell posted" href="${href}" target="_blank" rel="noopener" title="Posted ${d}">${CHECK_ICON}</a>`;
+          } else {
+            td.innerHTML = `<span class="cell missed" title="No post on ${d}">${X_ICON}</span>`;
+          }
+          row.appendChild(td);
+        }
+        tbody.appendChild(row);
+      }
+      table.appendChild(tbody);
+
+      content.innerHTML = "";
+      const card = document.createElement("div");
+      card.className = "card";
+      const scrollWrap = document.createElement("div");
+      scrollWrap.className = "table-scroll";
+      scrollWrap.appendChild(table);
+      card.appendChild(scrollWrap);
+      content.appendChild(card);
+    }
+
+    function setupErrorPopover() {
+      const popover = document.getElementById("error-popover");
+
+      document.addEventListener("click", (e) => {
+        const btn = e.target.closest(".cell.error");
+        if (!btn) {
+          popover.classList.remove("visible");
+          return;
+        }
+        e.stopPropagation();
+        const wasShownForThisButton = popover.classList.contains("visible") && popover._forButton === btn;
+        popover.classList.remove("visible");
+        if (wasShownForThisButton) return;
+
+        popover.textContent = btn.getAttribute("data-msg") || "unknown error";
+        popover._forButton = btn;
+
+        const rect = btn.getBoundingClientRect();
+        popover.classList.add("visible");
+        const popRect = popover.getBoundingClientRect();
+        let left = rect.left + window.scrollX + rect.width / 2 - popRect.width / 2;
+        left = Math.max(8, Math.min(left, window.scrollX + document.documentElement.clientWidth - popRect.width - 8));
+        popover.style.left = `${left}px`;
+        popover.style.top = `${rect.bottom + window.scrollY + 8}px`;
+      });
+    }
+
+    setupErrorPopover();
+    render();
+  </script>
+</body>
+</html>

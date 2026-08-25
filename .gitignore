@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+.venv/
+.DS_Store
+data/tracker.db
+data/tracker.db-journal
+data/tracker.db-wal
+data/tracker.db-shm
