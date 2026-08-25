@@ -92,6 +92,14 @@ jobs:
           # tracked account posts frequently enough that 1 page risks
           # missing yesterday's post.
           MAX_FEED_PAGES: ${{ vars.MAX_FEED_PAGES || '1' }}
+          # Empty by default (normal rolling 14-day-ending-yesterday window).
+          # Set to an ISO date via the repo variable to pin the tracked
+          # window to a fixed start instead - see WINDOW_START_DATE in
+          # scripts/check_posts.py's module docstring. Needs to stay set as
+          # a repo variable (not just passed once locally) for as long as
+          # you want the fixed window to persist, since every scheduled run
+          # reads it fresh - unset it to go back to the normal rolling window.
+          WINDOW_START_DATE: ${{ vars.WINDOW_START_DATE }}
         run: python3 scripts/check_posts.py
 
       - name: Save tracker DB cache

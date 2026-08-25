@@ -120,6 +120,12 @@ loop is untested - kept conservative pending evidence either way.
 Optional env vars:
   TRACKER_TIMEZONE            - IANA tz name, default "America/Los_Angeles"
   TARGET_DATE                  - ISO date (YYYY-MM-DD) to check instead of "yesterday"
+  WINDOW_START_DATE             - ISO date (YYYY-MM-DD): pin the HISTORY_DAYS window to start
+                                  here instead of ending "yesterday" - e.g. to set up a clean
+                                  reference window from a fixed date even if it's already
+                                  partway elapsed, or extends into days that haven't happened
+                                  yet (those are simply left with no data). Takes priority over
+                                  TARGET_DATE if both are set.
   HANDLES_FILE                 - default "handles.csv"
   DB_FILE                      - default "data/tracker.db", the persistent store
   HISTORY_FILE                 - default "docs/data/history.json", generated snapshot
@@ -227,7 +233,21 @@ def load_handles(path: Path) -> list[str]:
 
 
 def resolve_window(tz: ZoneInfo) -> list[date]:
-    """Oldest-to-newest list of dates the run should have results for."""
+    """Oldest-to-newest list of dates the run should have results for.
+
+    Normally a rolling HISTORY_DAYS-day window ending "yesterday" (or
+    TARGET_DATE, if set). WINDOW_START_DATE instead pins the window to a
+    fixed start, e.g. for setting up a clean HISTORY_DAYS-day reference
+    window from a specific date even if some of it is already in the past
+    - the days before "today" just won't have a check run for them, and
+    days after "today" haven't happened yet. Either way, check_handle
+    never writes results for a date past "today" - see its own `today`
+    guard.
+    """
+    start_override = os.environ.get("WINDOW_START_DATE")
+    if start_override:
+        start = date.fromisoformat(start_override)
+        return [start + timedelta(days=i) for i in range(HISTORY_DAYS)]
     override = os.environ.get("TARGET_DATE")
     end = date.fromisoformat(override) if override else (datetime.now(tz) - timedelta(days=1)).date()
     return [end - timedelta(days=i) for i in range(HISTORY_DAYS - 1, -1, -1)]
@@ -547,8 +567,11 @@ def check_handle(
     else:
         coverage_start = None  # no usable evidence at all - don't touch any existing rows
 
+    today = datetime.now(tz).date()
     results = {}
     for d in window:
+        if d > today:
+            continue  # hasn't happened yet - nothing to assert either way
         if coverage_start is None or d < coverage_start:
             continue
         if d in permalink_by_date:
