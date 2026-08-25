@@ -177,6 +177,26 @@ FEED_HEADERS = {
     "Accept": "*/*",
 }
 USER_ID_PATTERN = re.compile(r'"profilePage_(\d+)"')
+
+# The profile page's own server-rendered Relay/GraphQL preload data
+# (see extract_embedded_timeline) - a completely different code path from
+# the web_profile_info XHR call, useful when that call fails outright.
+# Each post node's `accessibility_caption` ends with a human-readable
+# date like "... on August 14, 2026." - empirically verified (cross-
+# checked against known-good taken_at timestamps for the same exact
+# posts, across two different accounts) to consistently be the calendar
+# date in *America/Los_Angeles*, regardless of the viewer's own system
+# timezone - almost certainly Instagram's own server default for
+# anonymous/logged-out rendering (their infrastructure's home timezone),
+# not something tied to the browser or to TRACKER_TIMEZONE. This only
+# gives a calendar date, not a real time - fine for day-bucketing, and
+# the only thing bucket_media_by_day needs, but the *timezone* dependency
+# is real: if TRACKER_TIMEZONE is ever set to something other than
+# America/Los_Angeles, dates recovered this way can be off by a day
+# right around midnight Pacific, since the caption's date is generated in
+# Pacific time no matter what TRACKER_TIMEZONE says.
+ACCESSIBILITY_CAPTION_TZ = ZoneInfo("America/Los_Angeles")
+ACCESSIBILITY_DATE_PATTERN = re.compile(r"on ([A-Za-z]+ \d{1,2}, \d{4})\.")
 FEED_ITEM_COUNT = 30
 MAX_FEED_PAGES = int(os.environ.get("MAX_FEED_PAGES", "2"))
 HEADLESS = os.environ.get("HEADLESS", "1") != "0"
@@ -337,6 +357,100 @@ def goto_profile(page: Page, handle: str) -> str | None:
         return str(exc)
 
 
+def _find_key(obj, key: str):
+    """Recursively searches a nested dict/list structure for the first
+    occurrence of `key`, returning its value (or None if not found).
+    Instagram's embedded Relay preload payloads bury the data several
+    layers deep in a shape that shifts around; walking for the key by
+    name is far less brittle than hardcoding the exact path."""
+    if isinstance(obj, dict):
+        if key in obj:
+            return obj[key]
+        for v in obj.values():
+            found = _find_key(v, key)
+            if found is not None:
+                return found
+    elif isinstance(obj, list):
+        for v in obj:
+            found = _find_key(v, key)
+            if found is not None:
+                return found
+    return None
+
+
+def extract_embedded_timeline(page: Page) -> tuple[str | None, list[dict]]:
+    """Recovers (user_id, media) from the profile page's own embedded
+    Relay/GraphQL preload data (a `polaris_ordered_timeline_connection`
+    inside one of the page's `<script type="application/json">` blocks) -
+    a completely different, server-rendered code path from the
+    web_profile_info XHR call, useful precisely when that call fails
+    outright. Costs no extra request: reads whatever `page` already
+    loaded as part of its normal navigation (see goto_profile).
+
+    Post dates come from each item's accessibility_caption rather than a
+    raw timestamp - see ACCESSIBILITY_DATE_PATTERN's comment for the
+    Pacific-time caveat. Posts whose caption doesn't match the expected
+    pattern are silently skipped rather than guessed at.
+
+    Returns (None, []) if the expected structure isn't present at all
+    (e.g. Instagram changes this internal format, or the account
+    genuinely couldn't be loaded) - callers should treat that the same
+    as any other failed recovery attempt.
+    """
+    try:
+        blocks = page.eval_on_selector_all(
+            "script[type='application/json']", "els => els.map(e => e.textContent)"
+        )
+    except PlaywrightError:
+        return None, []
+
+    for raw in blocks:
+        if "polaris_ordered_timeline_connection" not in raw:
+            continue
+        try:
+            data = json.loads(raw)
+        except ValueError:
+            continue
+
+        conn = _find_key(data, "polaris_ordered_timeline_connection")
+        edges = (conn or {}).get("edges")
+        if not edges:
+            continue
+
+        user_id = None
+        media = []
+        for edge in edges:
+            node = edge.get("node") or {}
+            code = node.get("code")
+            if not code:
+                continue
+            if user_id is None:
+                user_id = (node.get("user") or {}).get("pk")
+
+            match = ACCESSIBILITY_DATE_PATTERN.search(node.get("accessibility_caption") or "")
+            if not match:
+                continue
+            try:
+                post_date = datetime.strptime(match.group(1), "%B %d, %Y").date()
+            except ValueError:
+                continue
+            taken_at = int(
+                datetime(post_date.year, post_date.month, post_date.day, 12, tzinfo=ACCESSIBILITY_CAPTION_TZ)
+                .timestamp()
+            )
+            media.append({
+                "taken_at": taken_at,
+                "code": code,
+                "media_type": node.get("media_type"),
+                "product_type": node.get("product_type"),
+            })
+
+        if user_id or media:
+            return user_id, media
+
+    return None, []
+
+
 def resolve_identity(
     handle: str, page: Page
 ) -> tuple[str | None, str | None, list[dict] | None, str | None, bool, int | None]:
@@ -360,11 +474,15 @@ def resolve_identity(
     path below can ever give, which is why it's threaded all the way out
     to check_handle rather than discarded.
 
-    Falls back to scraping the numeric id out of the crawler-UA-rendered
-    profile page (a plain HTTP request, not the browser - this fallback
-    never needed JS) for accounts where web_profile_info fails outright
-    (see module docstring for why) - that path can't recover embedded
-    media, only the id.
+    For accounts where web_profile_info fails outright (see module
+    docstring for why - it's a real, per-account failure mode, not just
+    rate limiting), falls back in two tiers:
+      1. extract_embedded_timeline - scrapes the id *and* real post dates
+         out of the same already-loaded page's own embedded Relay preload
+         JSON, no extra request. Preferred when it works.
+      2. A plain HTTP request (crawler UA, not the browser - never needed
+         JS) scraping just the numeric id out of the rendered HTML. Last
+         resort - can't recover any post data, only the id.
     """
     nav_error = goto_profile(page, handle)
     if nav_error:
@@ -387,6 +505,16 @@ def resolve_identity(
             ]
             return user["id"], user.get("profile_pic_url"), media, None, False, timeline.get("count")
         error = "no user data returned (account may not exist)"
+
+    # web_profile_info failed outright - try recovering both the id and
+    # real post data from the same already-loaded page's own embedded
+    # Relay preload JSON before falling further back to the id-only HTML
+    # scrape below. No extra request (the page from goto_profile above is
+    # reused as-is); see extract_embedded_timeline's docstring for the
+    # Pacific-time caveat on the dates it returns.
+    embedded_user_id, embedded_media = extract_embedded_timeline(page)
+    if embedded_user_id:
+        return embedded_user_id, None, embedded_media, None, False, None
 
     time.sleep(MIN_REQUEST_INTERVAL + random.uniform(0, REQUEST_JITTER))
     try:
