@@ -151,16 +151,21 @@ Next daily run picks it up automatically.
 
 ## 3. Changing the schedule
 
-The daily job fires twice in UTC (covering both PST and PDT) and a guard
-step only lets the real work run within ~20 minutes of `TARGET_LOCAL_TIME`
-in `TRACKER_TIMEZONE` (repo variables, both optional — default to `00:30`
-and `America/Los_Angeles`). To move it to a very different time of day,
-also update the two `cron:` lines in `.github/workflows/daily-check.yml` so
-one of them still lands near your new target — GitHub Actions cron values
-can't reference repo variables directly.
+The daily job fires twice in UTC (covering both PST and PDT, roughly
+targeting 00:30 `TRACKER_TIMEZONE` — a repo variable, defaults to
+`America/Los_Angeles`). GitHub's own cron scheduler is best-effort and
+commonly fires late — sometimes hours late — so the guard step
+(`scripts/ci_guard.py`) doesn't gate on time of day at all: it only skips
+a *scheduled* firing if today's local date already has a successful run
+(per `docs/data/history.json`'s own `updated_at`). A late firing still
+runs; the second of the day's two cron entries just no-ops once the first
+one succeeds that day. To move the target time meaningfully, update the
+two `cron:` lines in `.github/workflows/daily-check.yml` — GitHub Actions
+cron values can't reference repo variables directly.
 
 You can also trigger a run manually any time from the Actions tab
-("Daily Instagram post check" → Run workflow).
+("Daily Instagram post check" → Run workflow) — manual runs always
+execute regardless of the guard.
 
 ## How it works
 

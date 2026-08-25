@@ -1,17 +1,24 @@
 name: Daily Instagram post check
 
 # GitHub Actions cron is UTC-only and does not shift for daylight saving,
-# so we fire twice a day (covering both PST and PDT) and let the guard step
-# below decide which firing is the "real" one for the configured local time.
-# Default target: 00:30 America/Los_Angeles.
+# so we fire twice a day (covering both PST and PDT) targeting roughly
+# 00:30 America/Los_Angeles:
 #   00:30 PST (UTC-8, ~Nov-Mar) = 08:30 UTC
 #   00:30 PDT (UTC-7, ~Mar-Nov) = 07:30 UTC
 #
-# To change the target local time or timezone:
-#   1. Update the `vars.TARGET_LOCAL_TIME` / `vars.TRACKER_TIMEZONE` repo
-#      variables (Settings > Secrets and variables > Actions > Variables).
-#   2. Update the two cron lines below to bracket the new UTC time so one of
-#      them still lands within the guard's tolerance window.
+# GitHub's own scheduler is best-effort and can run cron jobs late -
+# minutes to hours late is normal, and both firings landed 30-95 minutes
+# late the first two times this actually ran (see git history for the
+# guard rewrite this replaced, which used a tight time-of-day tolerance
+# window and as a result never once let a run through). The guard below
+# no longer cares what time it is - it only checks whether today's local
+# date already has a successful run (via docs/data/history.json's
+# updated_at), so a late firing still runs, and the second of the two
+# daily cron firings harmlessly no-ops once the first one succeeds.
+#
+# workflow_dispatch (manual runs from the Actions tab) always runs,
+# regardless of the guard - a human explicitly asking for a run should
+# never get silently skipped.
 on:
   schedule:
     - cron: "30 8 * * *"
@@ -31,31 +38,13 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Guard - only proceed near the configured local run time
+      - name: Guard - skip only if today's local date already ran successfully
         id: guard
         env:
           TZ_NAME: ${{ vars.TRACKER_TIMEZONE || 'America/Los_Angeles' }}
-          TARGET_LOCAL_TIME: ${{ vars.TARGET_LOCAL_TIME || '00:30' }}
-          TOLERANCE_MINUTES: "20"
         run: |
-          python3 - <<'PY' >> "$GITHUB_OUTPUT"
-          import os
-          from datetime import datetime
-          from zoneinfo import ZoneInfo
-
-          tz = ZoneInfo(os.environ["TZ_NAME"])
-          target_h, target_m = (int(x) for x in os.environ["TARGET_LOCAL_TIME"].split(":"))
-          tolerance = int(os.environ["TOLERANCE_MINUTES"])
-
-          now = datetime.now(tz)
-          target_minutes = target_h * 60 + target_m
-          now_minutes = now.hour * 60 + now.minute
-          delta = min(abs(now_minutes - target_minutes), 1440 - abs(now_minutes - target_minutes))
-
-          should_run = delta <= tolerance
-          print(f"local time is {now.isoformat()}, target {os.environ['TARGET_LOCAL_TIME']}, delta {delta}m -> should_run={should_run}")
-          print(f"should_run={'true' if should_run else 'false'}")
-          PY
+          SHOULD_RUN=$(python3 scripts/ci_guard.py "${{ github.event_name }}")
+          echo "should_run=$SHOULD_RUN" >> "$GITHUB_OUTPUT"
 
       - name: Install dependencies
         if: steps.guard.outputs.should_run == 'true'
