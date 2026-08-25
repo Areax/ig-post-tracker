@@ -378,7 +378,9 @@ def _find_key(obj, key: str):
     return None
 
 
-def extract_embedded_timeline(page: Page) -> tuple[str | None, list[dict]]:
+def extract_embedded_timeline(
+    page: Page, max_attempts: int = 4, retry_interval_ms: int = 1500
+) -> tuple[str | None, list[dict]]:
     """Recovers (user_id, media) from the profile page's own embedded
     Relay/GraphQL preload data (a `polaris_ordered_timeline_connection`
     inside one of the page's `<script type="application/json">` blocks) -
@@ -387,29 +389,51 @@ def extract_embedded_timeline(page: Page) -> tuple[str | None, list[dict]]:
     outright. Costs no extra request: reads whatever `page` already
     loaded as part of its normal navigation (see goto_profile).
 
+    Retries a few times with a short pause between attempts: this data
+    isn't guaranteed to be present the instant goto_profile's fixed
+    2-second settle wait ends - confirmed in production, where a run
+    found zero application/json blocks at all (not just missing the
+    marker - the DOM query itself came back empty) on one connection,
+    while the identical account succeeded immediately on another. Only
+    costs extra time on this already-rare fallback path; the normal happy
+    path (web_profile_info succeeding) never reaches this function.
+
     Post dates come from each item's accessibility_caption rather than a
     raw timestamp - see ACCESSIBILITY_DATE_PATTERN's comment for the
     Pacific-time caveat. Posts whose caption doesn't match the expected
     pattern are silently skipped rather than guessed at.
 
-    Returns (None, []) if the expected structure isn't present at all
-    (e.g. Instagram changes this internal format, or the account
-    genuinely couldn't be loaded) - callers should treat that the same
-    as any other failed recovery attempt.
+    Returns (None, []) if the expected structure never showed up (e.g.
+    Instagram changes this internal format, or the account genuinely
+    couldn't be loaded) - callers should treat that the same as any other
+    failed recovery attempt.
     """
-    try:
-        blocks = page.eval_on_selector_all(
-            "script[type='application/json']", "els => els.map(e => e.textContent)"
+    marker_blocks: list[str] = []
+    blocks: list[str] = []
+    for attempt in range(1, max_attempts + 1):
+        try:
+            blocks = page.eval_on_selector_all(
+                "script[type='application/json']", "els => els.map(e => e.textContent)"
+            )
+        except PlaywrightError as exc:
+            print(f"    embedded-timeline fallback: eval_on_selector_all failed: {exc}", file=sys.stderr)
+            return None, []
+
+        marker_blocks = [b for b in blocks if "polaris_ordered_timeline_connection" in b]
+        if marker_blocks:
+            break
+        if attempt < max_attempts:
+            page.wait_for_timeout(retry_interval_ms)
+
+    if not marker_blocks:
+        print(
+            f"    embedded-timeline fallback: none of {len(blocks)} application/json blocks "
+            f"contained the expected marker after {max_attempts} attempts",
+            file=sys.stderr,
         )
-    except PlaywrightError as exc:
-        print(f"    embedded-timeline fallback: eval_on_selector_all failed: {exc}", file=sys.stderr)
         return None, []
 
-    marker_blocks = 0
-    for raw in blocks:
-        if "polaris_ordered_timeline_connection" not in raw:
-            continue
-        marker_blocks += 1
+    for raw in marker_blocks:
         try:
             data = json.loads(raw)
         except ValueError as exc:
@@ -461,12 +485,6 @@ def extract_embedded_timeline(page: Page) -> tuple[str | None, list[dict]]:
             file=sys.stderr,
         )
 
-    if marker_blocks == 0:
-        print(
-            f"    embedded-timeline fallback: none of {len(blocks)} application/json blocks "
-            "contained the expected marker",
-            file=sys.stderr,
-        )
     return None, []
 
 

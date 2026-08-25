@@ -16,14 +16,29 @@ from playwright.sync_api import Error as PlaywrightError
 
 
 class _FakePage:
-    def __init__(self, blocks: list[str], raise_error: bool = False):
+    """`blocks` can be a single list (returned on every attempt) or a list
+    of lists, one per successive eval_on_selector_all call - the latter
+    lets tests simulate the data showing up only after a retry."""
+
+    def __init__(self, blocks, raise_error: bool = False):
+        self._sequence = blocks if blocks and isinstance(blocks[0], list) else None
         self._blocks = blocks
         self._raise_error = raise_error
+        self.eval_calls = 0
+        self.wait_calls = []
 
     def eval_on_selector_all(self, selector, js):
+        self.eval_calls += 1
         if self._raise_error:
             raise PlaywrightError("navigation context was destroyed")
-        return self._blocks
+        if self._sequence is not None:
+            result = self._sequence[min(self.eval_calls - 1, len(self._sequence) - 1)]
+        else:
+            result = self._blocks
+        return result
+
+    def wait_for_timeout(self, ms):
+        self.wait_calls.append(ms)
 
 
 def _timeline_block(edges: list[dict]) -> str:
@@ -125,6 +140,41 @@ def test_no_matching_block_returns_none_and_empty_list():
 
     assert user_id is None
     assert media == []
+
+
+def test_retries_and_succeeds_once_data_appears_on_a_later_attempt():
+    """The real production bug: the data isn't guaranteed present the
+    instant the page settles - a slower connection needs another beat.
+    Empty on the first read, present by the second."""
+    edges = [_node("real_post", "on August 14, 2026.")]
+    page = _FakePage([[], [_timeline_block(edges)]])
+
+    user_id, media = extract_embedded_timeline(page, max_attempts=4, retry_interval_ms=1)
+
+    assert user_id == "663398771"
+    assert len(media) == 1
+    assert page.eval_calls == 2
+    assert page.wait_calls == [1]  # waited once, between attempt 1 and 2, then stopped retrying
+
+
+def test_gives_up_after_max_attempts_with_no_data_ever_appearing():
+    page = _FakePage([], raise_error=False)  # empty every time
+
+    user_id, media = extract_embedded_timeline(page, max_attempts=3, retry_interval_ms=1)
+
+    assert user_id is None
+    assert media == []
+    assert page.eval_calls == 3
+    assert page.wait_calls == [1, 1]  # waited between 1->2 and 2->3, not after the last attempt
+
+
+def test_does_not_retry_once_a_playwright_error_occurs():
+    page = _FakePage([], raise_error=True)
+
+    extract_embedded_timeline(page, max_attempts=5, retry_interval_ms=1)
+
+    assert page.eval_calls == 1
+    assert page.wait_calls == []
 
 
 def test_malformed_json_in_a_matching_block_is_skipped_gracefully():
