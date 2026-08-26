@@ -26,14 +26,33 @@ import sys
 from playwright.sync_api import sync_playwright
 
 import check_posts as cp
+import db
 
 HANDLE = sys.argv[1] if len(sys.argv) > 1 else "torch_boy"
 
 
 def main() -> None:
+    # Load the SAME persisted browser session (cookies/localStorage) the
+    # real pipeline uses - a fresh, cookie-less context is far more likely
+    # to get redirected to a login wall on its own, which would explain a
+    # rendering failure that has nothing to do with the environment's
+    # rendering capability at all. First attempt at this diagnostic made
+    # exactly that mistake (see git history) - "no id 429" showed the
+    # navigation itself got bounced to /accounts/login/, rate-limited.
+    conn = db.connect(cp.DB_FILE)
+    persisted_state = db.load_session_cookies(conn)
+    conn.close()
+    print(f"persisted session state found: {persisted_state is not None}")
+
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=cp.HEADLESS)
-        context = browser.new_context(user_agent=cp.DESKTOP_UA, viewport={"width": 1280, "height": 800})
+        try:
+            context = browser.new_context(
+                storage_state=persisted_state, user_agent=cp.DESKTOP_UA, viewport={"width": 1280, "height": 800}
+            )
+        except Exception as exc:
+            print(f"persisted state was invalid, starting fresh: {exc}")
+            context = browser.new_context(user_agent=cp.DESKTOP_UA, viewport={"width": 1280, "height": 800})
         page = context.new_page()
 
         failed_requests = []

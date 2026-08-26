@@ -27,6 +27,17 @@ jobs:
       - name: Install Playwright's Chromium browser
         run: python3 -m playwright install --with-deps chromium
 
+      # Same cache restore as daily-check.yml, read-only here (no save
+      # step) - this diagnostic needs the real persisted session to be a
+      # fair test, not a fresh cookie-less context that's likely to get
+      # redirected to a login wall on its own.
+      - name: Restore tracker DB cache
+        uses: actions/cache/restore@v4
+        with:
+          path: data/tracker.db
+          key: tracker-db-nonexistent-key-forces-restore-keys-match
+          restore-keys: |
+            tracker-db-
+
       - name: Run diagnostic
-        working-directory: scripts
-        run: python3 diagnose_rendering.py "${{ inputs.handle }}"
+        run: python3 scripts/diagnose_rendering.py "${{ inputs.handle }}"
