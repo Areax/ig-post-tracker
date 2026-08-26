@@ -118,3 +118,49 @@ def test_no_cursor_stops_pagination_even_if_more_available_is_true(monkeypatch):
 
     assert len(media) == 1
     assert exhausted is True
+
+
+def test_max_pages_argument_overrides_the_global_default(monkeypatch):
+    """The known-id fallback (check_handle) needs more pages than
+    MAX_FEED_PAGES=1 (the daily default) ever fetches - a real gap-in-a-
+    single-page bug (see this function's own docstring) was only caught
+    by fetching a second page. `max_pages` must actually take effect
+    independent of the global MAX_FEED_PAGES setting."""
+    _patch_pacing(monkeypatch)
+    monkeypatch.setattr(check_posts, "MAX_FEED_PAGES", 1)  # daily default
+    call_count = {"n": 0}
+
+    def fake_fetch(page, url, params, headers):
+        call_count["n"] += 1
+        return (
+            {"items": [{"taken_at": call_count["n"], "code": f"p{call_count['n']}", "media_type": 1, "product_type": "feed"}],
+             "more_available": True, "next_max_id": f"cursor{call_count['n']}"},
+            None, False,
+        )
+
+    monkeypatch.setattr(check_posts, "fetch_in_page", fake_fetch)
+
+    media, avatar, error, blocked, exhausted = check_posts.fetch_media_paginated(None, "123", max_pages=2)
+
+    assert call_count["n"] == 2, "max_pages=2 must fetch 2 pages even though MAX_FEED_PAGES is 1"
+    assert len(media) == 2
+
+
+def test_max_pages_none_falls_back_to_the_global_max_feed_pages(monkeypatch):
+    _patch_pacing(monkeypatch)
+    monkeypatch.setattr(check_posts, "MAX_FEED_PAGES", 3)
+    call_count = {"n": 0}
+
+    def fake_fetch(page, url, params, headers):
+        call_count["n"] += 1
+        return (
+            {"items": [{"taken_at": 1, "code": "a", "media_type": 1, "product_type": "feed"}],
+             "more_available": True, "next_max_id": "cursor"},
+            None, False,
+        )
+
+    monkeypatch.setattr(check_posts, "fetch_in_page", fake_fetch)
+
+    check_posts.fetch_media_paginated(None, "123")  # max_pages not passed
+
+    assert call_count["n"] == 3

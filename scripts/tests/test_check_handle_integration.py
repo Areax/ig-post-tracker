@@ -40,7 +40,7 @@ def test_max_feed_pages_1_never_touches_feed_user(conn, monkeypatch):
     monkeypatch.setattr(check_posts, "MAX_FEED_PAGES", 1)
     called = {"feed": False}
 
-    def fake_fetch_media_paginated(page, user_id):
+    def fake_fetch_media_paginated(page, user_id, max_pages=None):
         called["feed"] = True
         return [], None, None, False, True
 
@@ -63,7 +63,7 @@ def test_max_feed_pages_above_1_does_call_feed_user(conn, monkeypatch):
     monkeypatch.setattr(check_posts, "MAX_FEED_PAGES", 2)
     called = {"feed": False}
 
-    def fake_fetch_media_paginated(page, user_id):
+    def fake_fetch_media_paginated(page, user_id, max_pages=None):
         called["feed"] = True
         return [], None, None, False, True
 
@@ -115,7 +115,7 @@ def test_known_user_id_fallback_recovers_when_resolve_identity_fails(conn, monke
     ts = int(datetime(2026, 8, 17, 12, tzinfo=UTC).timestamp())
     called_with = {}
 
-    def fake_fetch_media_paginated(page, user_id):
+    def fake_fetch_media_paginated(page, user_id, max_pages=None):
         called_with["user_id"] = user_id
         return [{"taken_at": ts, "code": "abc", "media_type": None, "product_type": None}], None, None, False, True
 
@@ -161,7 +161,7 @@ def test_known_user_id_fallback_failure_reports_both_errors(conn, monkeypatch):
     )
     monkeypatch.setattr(
         check_posts, "fetch_media_paginated",
-        lambda page, user_id: (None, None, "feed also rate limited", True, False),
+        lambda page, user_id, max_pages=None: (None, None, "feed also rate limited", True, False),
     )
 
     results, error, was_blocked, avatar = check_posts.check_handle(
@@ -188,7 +188,7 @@ def test_known_user_id_fallback_skips_redundant_max_feed_pages_call(conn, monkey
     )
     call_count = {"n": 0}
 
-    def fake_fetch_media_paginated(page, user_id):
+    def fake_fetch_media_paginated(page, user_id, max_pages=None):
         call_count["n"] += 1
         return [], None, None, False, True
 
@@ -197,6 +197,33 @@ def test_known_user_id_fallback_skips_redundant_max_feed_pages_call(conn, monkey
     check_posts.check_handle("bry.trieu", [date(2026, 8, 17)], UTC, page=None, conn=conn)
 
     assert call_count["n"] == 1
+
+
+def test_known_user_id_fallback_requests_at_least_the_min_pages(conn, monkeypatch):
+    """Regression test for the real gap-in-a-single-page bug: a single
+    feed/user page silently omitted a real post despite older and newer
+    dates surrounding it. The fallback must always ask for at least
+    KNOWN_ID_FALLBACK_MIN_PAGES, even when MAX_FEED_PAGES (the daily
+    default) is 1."""
+    _patch_pacing(monkeypatch)
+    monkeypatch.setattr(check_posts, "MAX_FEED_PAGES", 1)
+    monkeypatch.setattr(check_posts, "KNOWN_ID_FALLBACK_MIN_PAGES", 2)
+    monkeypatch.setattr(check_posts, "KNOWN_USER_IDS", {"bry.trieu": "663398771"})
+    monkeypatch.setattr(
+        check_posts, "resolve_identity",
+        lambda handle, page: (None, None, None, "broken", False, None),
+    )
+    captured = {}
+
+    def fake_fetch_media_paginated(page, user_id, max_pages=None):
+        captured["max_pages"] = max_pages
+        return [], None, None, False, True
+
+    monkeypatch.setattr(check_posts, "fetch_media_paginated", fake_fetch_media_paginated)
+
+    check_posts.check_handle("bry.trieu", [date(2026, 8, 17)], UTC, page=None, conn=conn)
+
+    assert captured["max_pages"] == 2
 
 
 def test_successful_check_persists_user_id_and_raw_posts(conn, monkeypatch):
