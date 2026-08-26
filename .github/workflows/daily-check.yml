@@ -106,7 +106,28 @@ jobs:
           git add docs/data/history.json docs/data/avatars
           if git diff --cached --quiet; then
             echo "no changes to commit"
-          else
-            git commit -m "Update post history"
-            git push
+            exit 0
           fi
+          git commit -m "Update post history"
+          # A plain `git push` can lose a whole run's real check results to
+          # a bare "rejected: fetch first" if anything else pushed to main
+          # while this run was checking handles (confirmed in production -
+          # a manual push during an in-flight run dropped its results
+          # entirely, with no retry). On rejection, re-apply our freshly-
+          # generated files on top of whatever main now is, rather than a
+          # line-level rebase - history.json is always fully regenerated
+          # from the DB, never hand-edited, so there's nothing to merge
+          # line-by-line; "ours, replayed on the new tip" is exactly the
+          # right semantics here.
+          for attempt in 1 2 3 4 5; do
+            if git push; then
+              exit 0
+            fi
+            echo "push rejected (attempt $attempt/5) - replaying our commit on top of the new main"
+            git fetch origin main
+            git reset --soft origin/main
+            git add docs/data/history.json docs/data/avatars
+            git commit -m "Update post history"
+          done
+          echo "::error::failed to push after 5 attempts"
+          exit 1
