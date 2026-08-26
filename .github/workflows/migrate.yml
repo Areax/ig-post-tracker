@@ -1,0 +1,38 @@
+name: Temporary DB migration
+
+# One-off, throwaway: applies scripts/migrate_corrections.py to CI's
+# actual cached tracker.db (not just the published history.json snapshot),
+# then saves the corrected cache back. Delete this workflow and
+# scripts/migrate_corrections.py once confirmed applied.
+on:
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Restore tracker DB cache
+        uses: actions/cache/restore@v4
+        with:
+          path: data/tracker.db
+          key: tracker-db-nonexistent-key-forces-restore-keys-match
+          restore-keys: |
+            tracker-db-
+
+      - name: Run migration
+        run: python3 scripts/migrate_corrections.py
+
+      - name: Save tracker DB cache
+        uses: actions/cache/save@v4
+        with:
+          path: data/tracker.db
+          key: tracker-db-${{ github.run_id }}

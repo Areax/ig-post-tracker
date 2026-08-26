@@ -113,19 +113,39 @@ jobs:
           # a bare "rejected: fetch first" if anything else pushed to main
           # while this run was checking handles (confirmed in production -
           # a manual push during an in-flight run dropped its results
-          # entirely, with no retry). On rejection, re-apply our freshly-
-          # generated files on top of whatever main now is, rather than a
-          # line-level rebase - history.json is always fully regenerated
-          # from the DB, never hand-edited, so there's nothing to merge
-          # line-by-line; "ours, replayed on the new tip" is exactly the
-          # right semantics here.
+          # entirely, with no retry).
+          #
+          # On rejection, replay our freshly-generated files on top of
+          # whatever main now is - via a HARD reset, not soft. This
+          # checkout happened once, at the start of a run that then spent
+          # ~10 minutes checking handles; if anything else landed on main
+          # during that window, this run's working tree is stale for
+          # every file, not just history.json/avatars. A soft reset only
+          # moves HEAD and leaves the index/working tree untouched, so
+          # re-adding just the 2 generated paths still commits whatever
+          # STALE content every other tracked file already had sitting in
+          # the index - which silently reverted real code changes
+          # (scripts/check_posts.py, scripts/db.py) back to an old version
+          # in production, with no hint in the commit's own diff that
+          # anything was wrong, since git only diffs against the parent it
+          # picked, not against "whatever main actually was by push time."
+          # A hard reset brings every file back in sync with the real
+          # current main first; only then do we restore our own generated
+          # output on top and commit just that.
           for attempt in 1 2 3 4 5; do
             if git push; then
               exit 0
             fi
-            echo "push rejected (attempt $attempt/5) - replaying our commit on top of the new main"
+            echo "push rejected (attempt $attempt/5) - replaying our generated files on top of the new main"
+            mkdir -p /tmp/history-replay
+            cp docs/data/history.json /tmp/history-replay/history.json
+            rm -rf /tmp/history-replay/avatars
+            cp -r docs/data/avatars /tmp/history-replay/avatars
             git fetch origin main
-            git reset --soft origin/main
+            git reset --hard origin/main
+            cp /tmp/history-replay/history.json docs/data/history.json
+            mkdir -p docs/data/avatars
+            cp -r /tmp/history-replay/avatars/. docs/data/avatars/
             git add docs/data/history.json docs/data/avatars
             git commit -m "Update post history"
           done

@@ -1,9 +1,18 @@
-"""db.py owns the tracker's actual persisted state. The two invariants
-that matter most for business correctness:
+"""db.py owns the tracker's actual persisted state. The invariants that
+matter most for business correctness:
 
   1. A successful run overwrites - it's authoritative for the dates it
-     covers (upsert_ok).
-  2. A failed run never overwrites - it only fills genuine gaps
+     covers (upsert_ok)...
+  2. ...except a confirmed `posted: true` can never be downgraded back to
+     false by a later write (also upsert_ok). Both of Instagram's post-
+     listing endpoints have been confirmed, in production, to sometimes
+     return a real post's day missing from an otherwise-gapless-looking
+     fetch (feed/user's non-chronological interleaving; a manually-
+     reordered profile grid changing web_profile_info's display order) -
+     without this rule, a later run's incomplete fetch silently erased a
+     real, previously-confirmed post. `false` stays revisable in the
+     other direction: a later run can still correct it to `true`.
+  3. A failed run never overwrites - it only fills genuine gaps
      (fill_gaps_with_error), so a transient block can't erase history
      that a previous good run already established.
 
@@ -47,6 +56,96 @@ def test_upsert_ok_overwrites_existing_row_for_the_same_date(conn):
         ("torch_boy", "2026-08-17"),
     ).fetchone()
     assert row == (1, "https://instagram.com/p/xyz/", "run-2")
+
+
+def test_upsert_ok_never_downgrades_a_confirmed_posted_day_to_false(conn):
+    """The core regression this whole invariant exists for: signed.angela
+    and bry.trieu both had a real, confirmed posted day silently erased
+    by a later run whose fetch happened to have a gap. A later `false`
+    for an already-`true` day must be rejected outright, not applied."""
+    db.upsert_ok(
+        conn, "signed.angela",
+        {"2026-08-21": {"status": "ok", "posted": True, "permalink": "https://instagram.com/p/DcUwvYJt7f7/"}},
+        "good-run",
+    )
+
+    db.upsert_ok(conn, "signed.angela", {"2026-08-21": {"status": "ok", "posted": False}}, "gappy-later-run")
+
+    row = conn.execute(
+        "SELECT posted, permalink, checked_at FROM checks WHERE handle = ? AND check_date = ?",
+        ("signed.angela", "2026-08-21"),
+    ).fetchone()
+    assert row == (1, "https://instagram.com/p/DcUwvYJt7f7/", "good-run"), (
+        "a confirmed posted day must survive a later run's incomplete fetch"
+    )
+
+
+def test_upsert_ok_still_allows_false_to_true_correction(conn):
+    """The protection is one-directional - a day genuinely marked false
+    (no evidence yet) must still be correctable to true once a later
+    run's fetch actually includes it."""
+    db.upsert_ok(conn, "signed.angela", {"2026-08-21": {"status": "ok", "posted": False}}, "gappy-run")
+
+    db.upsert_ok(
+        conn, "signed.angela",
+        {"2026-08-21": {"status": "ok", "posted": True, "permalink": "https://instagram.com/p/DcUwvYJt7f7/"}},
+        "corrected-run",
+    )
+
+    row = conn.execute(
+        "SELECT posted, permalink, checked_at FROM checks WHERE handle = ? AND check_date = ?",
+        ("signed.angela", "2026-08-21"),
+    ).fetchone()
+    assert row == (1, "https://instagram.com/p/DcUwvYJt7f7/", "corrected-run")
+
+
+def test_upsert_ok_true_can_still_refresh_over_true(conn):
+    """true -> true must still go through normally (e.g. to refresh
+    checked_at or swap in a different permalink for the same day),
+    not get silently blocked by the same guard."""
+    db.upsert_ok(
+        conn, "torch_boy",
+        {"2026-08-17": {"status": "ok", "posted": True, "permalink": "https://instagram.com/p/old/"}},
+        "run-1",
+    )
+
+    db.upsert_ok(
+        conn, "torch_boy",
+        {"2026-08-17": {"status": "ok", "posted": True, "permalink": "https://instagram.com/p/new/"}},
+        "run-2",
+    )
+
+    row = conn.execute(
+        "SELECT posted, permalink, checked_at FROM checks WHERE handle = ? AND check_date = ?",
+        ("torch_boy", "2026-08-17"),
+    ).fetchone()
+    assert row == (1, "https://instagram.com/p/new/", "run-2")
+
+
+def test_upsert_ok_downgrade_protection_is_scoped_per_handle_and_date(conn):
+    """The guard must key off the exact (handle, check_date) row, not
+    accidentally protect/block unrelated rows."""
+    db.upsert_ok(conn, "a", {"2026-08-17": {"status": "ok", "posted": True, "permalink": "https://x/"}}, "t1")
+
+    db.upsert_ok(
+        conn, "a",
+        {
+            "2026-08-17": {"status": "ok", "posted": False},  # blocked: same handle+date, was true
+            "2026-08-18": {"status": "ok", "posted": False},  # allowed: new date, no prior row
+        },
+        "t2",
+    )
+    db.upsert_ok(conn, "b", {"2026-08-17": {"status": "ok", "posted": False}}, "t2")  # allowed: different handle
+
+    rows = {
+        (h, d): (posted, checked_at)
+        for h, d, posted, checked_at in conn.execute(
+            "SELECT handle, check_date, posted, checked_at FROM checks"
+        )
+    }
+    assert rows[("a", "2026-08-17")] == (1, "t1"), "protected - different handle/date rows must not affect it"
+    assert rows[("a", "2026-08-18")] == (0, "t2")
+    assert rows[("b", "2026-08-17")] == (0, "t2")
 
 
 def test_fill_gaps_with_error_never_overwrites_a_good_row(conn):
