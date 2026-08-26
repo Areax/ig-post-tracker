@@ -27,8 +27,7 @@
         "status": "ok"
       },
       "bry.trieu": {
-        "permalink": "https://www.instagram.com/p/DcKW_atmvZc/",
-        "posted": true,
+        "posted": false,
         "status": "ok"
       },
       "caroline.c.rei": {
@@ -272,8 +271,7 @@
         "status": "ok"
       },
       "signed.angela": {
-        "permalink": "https://www.instagram.com/p/DcZ5Qavt0i6/",
-        "posted": true,
+        "posted": false,
         "status": "ok"
       },
       "torch_boy": {
@@ -321,7 +319,48 @@
         "status": "ok"
       }
     },
-    "2026-08-25": {},
+    "2026-08-25": {
+      "angiechack": {
+        "permalink": "https://www.instagram.com/p/DcfYBcDqGDc/",
+        "posted": true,
+        "status": "ok"
+      },
+      "b_yanggg": {
+        "permalink": "https://www.instagram.com/p/DcfSDYGFtNI/",
+        "posted": true,
+        "status": "ok"
+      },
+      "brucedao.str": {
+        "permalink": "https://www.instagram.com/p/DceXOB5tdoG/",
+        "posted": true,
+        "status": "ok"
+      },
+      "bry.trieu": {
+        "permalink": "https://www.instagram.com/p/DcfTOK1Ou-n/",
+        "posted": true,
+        "status": "ok"
+      },
+      "caroline.c.rei": {
+        "permalink": "https://www.instagram.com/p/DcecJIrRVnV/",
+        "posted": true,
+        "status": "ok"
+      },
+      "ringoyippp": {
+        "permalink": "https://www.instagram.com/p/DceXOB5tdoG/",
+        "posted": true,
+        "status": "ok"
+      },
+      "signed.angela": {
+        "permalink": "https://www.instagram.com/p/DcfLNcpt40G/",
+        "posted": true,
+        "status": "ok"
+      },
+      "torch_boy": {
+        "permalink": "https://www.instagram.com/p/Dce1nQakdaA/",
+        "posted": true,
+        "status": "ok"
+      }
+    },
     "2026-08-26": {},
     "2026-08-27": {},
     "2026-08-28": {},
@@ -338,5 +377,5 @@
     "b_yanggg",
     "ringoyippp"
   ],
-  "updated_at": "2026-08-25T18:46:23.773665-07:00"
+  "updated_at": "2026-08-26T01:16:34.123632-07:00"
 }
