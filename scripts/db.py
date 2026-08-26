@@ -213,7 +213,28 @@ def export_avatars(conn: sqlite3.Connection, handles: list[str], output_dir: Pat
 
 
 def upsert_ok(conn: sqlite3.Connection, handle: str, results_by_date: dict, checked_at: str) -> None:
-    """Authoritative write: replaces any existing row for these dates."""
+    """Authoritative write for the dates it covers - with one exception:
+    a confirmed `posted: true` is never downgraded back to false by a
+    later write.
+
+    A `posted: true` is backed by real, positive evidence (a specific
+    post existing) - a `posted: false` is only ever the *absence* of a
+    match in whatever this run happened to fetch, which both of
+    Instagram's post-listing endpoints (web_profile_info's embedded
+    edge_owner_to_timeline_media, and feed/user) have now been confirmed,
+    in production, to sometimes return non-contiguously: a real post can
+    be missing from one run's fetched set even with older *and* newer
+    posts present around it (observed causes: feed/user's non-
+    chronological interleaving, and a profile grid the account owner
+    manually reordered, which changes edge_owner_to_timeline_media's
+    display order without changing anything's real taken_at). Treating
+    every fetch as if it were a complete, gapless picture is what let a
+    later run silently erase a previously-confirmed real post - twice,
+    in production, on two different accounts, through two different
+    endpoints. `false` stays revisable (a later run can still correct it
+    to `true` once a fetch actually includes that day's post), it just
+    can never move the other direction.
+    """
     rows = [
         (handle, d, r["status"], int(r["posted"]), r.get("permalink"), None, checked_at)
         for d, r in results_by_date.items()
@@ -228,6 +249,7 @@ def upsert_ok(conn: sqlite3.Connection, handle: str, results_by_date: dict, chec
             permalink = excluded.permalink,
             message = excluded.message,
             checked_at = excluded.checked_at
+        WHERE NOT (checks.status = 'ok' AND checks.posted = 1 AND excluded.posted = 0)
         """,
         rows,
     )
