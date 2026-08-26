@@ -198,6 +198,32 @@ USER_ID_PATTERN = re.compile(r'"profilePage_(\d+)"')
 ACCESSIBILITY_CAPTION_TZ = ZoneInfo("America/Los_Angeles")
 ACCESSIBILITY_DATE_PATTERN = re.compile(r"on ([A-Za-z]+ \d{1,2}, \d{4})\.")
 POST_CODE_PATTERN = re.compile(r"/(?:p|reel)/([^/?]+)")
+
+# Handles whose numeric user id has been manually confirmed (e.g. via a
+# local run's resolve_identity result) but whose *fresh* id-discovery is
+# known to be unreliable from wherever this script actually runs in
+# production - see check_handle's known-id fallback, used only after
+# resolve_identity has already exhausted every live discovery method and
+# still come up empty. A user id is effectively permanent for the life of
+# an account, so this is safe to rely on once confirmed - but add an
+# entry here only after confirming it yourself; a wrong value would
+# silently pull another account's posts under this handle's name.
+KNOWN_USER_IDS = {
+    # web_profile_info is permanently broken for this specific account
+    # (Instagram-side: "Asset asset://laser.provider/ig_business_category_
+    # subvertical has been deleted"), and every one of resolve_identity's
+    # live id-discovery fallbacks (crawler-UA HTML scrape, rendered DOM
+    # grid, embedded Relay JSON) has been confirmed to fail specifically
+    # from GitHub Actions - profile-page navigation gets redirected to a
+    # login wall and rate-limited there (302 -> /accounts/login/ -> 429),
+    # even though the exact same account resolves fine from a residential
+    # connection. feed/user itself is unaffected by any of this: it's a
+    # plain in-page fetch() call, the same mechanism the primary
+    # web_profile_info call uses successfully for every other tracked
+    # handle - it just needs a user id to call, which this supplies.
+    "bry.trieu": "663398771",
+}
+
 FEED_ITEM_COUNT = 30
 MAX_FEED_PAGES = int(os.environ.get("MAX_FEED_PAGES", "2"))
 HEADLESS = os.environ.get("HEADLESS", "1") != "0"
@@ -838,17 +864,48 @@ def check_handle(
     # throttled regardless of client (see module docstring). The id cache
     # still saves us the crawler-UA fallback path staying necessary.
     user_id, profile_pic_url, media, error, was_blocked, total_post_count = resolve_identity(handle, page)
-    if error:
-        return None, error, was_blocked, None
-    db.save_user_id(conn, handle, user_id, datetime.now(tz).isoformat())
-
     media = media or []
     feed_exhausted = False
+    used_known_id_fallback = False
 
-    # Only paginate feed/user when explicitly asked for deeper coverage
-    # than the ~12 embedded posts already give us (backfills). Daily
-    # checks (MAX_FEED_PAGES=1) never touch feed/user at all.
-    if MAX_FEED_PAGES > 1:
+    if error:
+        # Last resort: an account whose id can never be freshly
+        # rediscovered from this environment (see KNOWN_USER_IDS) isn't
+        # necessarily unrecoverable - feed/user uses the same in-page
+        # fetch() mechanism the primary web_profile_info call does, which
+        # has proven reliable even where resolve_identity's own
+        # DOM-reading fallbacks fail (confirmed for bry.trieu: every
+        # fresh id-discovery method fails from GitHub Actions, but
+        # feed/user succeeds fine once you already have the id).
+        known_user_id = KNOWN_USER_IDS.get(handle)
+        if known_user_id:
+            print(
+                f"    resolve_identity failed ({error}) - trying feed/user with known user_id {known_user_id}",
+                file=sys.stderr,
+            )
+            time.sleep(MIN_REQUEST_INTERVAL + random.uniform(0, REQUEST_JITTER))
+            media, profile_pic_url, feed_error, feed_blocked, feed_exhausted = fetch_media_paginated(
+                page, known_user_id
+            )
+            was_blocked = was_blocked or feed_blocked
+            if feed_error:
+                return None, f"{error}; feed/user with known user_id also failed: {feed_error}", was_blocked, None
+            user_id = known_user_id
+            media = media or []
+            total_post_count = None
+            used_known_id_fallback = True
+            error = None
+        if error:
+            return None, error, was_blocked, None
+
+    db.save_user_id(conn, handle, user_id, datetime.now(tz).isoformat())
+
+    # Only paginate feed/user further when explicitly asked for deeper
+    # coverage than we already have (backfills). Daily checks
+    # (MAX_FEED_PAGES=1) never touch feed/user at all on the normal path;
+    # the known-id fallback above already paginated up to MAX_FEED_PAGES
+    # on its own, so skip repeating that here.
+    if MAX_FEED_PAGES > 1 and not used_known_id_fallback:
         time.sleep(MIN_REQUEST_INTERVAL + random.uniform(0, REQUEST_JITTER))
         extra_media, feed_profile_pic_url, feed_error, feed_blocked, feed_exhausted = fetch_media_paginated(
             page, user_id
