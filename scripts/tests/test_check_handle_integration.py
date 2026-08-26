@@ -199,14 +199,15 @@ def test_known_user_id_fallback_skips_redundant_max_feed_pages_call(conn, monkey
     assert call_count["n"] == 1
 
 
-def test_known_user_id_fallback_does_not_override_max_pages(conn, monkeypatch):
-    """More pages was never a reliable fix for a gap inside a single
-    fetch (confirmed on two different endpoints in production - see
-    db.upsert_ok's docstring for the actual fix). The known-id fallback
-    doesn't special-case its page count; it just uses fetch_media_paginated's
-    own default (MAX_FEED_PAGES, 1 daily) like every other call site."""
+def test_known_user_id_fallback_requests_at_least_the_min_pages(conn, monkeypatch):
+    """Regression test for the real gap-in-a-single-page bug: a single
+    feed/user page silently omitted a real post despite older and newer
+    dates surrounding it. The fallback must always ask for at least
+    KNOWN_ID_FALLBACK_MIN_PAGES, even when MAX_FEED_PAGES (the daily
+    default) is 1."""
     _patch_pacing(monkeypatch)
     monkeypatch.setattr(check_posts, "MAX_FEED_PAGES", 1)
+    monkeypatch.setattr(check_posts, "KNOWN_ID_FALLBACK_MIN_PAGES", 2)
     monkeypatch.setattr(check_posts, "KNOWN_USER_IDS", {"bry.trieu": "663398771"})
     monkeypatch.setattr(
         check_posts, "resolve_identity",
@@ -222,7 +223,7 @@ def test_known_user_id_fallback_does_not_override_max_pages(conn, monkeypatch):
 
     check_posts.check_handle("bry.trieu", [date(2026, 8, 17)], UTC, page=None, conn=conn)
 
-    assert captured["max_pages"] is None, "no page-count override - relies on fetch_media_paginated's own default"
+    assert captured["max_pages"] == 2
 
 
 def test_successful_check_persists_user_id_and_raw_posts(conn, monkeypatch):

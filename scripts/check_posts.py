@@ -224,21 +224,18 @@ KNOWN_USER_IDS = {
     "bry.trieu": "663398771",
 }
 
+# See check_handle's known-id fallback and fetch_media_paginated's
+# docstring: a single feed/user page can have an internal gap from
+# non-chronological interleaving, confirmed in production for bry.trieu
+# (a real Aug 17 post was absent from a single 12-item page despite
+# older and newer dates surrounding it). A second page reliably backfills
+# the gap. Only applies to this fallback - the normal daily path (an
+# account whose id resolves fine) stays at MAX_FEED_PAGES=1 and doesn't
+# pay this extra request's cost.
+KNOWN_ID_FALLBACK_MIN_PAGES = 2
+
 FEED_ITEM_COUNT = 30
-# A real gap-in-a-single-fetch, confirmed twice in production on two
-# different endpoints (feed/user's non-chronological interleaving; a
-# manually-reordered profile grid changing edge_owner_to_timeline_media's
-# display order), showed that fetching more pages doesn't reliably fix
-# this class of bug - the gap isn't a "ran out of pages" problem, it's
-# that a single fetch can't be trusted as a complete, gapless picture no
-# matter how large. The actual fix is at the DB layer instead (see
-# db.upsert_ok: a confirmed `posted: true` can never be downgraded back
-# to false by a later write, so a day missed by one gappy fetch just
-# self-heals the next time any run's fetch happens to include it) -
-# deep, multi-page backfills are no longer a real use case this project
-# needs, so this defaults to 1 everywhere, including the known-id
-# fallback in check_handle.
-MAX_FEED_PAGES = int(os.environ.get("MAX_FEED_PAGES", "1"))
+MAX_FEED_PAGES = int(os.environ.get("MAX_FEED_PAGES", "2"))
 HEADLESS = os.environ.get("HEADLESS", "1") != "0"
 
 TRACKER_TIMEZONE = os.environ.get("TRACKER_TIMEZONE", "America/Los_Angeles")
@@ -732,18 +729,11 @@ def fetch_media_paginated(
     genuinely absent from that page despite older *and* newer dates being
     present on both sides of it, silently marking a real posted day as a
     false miss (bucket_media_by_day's coverage_start logic only tracks
-    the overall oldest date seen, not gaps within that range). A second
-    page happened to backfill that particular gap, but fetching more
-    pages isn't a real fix - the same class of gap was independently
-    confirmed on web_profile_info's embedded post list too (a manually-
-    reordered profile grid, nothing to do with pagination at all), so
-    there's no page count that reliably guarantees a gapless fetch. The
-    actual fix lives in db.upsert_ok instead: a confirmed `posted: true`
-    can never be downgraded back to false by a later write, so any gap a
-    single fetch has just self-heals whenever some future run's fetch
-    happens to include that day. MAX_FEED_PAGES defaults to 1 everywhere
-    (including check_handle's known-id fallback) on that basis - deep,
-    multi-page backfills aren't a real use case this project needs.
+    the overall oldest date seen, not gaps within that range - a second
+    page happened to backfill the missing day and restore a clean,
+    contiguous range). There's no way to detect this from a single page
+    alone; check_handle's known-id fallback always requests at least 2
+    pages for exactly this reason.
     """
     max_pages = MAX_FEED_PAGES if max_pages is None else max_pages
     all_media: list[dict] = []
@@ -918,8 +908,14 @@ def check_handle(
                 file=sys.stderr,
             )
             time.sleep(MIN_REQUEST_INTERVAL + random.uniform(0, REQUEST_JITTER))
+            # At least 2 pages, even when MAX_FEED_PAGES is 1 (the daily
+            # default) - a single page alone can have an internal gap from
+            # non-chronological interleaving (see fetch_media_paginated's
+            # docstring for the confirmed real-world case), and this
+            # fallback already accepts the cost of an extra request for
+            # this one account in exchange for actually-correct data.
             media, profile_pic_url, feed_error, feed_blocked, feed_exhausted = fetch_media_paginated(
-                page, known_user_id
+                page, known_user_id, max_pages=max(MAX_FEED_PAGES, KNOWN_ID_FALLBACK_MIN_PAGES)
             )
             was_blocked = was_blocked or feed_blocked
             if feed_error:
