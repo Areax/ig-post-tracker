@@ -36,8 +36,38 @@ def main() -> None:
         context = browser.new_context(user_agent=cp.DESKTOP_UA, viewport={"width": 1280, "height": 800})
         page = context.new_page()
 
+        failed_requests = []
+        page.on("requestfailed", lambda req: failed_requests.append(
+            f"{req.method} {req.url} -> {req.failure}"
+        ))
+        console_errors = []
+        page.on("console", lambda msg: console_errors.append(msg.text) if msg.type == "error" else None)
+        response_summary = []
+        page.on("response", lambda res: response_summary.append((res.url, res.status)))
+
         nav_error = cp.goto_profile(page, HANDLE)
         print(f"navigation error: {nav_error}")
+
+        print(f"\n--- raw DOM probe ---")
+        grid_link_count = page.eval_on_selector_all("a[href*='/p/'], a[href*='/reel/']", "els => els.length")
+        img_count = page.eval_on_selector_all("img", "els => els.length")
+        img_with_alt = page.eval_on_selector_all("img[alt]", "els => els.filter(e => e.alt && e.alt.length > 0).length")
+        print(f"grid <a> links found: {grid_link_count}")
+        print(f"<img> tags found: {img_count}")
+        print(f"<img> tags with non-empty alt: {img_with_alt}")
+
+        print(f"\n--- failed requests ({len(failed_requests)}) ---")
+        for f in failed_requests[:30]:
+            print(f"  {f}")
+
+        print(f"\n--- console errors ({len(console_errors)}) ---")
+        for c in console_errors[:20]:
+            print(f"  {c[:200]}")
+
+        non_200 = [r for r in response_summary if r[1] != 200]
+        print(f"\n--- non-200 responses ({len(non_200)} of {len(response_summary)} total) ---")
+        for url, status in non_200[:30]:
+            print(f"  {status} {url}")
 
         print(f"\n--- extract_grid_timeline({HANDLE}) ---")
         grid_user_id, grid_media = cp.extract_grid_timeline(page)
