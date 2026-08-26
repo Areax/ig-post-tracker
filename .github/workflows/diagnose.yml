@@ -1,0 +1,32 @@
+name: Diagnose rendering
+
+# Manual, throwaway diagnostic - does NOT touch data/tracker.db or
+# docs/data/history.json. See scripts/diagnose_rendering.py for what
+# question this is answering and why.
+on:
+  workflow_dispatch:
+    inputs:
+      handle:
+        description: "Handle to test (should be a currently-healthy one)"
+        required: false
+        default: "torch_boy"
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r scripts/requirements.txt
+
+      - name: Install Playwright's Chromium browser
+        run: python3 -m playwright install --with-deps chromium
+
+      - name: Run diagnostic
+        working-directory: scripts
+        run: python3 diagnose_rendering.py "${{ inputs.handle }}"
