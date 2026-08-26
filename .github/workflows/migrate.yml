@@ -20,6 +20,12 @@ jobs:
         with:
           python-version: "3.12"
 
+      # migrate_corrections.py imports check_posts, which imports
+      # playwright.sync_api at module level - the package needs to be
+      # importable even though this migration never launches a browser.
+      - name: Install dependencies
+        run: pip install -r scripts/requirements.txt
+
       - name: Restore tracker DB cache
         uses: actions/cache/restore@v4
         with:
