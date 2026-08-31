@@ -530,7 +530,46 @@
         "status": "ok"
       }
     },
-    "2026-08-30": {}
+    "2026-08-30": {
+      "angiechack": {
+        "posted": false,
+        "status": "ok"
+      },
+      "b_yanggg": {
+        "permalink": "https://www.instagram.com/p/DcrG0swxd46/",
+        "posted": true,
+        "status": "ok"
+      },
+      "brucedao.str": {
+        "permalink": "https://www.instagram.com/p/DcsFacSjXdq/",
+        "posted": true,
+        "status": "ok"
+      },
+      "bry.trieu": {
+        "posted": false,
+        "status": "ok"
+      },
+      "caroline.c.rei": {
+        "permalink": "https://www.instagram.com/p/DcsX3tLFeWU/",
+        "posted": true,
+        "status": "ok"
+      },
+      "ringoyippp": {
+        "permalink": "https://www.instagram.com/p/DcsI1wfDesB/",
+        "posted": true,
+        "status": "ok"
+      },
+      "signed.angela": {
+        "permalink": "https://www.instagram.com/p/DcsCMcyNuhf/",
+        "posted": true,
+        "status": "ok"
+      },
+      "torch_boy": {
+        "permalink": "https://www.instagram.com/p/Dcq7e_-Ec0Y/",
+        "posted": true,
+        "status": "ok"
+      }
+    }
   },
   "handles": [
     "torch_boy",
@@ -542,5 +581,5 @@
     "b_yanggg",
     "ringoyippp"
   ],
-  "updated_at": "2026-08-30T06:13:20.908955-07:00"
+  "updated_at": "2026-08-31T08:24:26.847495-07:00"
 }
