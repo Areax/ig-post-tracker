@@ -304,15 +304,20 @@
       // been reached by a check - i.e. at least one handle has a real
       // result for it (today and later never do, for any handle, by
       // design - see bucket_media_by_day). Deriving this from the data
-      // itself (rather than a separately-computed "today") means the
-      // badges automatically read 0/0 before the always-visible window's
-      // first day has actually happened, with no floor/clamp math needed.
-      const reachedDates = new Set(dates.filter((d) => handles.some((h) => (days[d] || {})[h] != null)));
-      const visibleReachedDates = (expanded) =>
-        (expanded ? dates : dates.slice(hiddenCount)).filter((d) => reachedDates.has(d));
+      // itself (rather than a separately-computed "today") means this
+      // naturally excludes future/pending days with no floor/clamp math
+      // needed. Always scored across EVERY reached date, regardless of
+      // whether the previous-week toggle is expanded - the toggle only
+      // controls which columns are visible in the table, not what counts
+      // toward the rate. Scoping it to just the currently-visible columns
+      // used to mean the badges read a flat 0/0 for everyone whenever the
+      // always-visible window hadn't started yet (e.g. before Sep 14),
+      // even though real data existed in the collapsed previous-week
+      // section - misleadingly looked like the tracker had no data at all.
+      const reachedDates = dates.filter((d) => handles.some((h) => (days[d] || {})[h] != null));
 
-      function updateRateBadges(expanded) {
-        const relevant = visibleReachedDates(expanded);
+      function updateRateBadges() {
+        const relevant = reachedDates;
         for (const handle of handles) {
           const { postedCount, checkedCount } = CellStatus.computeHandleStats(days, relevant, handle);
           const badge = table.querySelector(`.rate-badge[data-handle="${CSS.escape(handle)}"]`);
@@ -383,7 +388,7 @@
         tbody.appendChild(row);
       }
       table.appendChild(tbody);
-      updateRateBadges(false);
+      updateRateBadges();
 
       content.innerHTML = "";
       const card = document.createElement("div");
@@ -399,7 +404,6 @@
           const expanded = table.classList.toggle("extra-days-expanded");
           toggle.classList.toggle("expanded", expanded);
           toggle.querySelector(".toggle-label").textContent = expanded ? `Hide ${label}` : `Show ${label}`;
-          updateRateBadges(expanded);
         });
         card.appendChild(toggle);
       }
