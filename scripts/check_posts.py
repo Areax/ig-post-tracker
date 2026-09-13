@@ -112,10 +112,16 @@ endpoint without notice, and is technically against Instagram's Terms of
 Service (though a 2024 US court ruling found scraping logged-out public
 data isn't a CFAA violation).
 
-Pacing defaults to ~60-75s/request (~1/min), tightened from an earlier
-30-40s default after a real block was hit at that pace too, on a fresh
-IP, mid-run. Whether pacing matters at all once a real browser is in the
-loop is untested - kept conservative pending evidence either way.
+Pacing defaults to ~10-15s/request, brought down from a much more
+conservative ~60-75s (~1/min) that had itself been tightened from an
+earlier 30-40s default after a real block was hit at that pace too, on a
+fresh IP, mid-run. The 10-15s default cleared one full local run across
+all 35 tracked handles with zero blocks (2026-09-13), but that was from a
+residential IP with an already-established session - it has not yet been
+confirmed safe from GitHub Actions' IP range, which is a materially
+different environment. Watch the first few scheduled/cloud runs closely
+after this change and be ready to raise MIN_REQUEST_INTERVAL_SECONDS /
+REQUEST_JITTER_SECONDS back up if a block shows up there.
 
 Optional env vars:
   TRACKER_TIMEZONE            - IANA tz name, default "America/Los_Angeles"
@@ -130,10 +136,12 @@ Optional env vars:
   DB_FILE                      - default "data/tracker.db", the persistent store
   HISTORY_FILE                 - default "docs/data/history.json", generated snapshot
   HISTORY_DAYS                 - how many days the exported snapshot covers, default 14
-  MIN_REQUEST_INTERVAL_SECONDS - default 60 (~1/min)
-  REQUEST_JITTER_SECONDS       - default 15 (randomized on top of the min interval, so 60-75s)
-  MAX_FEED_PAGES                - default 2 (~24 posts of coverage per handle, ~12/page). The
-                                  scheduled daily workflow overrides this to 1 - see module docstring.
+  MIN_REQUEST_INTERVAL_SECONDS - default 10
+  REQUEST_JITTER_SECONDS       - default 5 (randomized on top of the min interval, so 10-15s)
+  MAX_FEED_PAGES                - default 1 (the ~12 most recent posts, from web_profile_info alone -
+                                  see resolve_identity). Set above 1 for deeper feed/user-paginated
+                                  backfills (~12 more posts/page); the scheduled daily workflow pins
+                                  this to 1 explicitly since a daily check only needs yesterday's post.
   COOLDOWN_SECONDS             - default 900 (15 min), only relevant if MAX_COOLDOWNS > 0.
   MAX_COOLDOWNS                - default 0: on a block, stop immediately - mark that handle as an
                                   error (the real message, visible in the UI) and the rest of the
@@ -247,8 +255,8 @@ DB_FILE = Path(os.environ.get("DB_FILE", "data/tracker.db"))
 HISTORY_FILE = Path(os.environ.get("HISTORY_FILE", "docs/data/history.json"))
 HISTORY_DAYS = int(os.environ.get("HISTORY_DAYS", "14"))
 
-MIN_REQUEST_INTERVAL = float(os.environ.get("MIN_REQUEST_INTERVAL_SECONDS", "60"))
-REQUEST_JITTER = float(os.environ.get("REQUEST_JITTER_SECONDS", "15"))
+MIN_REQUEST_INTERVAL = float(os.environ.get("MIN_REQUEST_INTERVAL_SECONDS", "10"))
+REQUEST_JITTER = float(os.environ.get("REQUEST_JITTER_SECONDS", "5"))
 MAX_RETRIES = 3
 RETRY_BACKOFF_SECONDS = 20
 CONSECUTIVE_BLOCK_LIMIT = 1
@@ -657,6 +665,23 @@ def resolve_identity(
         if user and user.get("id"):
             timeline = user.get("edge_owner_to_timeline_media", {})
             edges = timeline.get("edges", [])
+            count = timeline.get("count")
+            # IG's own `is_private` flag is the precise signal when it's
+            # there, but in practice this endpoint doesn't reliably set it
+            # even for accounts confirmed private by hand (tested live
+            # against Kirossound, 2026-09-13: is_private absent, yet
+            # edges/count were both empty too) - `total_post_count` itself
+            # turned out not to be a reliable public/private signal either
+            # (also None for a real, healthy public account, torch_boy,
+            # same day). The one signal that's actually held up: no edges
+            # AND no count at all means nothing about this account's posts
+            # was visible to us, private flag or not - treat that the same
+            # way as a confirmed private account rather than silently
+            # leaving it as an unexplained blank forever (see
+            # bucket_media_by_day/check_handle's own fallback for the
+            # equivalent guard on the id-only fallback paths below).
+            if user.get("is_private") or (not edges and count is None):
+                return None, None, None, "account is private or has no visible posts", False, None
             media = [
                 {
                     "taken_at": e.get("node", {}).get("taken_at_timestamp"),
@@ -931,6 +956,22 @@ def check_handle(
             error = None
         if error:
             return None, error, was_blocked, None
+
+    # A real IG block/rate-limit always surfaces as `error` above (a
+    # distinct HTTP-level failure, e.g. "rate limited (HTTP 401...)").
+    # This is a different, quieter case: the id-only fallback paths
+    # (extract_grid_timeline / extract_embedded_timeline, used when
+    # web_profile_info itself failed) can still succeed with an id but
+    # come back with zero posts and no count metadata - the same signal
+    # resolve_identity's own is_private/no-visible-posts check already
+    # catches on its primary path (see resolve_identity), just reached a
+    # different way here. Left alone this would render as a plain "no
+    # data yet" dash forever, indistinguishable from "haven't checked
+    # yet" - flag it explicitly instead, with the identical message, so
+    # it shows as "couldn't check" with a real reason regardless of which
+    # path found the id.
+    if not used_known_id_fallback and not media and total_post_count is None:
+        return None, "account is private or has no visible posts", was_blocked, None
 
     db.save_user_id(conn, handle, user_id, datetime.now(tz).isoformat())
 

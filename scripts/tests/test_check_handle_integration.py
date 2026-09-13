@@ -225,6 +225,75 @@ def test_known_user_id_fallback_does_not_override_max_pages(conn, monkeypatch):
     assert captured["max_pages"] is None, "no page-count override - relies on fetch_media_paginated's own default"
 
 
+def test_empty_response_with_no_post_count_is_flagged_not_left_pending(conn, monkeypatch):
+    """resolve_identity can succeed (no HTTP error, no block) yet still
+    come back with zero embedded posts and no post-count metadata at all -
+    the known signature of a private account (or, rarely, one that has
+    never posted). Left alone this would leave every day with no `checks`
+    row, indistinguishable from "not checked yet" (a plain pending dash
+    forever). It must instead come back as an explicit error so the UI can
+    show a real reason - and must be clearly distinguishable from an actual
+    IG block/rate-limit, which always surfaces through the `error` branch
+    above with its own HTTP-level message instead."""
+    monkeypatch.setattr(
+        check_posts, "resolve_identity",
+        lambda handle, page: ("123", None, [], None, False, None),
+    )
+
+    results, error, was_blocked, avatar = check_posts.check_handle(
+        "some_private_handle", [date(2026, 8, 17)], UTC, page=None, conn=conn,
+    )
+
+    assert results is None
+    assert error == "account is private or has no visible posts"
+    assert was_blocked is False, "not an IG block - must not trip the cooldown/circuit-breaker logic"
+    assert db.get_user_id(conn, "some_private_handle") is None
+
+
+def test_zero_post_count_is_not_confused_with_missing_post_count(conn, monkeypatch):
+    """A confirmed `total_post_count=0` (the account really has zero posts,
+    per its own timeline metadata) is real evidence, not an unknown - it
+    must NOT be flagged the same way as the missing-metadata case above,
+    and should instead flow through to a normal 'missed' result for every
+    covered day."""
+    monkeypatch.setattr(check_posts, "MAX_FEED_PAGES", 1)
+    monkeypatch.setattr(
+        check_posts, "resolve_identity",
+        lambda handle, page: ("123", None, [], None, False, 0),
+    )
+
+    results, error, was_blocked, avatar = check_posts.check_handle(
+        "torch_boy", [date(2026, 8, 17)], UTC, page=None, conn=conn,
+    )
+
+    assert error is None
+    assert results["2026-08-17"]["posted"] is False
+
+
+def test_known_user_id_fallback_empty_result_is_not_flagged_as_private(conn, monkeypatch):
+    """The known-id fallback deliberately can't recover a post-count (see
+    check_handle), so an empty result from it is an accepted coverage
+    limitation, not evidence of a private account - it must not be
+    misclassified as one."""
+    _patch_pacing(monkeypatch)
+    monkeypatch.setattr(check_posts, "KNOWN_USER_IDS", {"bry.trieu": "663398771"})
+    monkeypatch.setattr(
+        check_posts, "resolve_identity",
+        lambda handle, page: (None, None, None, "primary broken", False, None),
+    )
+    monkeypatch.setattr(
+        check_posts, "fetch_media_paginated",
+        lambda page, user_id, max_pages=None: ([], None, None, False, False),
+    )
+
+    results, error, was_blocked, avatar = check_posts.check_handle(
+        "bry.trieu", [date(2026, 8, 17)], UTC, page=None, conn=conn,
+    )
+
+    assert error is None
+    assert results == {}
+
+
 def test_successful_check_persists_user_id_and_raw_posts(conn, monkeypatch):
     monkeypatch.setattr(check_posts, "MAX_FEED_PAGES", 1)
     ts = int(datetime(2026, 8, 17, 12, tzinfo=UTC).timestamp())

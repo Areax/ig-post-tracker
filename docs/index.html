@@ -61,6 +61,46 @@
     overflow: hidden;
   }
   .table-scroll { overflow-x: auto; }
+  .extra-days-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.6rem 1rem;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface-2);
+    color: var(--muted);
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    user-select: none;
+  }
+  .extra-days-toggle:hover { color: var(--fg); }
+  .extra-days-toggle .toggle-box {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 0.95rem;
+    height: 0.95rem;
+    border-radius: 3px;
+    border: 1.5px solid var(--faint);
+    background: transparent;
+    transition: background 150ms ease, border-color 150ms ease;
+  }
+  .extra-days-toggle .toggle-box svg {
+    width: 0.65rem;
+    height: 0.65rem;
+    color: #fff;
+    opacity: 0;
+    transform: scale(0.6);
+    transition: opacity 120ms ease, transform 120ms ease;
+  }
+  .extra-days-toggle.expanded .toggle-box {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+  .extra-days-toggle.expanded .toggle-box svg { opacity: 1; transform: scale(1); }
+  th.extra-day, td.extra-day { display: none; }
+  table.extra-days-expanded th.extra-day, table.extra-days-expanded td.extra-day { display: table-cell; }
   table { border-collapse: collapse; width: 100%; min-width: 680px; font-size: 0.85rem; }
   thead th {
     text-align: center;
@@ -173,6 +213,7 @@
   .legend { display: flex; gap: 1.5rem; margin-top: 1.25rem; font-size: 0.78rem; color: var(--muted); flex-wrap: wrap; }
   .legend span { display: inline-flex; align-items: center; gap: 0.45rem; }
   .legend .swatch { width: 0.85rem; height: 0.85rem; border-radius: 5px; display: inline-block; }
+  .disclaimer { margin-top: 0.6rem; font-size: 0.72rem; color: var(--faint); }
 
   .empty { color: var(--muted); padding: 3rem 1.5rem; text-align: center; font-size: 0.9rem; }
 </style>
@@ -191,6 +232,9 @@
       <span><i class="swatch" style="background: var(--error-bg); box-shadow: inset 0 0 0 1px var(--error)"></i> Couldn't check &mdash; tap for reason</span>
       <span><i class="swatch" style="background: var(--pending-bg)"></i> No data yet</span>
     </div>
+    <p class="disclaimer" id="disclaimer" style="display:none">
+      Results may be inaccurate if someone has manually reordered their own post grid since the last check.
+    </p>
   </div>
   <div class="error-popover" id="error-popover"></div>
 
@@ -248,19 +292,51 @@
         return;
       }
 
+      // The primary Sep 14 + 2 weeks window always shows. Any earlier
+      // reference days tacked on the front (e.g. Sep 12/13) are collapsed
+      // by default - expandable via a "previous week" toggle rather than
+      // always shown.
+      const ALWAYS_VISIBLE_DAYS = 14;
+      const hiddenCount = Math.max(0, dates.length - ALWAYS_VISIBLE_DAYS);
+      const isExtraDay = (d, i) => i < hiddenCount;
+
+      // A date only counts toward anyone's rate badge once it's actually
+      // been reached by a check - i.e. at least one handle has a real
+      // result for it (today and later never do, for any handle, by
+      // design - see bucket_media_by_day). Deriving this from the data
+      // itself (rather than a separately-computed "today") means the
+      // badges automatically read 0/0 before the always-visible window's
+      // first day has actually happened, with no floor/clamp math needed.
+      const reachedDates = new Set(dates.filter((d) => handles.some((h) => (days[d] || {})[h] != null)));
+      const visibleReachedDates = (expanded) =>
+        (expanded ? dates : dates.slice(hiddenCount)).filter((d) => reachedDates.has(d));
+
+      function updateRateBadges(expanded) {
+        const relevant = visibleReachedDates(expanded);
+        for (const handle of handles) {
+          const { postedCount, checkedCount } = CellStatus.computeHandleStats(days, relevant, handle);
+          const badge = table.querySelector(`.rate-badge[data-handle="${CSS.escape(handle)}"]`);
+          if (!badge) continue;
+          badge.querySelector(".posted-count").textContent = postedCount;
+          badge.querySelector(".checked-count").textContent = checkedCount;
+        }
+      }
+
       updatedEl.textContent = data.updated_at ? `Updated ${new Date(data.updated_at).toLocaleString()}` : "";
       renderStats(handles, days, dates);
       document.getElementById("legend").style.display = "flex";
+      document.getElementById("disclaimer").style.display = "block";
 
       const table = document.createElement("table");
 
       const thead = document.createElement("thead");
       const headRow = document.createElement("tr");
       let headHtml = '<th class="handle-col">Handle</th>';
-      for (const d of dates) {
+      dates.forEach((d, i) => {
         const { date, weekday } = fmtDayLabel(d);
-        headHtml += `<th>${date}<span class="weekday">${weekday}</span></th>`;
-      }
+        const cls = isExtraDay(d, i) ? ' class="extra-day"' : "";
+        headHtml += `<th${cls}>${date}<span class="weekday">${weekday}</span></th>`;
+      });
       headRow.innerHTML = headHtml;
       thead.appendChild(headRow);
       table.appendChild(thead);
@@ -268,8 +344,6 @@
       const tbody = document.createElement("tbody");
       for (const handle of handles) {
         const row = document.createElement("tr");
-
-        const { postedCount, checkedCount } = CellStatus.computeHandleStats(days, dates, handle);
 
         const avatarFile = avatars[handle];
         const initial = handle.charAt(0);
@@ -283,14 +357,14 @@
           <div class="handle-name">
             ${avatarHtml}
             <a class="handle-link" href="https://instagram.com/${handle}" target="_blank" rel="noopener">@${handle}</a>
-            <span class="rate-badge"><b>${postedCount}</b>/${checkedCount || dates.length}</span>
+            <span class="rate-badge" data-handle="${handle}"><b class="posted-count">0</b>/<span class="checked-count">0</span></span>
           </div>`;
         row.appendChild(handleCell);
 
-        for (const d of dates) {
+        dates.forEach((d, i) => {
           const result = (days[d] || {})[handle];
           const td = document.createElement("td");
-          td.className = "day-col";
+          td.className = isExtraDay(d, i) ? "day-col extra-day" : "day-col";
 
           const status = CellStatus.classifyCell(result);
           if (status.cls === "pending") {
@@ -305,14 +379,31 @@
             td.innerHTML = `<span class="cell missed" title="No post on ${d}">${X_ICON}</span>`;
           }
           row.appendChild(td);
-        }
+        });
         tbody.appendChild(row);
       }
       table.appendChild(tbody);
+      updateRateBadges(false);
 
       content.innerHTML = "";
       const card = document.createElement("div");
       card.className = "card";
+
+      if (hiddenCount > 0) {
+        const toggle = document.createElement("div");
+        toggle.className = "extra-days-toggle";
+        const checkSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+        const label = "previous week";
+        toggle.innerHTML = `<span class="toggle-box">${checkSvg}</span><span class="toggle-label">Show ${label}</span>`;
+        toggle.addEventListener("click", () => {
+          const expanded = table.classList.toggle("extra-days-expanded");
+          toggle.classList.toggle("expanded", expanded);
+          toggle.querySelector(".toggle-label").textContent = expanded ? `Hide ${label}` : `Show ${label}`;
+          updateRateBadges(expanded);
+        });
+        card.appendChild(toggle);
+      }
+
       const scrollWrap = document.createElement("div");
       scrollWrap.className = "table-scroll";
       scrollWrap.appendChild(table);
