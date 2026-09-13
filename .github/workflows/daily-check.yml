@@ -89,6 +89,15 @@ jobs:
           # you want the fixed window to persist, since every scheduled run
           # reads it fresh - unset it to go back to the normal rolling window.
           WINDOW_START_DATE: ${{ vars.WINDOW_START_DATE }}
+          # Unset by default - direct connection, unchanged. Set all three
+          # repo secrets (Settings > Secrets and variables > Actions) to
+          # route through a residential proxy instead, once one is set up -
+          # see PROXY_SERVER's comment in scripts/check_posts.py for why
+          # GitHub's own shared runner IP needs this (confirmed blocked by
+          # Instagram, 2026-09-13).
+          PROXY_SERVER: ${{ secrets.PROXY_SERVER }}
+          PROXY_USERNAME: ${{ secrets.PROXY_USERNAME }}
+          PROXY_PASSWORD: ${{ secrets.PROXY_PASSWORD }}
         run: python3 scripts/check_posts.py
 
       - name: Save tracker DB cache

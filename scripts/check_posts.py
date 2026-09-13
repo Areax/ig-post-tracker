@@ -148,6 +148,9 @@ Optional env vars:
                                   run as skipped, rather than waiting. Set > 0 to opt back into
                                   cooldown-and-resume (e.g. for an unattended backfill).
   HEADLESS                     - default "1" (headless browser). Set "0" to watch it run locally.
+  PROXY_SERVER, PROXY_USERNAME, - unset by default (direct connection). Set all three together
+  PROXY_PASSWORD                 to route the whole browser instance through a residential proxy
+                                  (e.g. IPRoyal) - see resolve_proxy_config's docstring for why.
 """
 
 from __future__ import annotations
@@ -264,6 +267,29 @@ DB_FILE = Path(os.environ.get("DB_FILE", "data/tracker.db"))
 HISTORY_FILE = Path(os.environ.get("HISTORY_FILE", "docs/data/history.json"))
 HISTORY_DAYS = int(os.environ.get("HISTORY_DAYS", "14"))
 
+# Optional residential proxy (e.g. IPRoyal) for the whole browser instance -
+# added 2026-09-13 after GitHub Actions' shared runner IP got rate-limited
+# by Instagram mid-session (3 handles in a row all 401'd - see
+# CONSECUTIVE_BLOCK_LIMIT's comment for the incident this came from).
+# Datacenter IPs are broadly blocked; a residential proxy makes GitHub
+# Actions' traffic look like an ordinary residential connection instead,
+# the same kind of connection that has run this script all day locally
+# with zero real blocks. All three env vars must be set together for the
+# proxy to be used at all - unset (the default), this changes nothing and
+# every request goes out directly, exactly as before this existed.
+#   PROXY_SERVER   - e.g. "http://geo.iproyal.com:12321"
+#   PROXY_USERNAME - proxy account username (often encodes session/sticky
+#                    params per the provider's own format, e.g.
+#                    "user-session-abc123")
+#   PROXY_PASSWORD - proxy account password
+# Use ONE sticky session per run (not per-request rotation) - this script
+# already relies on a single consistent identity (persisted cookies) for
+# the whole run, and switching IPs mid-run would undermine that far more
+# than it would help.
+PROXY_SERVER = os.environ.get("PROXY_SERVER")
+PROXY_USERNAME = os.environ.get("PROXY_USERNAME")
+PROXY_PASSWORD = os.environ.get("PROXY_PASSWORD")
+
 MIN_REQUEST_INTERVAL = float(os.environ.get("MIN_REQUEST_INTERVAL_SECONDS", "10"))
 REQUEST_JITTER = float(os.environ.get("REQUEST_JITTER_SECONDS", "5"))
 MAX_RETRIES = 3
@@ -318,6 +344,19 @@ def load_handles(path: Path) -> list[str]:
                 continue
             handles.append(handle)
     return handles
+
+
+def resolve_proxy_config() -> dict | None:
+    """Playwright-shaped proxy config from PROXY_SERVER/USERNAME/PASSWORD,
+    or None if they're not all set (the default - direct connection,
+    unchanged from before this existed). Deliberately all-or-nothing: a
+    partially-configured proxy (e.g. server set but no credentials) is
+    almost certainly a mistake, not an intentional unauthenticated-proxy
+    setup, so it's treated as "not configured" rather than guessed at.
+    """
+    if not (PROXY_SERVER and PROXY_USERNAME and PROXY_PASSWORD):
+        return None
+    return {"server": PROXY_SERVER, "username": PROXY_USERNAME, "password": PROXY_PASSWORD}
 
 
 def resolve_window(tz: ZoneInfo) -> list[date]:
@@ -1087,8 +1126,11 @@ def main() -> None:
     else:
         print("no persisted browser state yet - this run will establish and save a fresh one")
 
+    proxy_config = resolve_proxy_config()
+    print(f"using proxy {PROXY_SERVER}" if proxy_config else "no proxy configured - connecting directly")
+
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=HEADLESS)
+        browser = p.chromium.launch(headless=HEADLESS, proxy=proxy_config)
         try:
             context = browser.new_context(
                 storage_state=persisted_state,
