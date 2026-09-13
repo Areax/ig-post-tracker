@@ -230,6 +230,15 @@ KNOWN_USER_IDS = {
     # web_profile_info call uses successfully for every other tracked
     # handle - it just needs a user id to call, which this supplies.
     "bry.trieu": "663398771",
+    # Same class of failure, confirmed 2026-09-13: resolves fine locally
+    # (id 79953093352, from a real local run's identities table) but every
+    # one of resolve_identity's fallback tiers failed from GitHub Actions -
+    # grid and embedded-timeline extraction both found nothing, and the
+    # last-resort crawler-UA HTML fetch got rate-limited (401) outright.
+    # This was also the account whose failure exposed the run-wide
+    # circuit-breaker bug fixed via CONSECUTIVE_BLOCK_LIMIT above - a
+    # single account this broken from CI used to abort the entire run.
+    "lj.exist": "79953093352",
 }
 
 FEED_ITEM_COUNT = 30
@@ -259,7 +268,18 @@ MIN_REQUEST_INTERVAL = float(os.environ.get("MIN_REQUEST_INTERVAL_SECONDS", "10"
 REQUEST_JITTER = float(os.environ.get("REQUEST_JITTER_SECONDS", "5"))
 MAX_RETRIES = 3
 RETRY_BACKOFF_SECONDS = 20
-CONSECUTIVE_BLOCK_LIMIT = 1
+# A block on ONE handle has turned out, twice in production now (bry.trieu,
+# then lj.exist - both resolve fine locally but fail every fallback tier
+# from GitHub Actions' IP specifically), to be an account/environment-
+# specific quirk rather than a sign the whole session is under a
+# sustained block. At 1, a single such account used to abort the entire
+# run and mark every OTHER handle as "skipped" too, for no reason related
+# to them at all - confirmed in production on 2026-09-13, when lj.exist
+# alone (handle #1 of 47) zeroed out that day's check for all 47 tracked
+# people. 3 in a row (never reset by a successful check in between - see
+# the main loop) is a much stronger, still-fast signal of an actual
+# sustained block, while not being tripped by one flaky account.
+CONSECUTIVE_BLOCK_LIMIT = 3
 RATE_LIMIT_STATUS_CODES = (429, 401)
 COOLDOWN_SECONDS = float(os.environ.get("COOLDOWN_SECONDS", "900"))
 MAX_COOLDOWNS = int(os.environ.get("MAX_COOLDOWNS", "0"))
@@ -985,11 +1005,20 @@ def check_handle(
         extra_media, feed_profile_pic_url, feed_error, feed_blocked, feed_exhausted = fetch_media_paginated(
             page, user_id
         )
-        was_blocked = was_blocked or feed_blocked
+        # Deliberately NOT folded into `was_blocked`: this call is asking
+        # for MORE history than we already have (older posts beyond the
+        # first page), not the core per-handle check itself - a 401 here
+        # just means "can't get further back today," not "we're under a
+        # sustained block." Letting it trip the same consecutive-block
+        # circuit breaker as a real primary-resolution failure would mean
+        # one account's optional deeper backfill stalling could abort the
+        # whole run for every other handle, for no real gain (see
+        # test_feed_user_failure_is_nonfatal_and_keeps_embedded_posts).
         if feed_error:
-            # Don't fail the whole handle over this - we still have the
-            # embedded posts from web_profile_info above, which is real,
-            # usable data even if the deeper backfill couldn't complete.
+            # Don't fail the whole handle over this either - we still have
+            # the embedded posts from web_profile_info above, which is
+            # real, usable data even if the deeper backfill couldn't
+            # complete. Just skip it and move on, no retry.
             print(f"    feed/user pagination failed (keeping embedded posts): {feed_error}", file=sys.stderr)
             feed_exhausted = False
         else:

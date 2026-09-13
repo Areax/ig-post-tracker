@@ -79,6 +79,12 @@ def test_max_feed_pages_above_1_does_call_feed_user(conn, monkeypatch):
 
 
 def test_feed_user_failure_is_nonfatal_and_keeps_embedded_posts(conn, monkeypatch):
+    """A feed/user failure while fetching MORE history than the first page
+    already gave us (MAX_FEED_PAGES > 1) is a "can't get further back
+    today" signal, not a "we're under a sustained block" one - it must
+    not trip the run-wide consecutive-block circuit breaker (see
+    check_handle), since that would let one account's optional deeper
+    backfill stalling abort the entire run for every other handle."""
     _patch_pacing(monkeypatch)
     monkeypatch.setattr(check_posts, "MAX_FEED_PAGES", 2)
     ts = int(datetime(2026, 8, 17, 12, tzinfo=UTC).timestamp())
@@ -98,7 +104,7 @@ def test_feed_user_failure_is_nonfatal_and_keeps_embedded_posts(conn, monkeypatc
 
     assert error is None, "a feed/user failure must not fail the whole handle"
     assert results["2026-08-17"]["posted"] is True
-    assert was_blocked is True, "the block signal itself still propagates for cooldown/circuit-breaker logic"
+    assert was_blocked is False, "a deeper-backfill-only block must not trip the run-wide circuit breaker"
 
 
 def test_known_user_id_fallback_recovers_when_resolve_identity_fails(conn, monkeypatch):
