@@ -564,6 +564,121 @@ def _find_key(obj, key: str):
     return None
 
 
+def extract_reels_tab_codes(page: Page, handle: str, max_attempts: int = 4, retry_interval_ms: int = 1500) -> list[str]:
+    """Recovers shortcodes from the account's own /reels/ tab (a separate
+    connection, `polaris_clips_connection`, embedded in that tab's own
+    server-rendered page - not the same data as the main grid's
+    `polaris_ordered_timeline_connection`). Discovered 2026-09-14: this
+    connection's edges only overlap PARTIALLY with the main grid's ~12 -
+    confirmed live against torch_boy, 6 of 12 overlapped and 6 were
+    genuinely new, giving 18 distinct posts total instead of 12, entirely
+    through page navigation (goto_profile-shaped, no XHR/API call at all).
+    That matters specifically because it's unaffected by web_profile_info
+    rate-limiting, which has (confirmed the same day) nothing to do with
+    plain page loads.
+
+    Deliberately returns codes only, not dated media: this connection's
+    nodes carry no date field whatsoever (no taken_at, no
+    accessibility_caption) - see fetch_post_date, which recovers a date
+    for one code at a time from that code's own page, the same way
+    extract_embedded_timeline already does for the main grid.
+    """
+    url = f"https://www.instagram.com/{handle}/reels/"
+    try:
+        page.goto(url, wait_until="domcontentloaded", timeout=NAV_TIMEOUT_MS)
+    except PlaywrightError as exc:
+        print(f"    reels-tab fallback: navigation failed: {exc}", file=sys.stderr)
+        return []
+
+    blocks: list[str] = []
+    marker_blocks: list[str] = []
+    for attempt in range(1, max_attempts + 1):
+        page.wait_for_timeout(retry_interval_ms if attempt > 1 else 2000)
+        try:
+            blocks = page.eval_on_selector_all(
+                "script[type='application/json']", "els => els.map(e => e.textContent)"
+            )
+        except PlaywrightError as exc:
+            print(f"    reels-tab fallback: eval_on_selector_all failed: {exc}", file=sys.stderr)
+            return []
+        marker_blocks = [b for b in blocks if "polaris_clips_connection" in b]
+        if marker_blocks:
+            break
+
+    if not marker_blocks:
+        print(
+            f"    reels-tab fallback: none of {len(blocks)} application/json blocks "
+            f"contained the expected marker after {max_attempts} attempts",
+            file=sys.stderr,
+        )
+        return []
+
+    for raw in marker_blocks:
+        try:
+            data = json.loads(raw)
+        except ValueError:
+            continue
+        conn = _find_key(data, "polaris_clips_connection")
+        edges = (conn or {}).get("edges")
+        if not edges:
+            continue
+        codes = [edge.get("node", {}).get("code") for edge in edges]
+        return [c for c in codes if c]
+
+    return []
+
+
+def fetch_post_date(page: Page, code: str) -> int | None:
+    """Recovers one post/reel's taken_at (unix timestamp) from its own
+    dedicated page, via the same accessibility_caption mechanism
+    extract_embedded_timeline already uses for the main grid - that field
+    isn't present on polaris_clips_connection's own nodes (see
+    extract_reels_tab_codes), but confirmed live, 2026-09-14, that it IS
+    present on the individual post/reel page for the same code. `/p/{code}/`
+    works for both regular posts and reels; no need to know which type
+    code is ahead of time."""
+    url = f"https://www.instagram.com/p/{code}/"
+    try:
+        page.goto(url, wait_until="domcontentloaded", timeout=NAV_TIMEOUT_MS)
+        page.wait_for_timeout(2000)
+    except PlaywrightError as exc:
+        print(f"    fetch_post_date({code}): navigation failed: {exc}", file=sys.stderr)
+        return None
+
+    html = page.content()
+    match = ACCESSIBILITY_DATE_PATTERN.search(html)
+    if not match:
+        return None
+    try:
+        post_date = datetime.strptime(match.group(1), "%B %d, %Y").date()
+    except ValueError:
+        return None
+    return int(
+        datetime(post_date.year, post_date.month, post_date.day, 12, tzinfo=ACCESSIBILITY_CAPTION_TZ).timestamp()
+    )
+
+
+def fetch_additional_reels(page: Page, handle: str, known_codes: set[str]) -> list[dict]:
+    """Combines extract_reels_tab_codes + fetch_post_date into dated media
+    entries for whatever the reels tab has that `known_codes` (the main
+    grid's own codes) doesn't already cover - see extract_reels_tab_codes'
+    docstring for why this is worth doing at all (a real, confirmed gap
+    between the two connections) and fetch_post_date's for where the date
+    for each new code actually comes from. Paced the same as every other
+    per-request call in this module (MIN_REQUEST_INTERVAL/REQUEST_JITTER)
+    since each new code costs one additional real page load."""
+    reel_codes = extract_reels_tab_codes(page, handle)
+    new_codes = [c for c in reel_codes if c not in known_codes]
+    media = []
+    for code in new_codes:
+        time.sleep(MIN_REQUEST_INTERVAL + random.uniform(0, REQUEST_JITTER))
+        taken_at = fetch_post_date(page, code)
+        if taken_at is None:
+            continue
+        media.append({"taken_at": taken_at, "code": code, "media_type": None, "product_type": "clips"})
+    return media
+
+
 def extract_grid_timeline(
     page: Page, max_attempts: int = 4, retry_interval_ms: int = 1500
 ) -> tuple[str | None, list[dict]]:
@@ -1143,6 +1258,24 @@ def check_handle(
             media = media + (extra_media or [])
             if profile_pic_url is None:
                 profile_pic_url = feed_profile_pic_url
+
+        # feed/user pagination above has turned out (confirmed live,
+        # 2026-09-14 - "Unauthorized logged out query" on the GraphQL
+        # equivalent, consistent 401s here, and a real anonymous client
+        # never even attempts either one) to not work at all for a
+        # logged-out session, regardless of retries or backoff - it isn't
+        # a rate-limit that clears, it's Instagram not offering deeper
+        # pagination to anonymous viewers at all. The reels tab's own
+        # embedded connection is a separate, genuinely additional source
+        # that IS reachable anonymously (plain page loads only, no XHR/API
+        # call - see extract_reels_tab_codes) - not a replacement for
+        # feed/user's intended depth, but real, confirmed-working extra
+        # coverage in the meantime.
+        known_codes = {n.get("code") for n in media if n.get("code")}
+        extra_reels = fetch_additional_reels(page, handle, known_codes)
+        if extra_reels:
+            print(f"    reels tab: found {len(extra_reels)} post(s) not in the main grid", file=sys.stderr)
+            media = media + extra_reels
 
     # Enrich with permalink/posted_at and persist every raw fetched post
     # (not just the one-per-day summary below) for later debugging/

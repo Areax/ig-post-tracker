@@ -68,6 +68,7 @@ def test_max_feed_pages_above_1_does_call_feed_user(conn, monkeypatch):
         return [], None, None, False, True
 
     monkeypatch.setattr(check_posts, "fetch_media_paginated", fake_fetch_media_paginated)
+    monkeypatch.setattr(check_posts, "fetch_additional_reels", lambda page, handle, known_codes: [])
     monkeypatch.setattr(
         check_posts, "resolve_identity",
         lambda handle, page: ("123", None, [], None, False, 0),
@@ -76,6 +77,45 @@ def test_max_feed_pages_above_1_does_call_feed_user(conn, monkeypatch):
     check_posts.check_handle("torch_boy", [date(2026, 8, 17)], UTC, page=None, conn=conn)
 
     assert called["feed"] is True
+
+
+def test_reels_tab_posts_not_in_the_main_grid_are_merged_in(conn, monkeypatch):
+    """The reels tab's own connection (see extract_reels_tab_codes) is a
+    genuinely separate source from the main grid, confirmed live to only
+    partially overlap - whatever it finds beyond what resolve_identity
+    already returned should end up in the final media, on a
+    MAX_FEED_PAGES > 1 backfill."""
+    _patch_pacing(monkeypatch)
+    monkeypatch.setattr(check_posts, "MAX_FEED_PAGES", 2)
+    ts = int(datetime(2026, 8, 17, 12, tzinfo=UTC).timestamp())
+    embedded = [{"taken_at": ts, "code": "from-main-grid", "media_type": None, "product_type": None}]
+    monkeypatch.setattr(
+        check_posts, "resolve_identity",
+        lambda handle, page: ("123", None, embedded, None, False, None),
+    )
+    monkeypatch.setattr(
+        check_posts, "fetch_media_paginated",
+        lambda page, user_id: ([], None, None, False, True),
+    )
+    reels_ts = int(datetime(2026, 8, 16, 12, tzinfo=UTC).timestamp())
+    captured_known_codes = {}
+
+    def fake_fetch_additional_reels(page, handle, known_codes):
+        captured_known_codes["value"] = known_codes
+        return [{"taken_at": reels_ts, "code": "from-reels-tab", "media_type": None, "product_type": "clips"}]
+
+    monkeypatch.setattr(check_posts, "fetch_additional_reels", fake_fetch_additional_reels)
+
+    results, error, was_blocked, avatar = check_posts.check_handle(
+        "torch_boy", [date(2026, 8, 16), date(2026, 8, 17)], UTC, page=None, conn=conn,
+    )
+
+    assert error is None
+    assert captured_known_codes["value"] == {"from-main-grid"}
+    assert results["2026-08-16"]["posted"] is True
+    assert results["2026-08-17"]["posted"] is True
+    posts = conn.execute("SELECT code FROM posts WHERE handle = ? ORDER BY code", ("torch_boy",)).fetchall()
+    assert posts == [("from-main-grid",), ("from-reels-tab",)]
 
 
 def test_feed_user_failure_is_nonfatal_and_keeps_embedded_posts(conn, monkeypatch):
@@ -97,6 +137,7 @@ def test_feed_user_failure_is_nonfatal_and_keeps_embedded_posts(conn, monkeypatc
         check_posts, "fetch_media_paginated",
         lambda page, user_id: (None, None, "rate limited", True, False),
     )
+    monkeypatch.setattr(check_posts, "fetch_additional_reels", lambda page, handle, known_codes: [])
 
     results, error, was_blocked, avatar = check_posts.check_handle(
         "torch_boy", [date(2026, 8, 17)], UTC, page=None, conn=conn,
