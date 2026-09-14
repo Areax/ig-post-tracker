@@ -290,6 +290,16 @@ PROXY_SERVER = os.environ.get("PROXY_SERVER")
 PROXY_USERNAME = os.environ.get("PROXY_USERNAME")
 PROXY_PASSWORD = os.environ.get("PROXY_PASSWORD")
 
+# Confirmed in production, 2026-09-13: routing through IPRoyal's residential
+# proxy, 39/47 handles failed with "Page.goto: Timeout 30000ms exceeded" -
+# not an Instagram block at all (no rate-limit message, no 401 - the page
+# load itself just didn't finish in time). A residential peer's own home
+# connection adds real, variable latency on top of the extra proxy hop;
+# 30s (fine and unchanged for a direct connection) isn't generous enough
+# for that. Scales automatically with whether a proxy is configured, so
+# direct-connection runs keep the tighter, already-proven default.
+NAV_TIMEOUT_MS = int(os.environ.get("NAV_TIMEOUT_MS", "60000" if PROXY_SERVER else "30000"))
+
 MIN_REQUEST_INTERVAL = float(os.environ.get("MIN_REQUEST_INTERVAL_SECONDS", "10"))
 REQUEST_JITTER = float(os.environ.get("REQUEST_JITTER_SECONDS", "5"))
 MAX_RETRIES = 3
@@ -454,14 +464,26 @@ def goto_profile(page: Page, handle: str) -> str | None:
     """Navigates to the handle's profile page - a real page load with real
     JS execution, which is what actually made web_profile_info work in
     testing (vs. a cold API call with no page behind it). Returns an error
-    message on failure, None on success."""
+    message on failure, None on success.
+
+    One retry on a timeout specifically (not other navigation errors) -
+    unlike fetch_in_page's retried API calls, this had none at all, and a
+    proxy's variable per-connection latency makes a single slow load a
+    poor reason to give up on the whole handle."""
     url = f"https://www.instagram.com/{handle}/"
-    try:
-        page.goto(url, wait_until="domcontentloaded", timeout=30000)
-        page.wait_for_timeout(2000)  # let the page's own JS settle
-        return None
-    except PlaywrightError as exc:
-        return str(exc)
+    last_error = None
+    for attempt in range(2):
+        if attempt > 0:
+            time.sleep(RETRY_BACKOFF_SECONDS)  # give a saturated link a moment, not just an instant re-hit
+        try:
+            page.goto(url, wait_until="domcontentloaded", timeout=NAV_TIMEOUT_MS)
+            page.wait_for_timeout(2000)  # let the page's own JS settle
+            return None
+        except PlaywrightError as exc:
+            last_error = str(exc)
+            if "Timeout" not in last_error:
+                return last_error
+    return last_error
 
 
 def _find_key(obj, key: str):
