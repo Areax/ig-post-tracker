@@ -5,206 +5,14 @@
     "ringoyippp": "ringoyippp.jpg"
   },
   "days": {
-    "2026-08-30": {
-      "Bakaproof": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
-      },
-      "Borderlessclub": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
-      },
-      "Bymaihoang": {
-        "posted": false,
-        "status": "ok"
-      },
-      "ChewyyyL": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
-      },
-      "FinanciallyGolden": {
-        "posted": false,
-        "status": "ok"
-      },
-      "Irisandhomes": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
-      },
-      "Itshectorav": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
-      },
-      "Itskevzhao": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
-      },
-      "Jay.invests": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
-      },
-      "Kirossound": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
-      },
-      "Michael.dc.santos": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
-      },
-      "Signed.angela": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
-      },
-      "Zhenginmotion": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
-      },
-      "_victoriaponte": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
-      },
-      "abourinaris": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
-      },
-      "alexyee.ventures": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
-      },
-      "angiechack": {
-        "posted": false,
-        "status": "ok"
-      },
-      "brucedao.str": {
-        "permalink": "https://www.instagram.com/p/DcsFacSjXdq/",
-        "posted": true,
-        "status": "ok"
-      },
-      "cincycashflow": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
-      },
-      "daronkfong": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
-      },
-      "eddiebriant.re": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
-      },
-      "goblinkingnyc": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
-      },
-      "heytracymai": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
-      },
-      "ialanng": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
-      },
-      "iamleilanisoon": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
-      },
-      "intamfan": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
-      },
-      "jackrinstagram": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
-      },
-      "janeevanswalther": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
-      },
-      "lj.exist": {
-        "posted": false,
-        "status": "ok"
-      },
-      "minhdoan.ngo": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
-      },
-      "miso.mind": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
-      },
-      "muhan.being": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
-      },
-      "mylivingnotebook": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
-      },
-      "nancyrhuang": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
-      },
-      "ohgreatspirit": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
-      },
-      "realtorharry_": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
-      },
-      "ringoyippp": {
-        "permalink": "https://www.instagram.com/p/DcsI1wfDesB/",
-        "posted": true,
-        "status": "ok"
-      },
-      "rt.invests": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
-      },
-      "saamkavusi": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
-      },
-      "stateofKhai": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
-      },
-      "sylchoice": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
-      },
-      "thenextmandy": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
-      },
-      "trentl3af": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
-      },
-      "tt.talks": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
-      },
-      "underwriting.jams": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
-      },
-      "watthemichael": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
-      },
-      "xcatherineann": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
-      }
-    },
     "2026-08-31": {
       "Bakaproof": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "Borderlessclub": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "Bymaihoang": {
         "posted": false,
@@ -220,16 +28,16 @@
         "status": "ok"
       },
       "Irisandhomes": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "Itshectorav": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "Itskevzhao": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "Jay.invests": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
@@ -244,72 +52,74 @@
         "status": "error"
       },
       "Signed.angela": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DcuYWGrNhQd/",
+        "posted": true,
+        "status": "ok"
       },
       "Zhenginmotion": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "_victoriaponte": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "abourinaris": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "alexyee.ventures": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "angiechack": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "brucedao.str": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DcurXdFtTDB/",
+        "posted": true,
+        "status": "ok"
       },
       "cincycashflow": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "daronkfong": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "eddiebriant.re": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "goblinkingnyc": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "heytracymai": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "ialanng": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "iamleilanisoon": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "intamfan": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "jackrinstagram": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "janeevanswalther": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "lj.exist": {
         "posted": false,
@@ -320,72 +130,75 @@
         "status": "error"
       },
       "miso.mind": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DctlV-rBGEr/",
+        "posted": true,
+        "status": "ok"
       },
       "muhan.being": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "mylivingnotebook": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "nancyrhuang": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "ohgreatspirit": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "realtorharry_": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "ringoyippp": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "rt.invests": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "saamkavusi": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "stateofKhai": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "sylchoice": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "thenextmandy": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "trentl3af": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DcuZgc0R-M8/",
+        "posted": true,
+        "status": "ok"
       },
       "tt.talks": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "underwriting.jams": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "watthemichael": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "xcatherineann": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DcucV0yh14Y/",
+        "posted": true,
+        "status": "ok"
       }
     },
     "2026-09-01": {
@@ -394,8 +207,8 @@
         "status": "error"
       },
       "Borderlessclub": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "Bymaihoang": {
         "posted": false,
@@ -411,16 +224,16 @@
         "status": "ok"
       },
       "Irisandhomes": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "Itshectorav": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "Itskevzhao": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "Jay.invests": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
@@ -435,72 +248,79 @@
         "status": "error"
       },
       "Signed.angela": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DcxTFUWt0qE/",
+        "posted": true,
+        "status": "ok"
       },
       "Zhenginmotion": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "_victoriaponte": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "abourinaris": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DcwqqphPPXM/",
+        "posted": true,
+        "status": "ok"
       },
       "alexyee.ventures": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DcxX8EBK82O/",
+        "posted": true,
+        "status": "ok"
       },
       "angiechack": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/Dcxco3iqrgc/",
+        "posted": true,
+        "status": "ok"
       },
       "brucedao.str": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DcxWDw1NEY0/",
+        "posted": true,
+        "status": "ok"
       },
       "cincycashflow": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DcwyolvyUl-/",
+        "posted": true,
+        "status": "ok"
       },
       "daronkfong": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "eddiebriant.re": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "goblinkingnyc": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "heytracymai": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DcwXL_-v3cq/",
+        "posted": true,
+        "status": "ok"
       },
       "ialanng": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "iamleilanisoon": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "intamfan": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "jackrinstagram": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "janeevanswalther": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "lj.exist": {
         "permalink": "https://www.instagram.com/p/Dcwk_jch-ME/",
@@ -512,72 +332,76 @@
         "status": "error"
       },
       "miso.mind": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "muhan.being": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "mylivingnotebook": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "nancyrhuang": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "ohgreatspirit": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "realtorharry_": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "ringoyippp": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DcxYm0TtrJd/",
+        "posted": true,
+        "status": "ok"
       },
       "rt.invests": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/Dcw29pkyPHp/",
+        "posted": true,
+        "status": "ok"
       },
       "saamkavusi": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DcxI0o3u98G/",
+        "posted": true,
+        "status": "ok"
       },
       "stateofKhai": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DcwMiGARtL_/",
+        "posted": true,
+        "status": "ok"
       },
       "sylchoice": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "thenextmandy": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "trentl3af": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "tt.talks": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "underwriting.jams": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "watthemichael": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "xcatherineann": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       }
     },
     "2026-09-02": {
@@ -586,8 +410,8 @@
         "status": "error"
       },
       "Borderlessclub": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "Bymaihoang": {
         "posted": false,
@@ -602,8 +426,9 @@
         "status": "ok"
       },
       "Irisandhomes": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/Dcyw3HTgX8a/",
+        "posted": true,
+        "status": "ok"
       },
       "Itshectorav": {
         "permalink": "https://www.instagram.com/p/DczFaynSTrT/",
@@ -611,8 +436,8 @@
         "status": "ok"
       },
       "Itskevzhao": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "Jay.invests": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
@@ -627,72 +452,75 @@
         "status": "error"
       },
       "Signed.angela": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "Zhenginmotion": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "_victoriaponte": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "abourinaris": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "alexyee.ventures": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "angiechack": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DczuRCTqTny/",
+        "posted": true,
+        "status": "ok"
       },
       "brucedao.str": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DczVgOjN3gt/",
+        "posted": true,
+        "status": "ok"
       },
       "cincycashflow": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "daronkfong": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "eddiebriant.re": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "goblinkingnyc": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "heytracymai": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DczhQdwNVJ2/",
+        "posted": true,
+        "status": "ok"
       },
       "ialanng": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "iamleilanisoon": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "intamfan": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "jackrinstagram": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "janeevanswalther": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "lj.exist": {
         "permalink": "https://www.instagram.com/p/Dc0F9VCBRfR/",
@@ -704,72 +532,75 @@
         "status": "error"
       },
       "miso.mind": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "muhan.being": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "mylivingnotebook": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "nancyrhuang": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "ohgreatspirit": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "realtorharry_": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "ringoyippp": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/Dc0CanZkaro/",
+        "posted": true,
+        "status": "ok"
       },
       "rt.invests": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "saamkavusi": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DczzQgPu7s0/",
+        "posted": true,
+        "status": "ok"
       },
       "stateofKhai": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "sylchoice": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "thenextmandy": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "trentl3af": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DczwJXYNnr8/",
+        "posted": true,
+        "status": "ok"
       },
       "tt.talks": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "underwriting.jams": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "watthemichael": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "xcatherineann": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       }
     },
     "2026-09-03": {
@@ -778,8 +609,8 @@
         "status": "error"
       },
       "Borderlessclub": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "Bymaihoang": {
         "posted": false,
@@ -794,8 +625,8 @@
         "status": "ok"
       },
       "Irisandhomes": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "Itshectorav": {
         "permalink": "https://www.instagram.com/p/Dc2i9JQTjK0/",
@@ -803,8 +634,8 @@
         "status": "ok"
       },
       "Itskevzhao": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "Jay.invests": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
@@ -819,72 +650,73 @@
         "status": "error"
       },
       "Signed.angela": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/Dc2bz5nNb2F/",
+        "posted": true,
+        "status": "ok"
       },
       "Zhenginmotion": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "_victoriaponte": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "abourinaris": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "alexyee.ventures": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "angiechack": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "brucedao.str": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "cincycashflow": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "daronkfong": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "eddiebriant.re": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "goblinkingnyc": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "heytracymai": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "ialanng": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "iamleilanisoon": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "intamfan": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "jackrinstagram": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "janeevanswalther": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "lj.exist": {
         "posted": false,
@@ -895,72 +727,77 @@
         "status": "error"
       },
       "miso.mind": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/Dc1THaCkkbA/",
+        "posted": true,
+        "status": "ok"
       },
       "muhan.being": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "mylivingnotebook": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "nancyrhuang": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "ohgreatspirit": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "realtorharry_": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "ringoyippp": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "rt.invests": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/Dc1eAPMzmvq/",
+        "posted": true,
+        "status": "ok"
       },
       "saamkavusi": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/Dc2YKAnOYuT/",
+        "posted": true,
+        "status": "ok"
       },
       "stateofKhai": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/Dc07I62wkyJ/",
+        "posted": true,
+        "status": "ok"
       },
       "sylchoice": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "thenextmandy": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "trentl3af": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/Dc2O7hlRTGT/",
+        "posted": true,
+        "status": "ok"
       },
       "tt.talks": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "underwriting.jams": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "watthemichael": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "xcatherineann": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       }
     },
     "2026-09-04": {
@@ -969,8 +806,8 @@
         "status": "error"
       },
       "Borderlessclub": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "Bymaihoang": {
         "permalink": "https://www.instagram.com/p/Dc3y3MMlqid/",
@@ -987,8 +824,8 @@
         "status": "ok"
       },
       "Irisandhomes": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "Itshectorav": {
         "permalink": "https://www.instagram.com/p/Dc4RGXuzAD0/",
@@ -996,8 +833,8 @@
         "status": "ok"
       },
       "Itskevzhao": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "Jay.invests": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
@@ -1012,72 +849,75 @@
         "status": "error"
       },
       "Signed.angela": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "Zhenginmotion": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "_victoriaponte": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "abourinaris": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "alexyee.ventures": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "angiechack": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/Dc4z49Vq54n/",
+        "posted": true,
+        "status": "ok"
       },
       "brucedao.str": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/Dc4gUt9NUNG/",
+        "posted": true,
+        "status": "ok"
       },
       "cincycashflow": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "daronkfong": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "eddiebriant.re": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "goblinkingnyc": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "heytracymai": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/Dc4I5MozuoD/",
+        "posted": true,
+        "status": "ok"
       },
       "ialanng": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "iamleilanisoon": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "intamfan": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "jackrinstagram": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "janeevanswalther": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "lj.exist": {
         "permalink": "https://www.instagram.com/p/Dc5J6vShw_8/",
@@ -1089,72 +929,79 @@
         "status": "error"
       },
       "miso.mind": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/Dc4MdFQPq_X/",
+        "posted": true,
+        "status": "ok"
       },
       "muhan.being": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "mylivingnotebook": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "nancyrhuang": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "ohgreatspirit": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "realtorharry_": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "ringoyippp": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/Dc5FADYhjRZ/",
+        "posted": true,
+        "status": "ok"
       },
       "rt.invests": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/Dc4aXANmWuL/",
+        "posted": true,
+        "status": "ok"
       },
       "saamkavusi": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/Dc4886jOKR9/",
+        "posted": true,
+        "status": "ok"
       },
       "stateofKhai": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "sylchoice": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "thenextmandy": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/Dc3q1p2t22Y/",
+        "posted": true,
+        "status": "ok"
       },
       "trentl3af": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/Dc47mKJNpg6/",
+        "posted": true,
+        "status": "ok"
       },
       "tt.talks": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "underwriting.jams": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "watthemichael": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "xcatherineann": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/Dc307sSm4hJ/",
+        "posted": true,
+        "status": "ok"
       }
     },
     "2026-09-05": {
@@ -1163,8 +1010,8 @@
         "status": "error"
       },
       "Borderlessclub": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "Bymaihoang": {
         "posted": false,
@@ -1179,8 +1026,8 @@
         "status": "ok"
       },
       "Irisandhomes": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "Itshectorav": {
         "permalink": "https://www.instagram.com/p/Dc6XFTSzce1/",
@@ -1188,8 +1035,8 @@
         "status": "ok"
       },
       "Itskevzhao": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "Jay.invests": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
@@ -1204,72 +1051,73 @@
         "status": "error"
       },
       "Signed.angela": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "Zhenginmotion": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "_victoriaponte": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "abourinaris": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "alexyee.ventures": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "angiechack": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/Dc84ZWbBKjy/",
+        "posted": true,
+        "status": "ok"
       },
       "brucedao.str": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "cincycashflow": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "daronkfong": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "eddiebriant.re": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "goblinkingnyc": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "heytracymai": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "ialanng": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "iamleilanisoon": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "intamfan": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "jackrinstagram": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "janeevanswalther": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "lj.exist": {
         "permalink": "https://www.instagram.com/p/Dc70bjDBOvE/",
@@ -1281,72 +1129,75 @@
         "status": "error"
       },
       "miso.mind": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "muhan.being": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "mylivingnotebook": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "nancyrhuang": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "ohgreatspirit": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "realtorharry_": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "ringoyippp": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "rt.invests": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "saamkavusi": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/Dc7pslAuYoI/",
+        "posted": true,
+        "status": "ok"
       },
       "stateofKhai": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "sylchoice": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "thenextmandy": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/Dc500YHNnRr/",
+        "posted": true,
+        "status": "ok"
       },
       "trentl3af": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/Dc6rDjHtEeI/",
+        "posted": true,
+        "status": "ok"
       },
       "tt.talks": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "underwriting.jams": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "watthemichael": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "xcatherineann": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       }
     },
     "2026-09-06": {
@@ -1355,8 +1206,8 @@
         "status": "error"
       },
       "Borderlessclub": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "Bymaihoang": {
         "posted": false,
@@ -1371,8 +1222,8 @@
         "status": "ok"
       },
       "Irisandhomes": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "Itshectorav": {
         "permalink": "https://www.instagram.com/p/Dc-L9X7T4Uo/",
@@ -1380,8 +1231,8 @@
         "status": "ok"
       },
       "Itskevzhao": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "Jay.invests": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
@@ -1396,72 +1247,74 @@
         "status": "error"
       },
       "Signed.angela": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "Zhenginmotion": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "_victoriaponte": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "abourinaris": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/Dc91t0PtLPr/",
+        "posted": true,
+        "status": "ok"
       },
       "alexyee.ventures": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "angiechack": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/Dc9n2-rPI_h/",
+        "posted": true,
+        "status": "ok"
       },
       "brucedao.str": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "cincycashflow": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "daronkfong": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "eddiebriant.re": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "goblinkingnyc": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "heytracymai": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "ialanng": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "iamleilanisoon": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "intamfan": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "jackrinstagram": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "janeevanswalther": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "lj.exist": {
         "permalink": "https://www.instagram.com/p/Dc9lG9RhKcy/",
@@ -1473,72 +1326,76 @@
         "status": "error"
       },
       "miso.mind": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "muhan.being": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "mylivingnotebook": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "nancyrhuang": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "ohgreatspirit": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "realtorharry_": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "ringoyippp": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "rt.invests": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/Dc9j-ZYjfLS/",
+        "posted": true,
+        "status": "ok"
       },
       "saamkavusi": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "stateofKhai": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/Dc8_dZMxy0G/",
+        "posted": true,
+        "status": "ok"
       },
       "sylchoice": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "thenextmandy": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/Dc8E9BzNCYO/",
+        "posted": true,
+        "status": "ok"
       },
       "trentl3af": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "tt.talks": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/Dc87M41E_VU/",
+        "posted": true,
+        "status": "ok"
       },
       "underwriting.jams": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "watthemichael": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "xcatherineann": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       }
     },
     "2026-09-07": {
@@ -1547,8 +1404,8 @@
         "status": "error"
       },
       "Borderlessclub": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "Bymaihoang": {
         "posted": false,
@@ -1564,8 +1421,8 @@
         "status": "ok"
       },
       "Irisandhomes": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "Itshectorav": {
         "permalink": "https://www.instagram.com/p/DdBBvp9zQMF/",
@@ -1573,8 +1430,8 @@
         "status": "ok"
       },
       "Itskevzhao": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "Jay.invests": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
@@ -1589,72 +1446,75 @@
         "status": "error"
       },
       "Signed.angela": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "Zhenginmotion": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "_victoriaponte": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "abourinaris": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DdAhAqfDZHh/",
+        "posted": true,
+        "status": "ok"
       },
       "alexyee.ventures": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "angiechack": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/Dc_fdpSDJK3/",
+        "posted": true,
+        "status": "ok"
       },
       "brucedao.str": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "cincycashflow": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "daronkfong": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "eddiebriant.re": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "goblinkingnyc": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "heytracymai": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DdAx2cPNHND/",
+        "posted": true,
+        "status": "ok"
       },
       "ialanng": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "iamleilanisoon": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "intamfan": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "jackrinstagram": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "janeevanswalther": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "lj.exist": {
         "permalink": "https://www.instagram.com/p/DdA5I7vhBmK/",
@@ -1666,82 +1526,88 @@
         "status": "error"
       },
       "miso.mind": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/Dc_ervMyMr8/",
+        "posted": true,
+        "status": "ok"
       },
       "muhan.being": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "mylivingnotebook": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "nancyrhuang": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "ohgreatspirit": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DdA1bZ2o9Lv/",
+        "posted": true,
+        "status": "ok"
       },
       "realtorharry_": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "ringoyippp": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "rt.invests": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DdAImNIicOD/",
+        "posted": true,
+        "status": "ok"
       },
       "saamkavusi": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "stateofKhai": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "sylchoice": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "thenextmandy": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "trentl3af": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DdAnsJaR25U/",
+        "posted": true,
+        "status": "ok"
       },
       "tt.talks": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/Dc_3KtKEyBh/",
+        "posted": true,
+        "status": "ok"
       },
       "underwriting.jams": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "watthemichael": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "xcatherineann": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       }
     },
     "2026-09-08": {
       "Bakaproof": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DdC6F--k169/",
+        "posted": true,
+        "status": "ok"
       },
       "Borderlessclub": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "Bymaihoang": {
         "posted": false,
@@ -1757,8 +1623,8 @@
         "status": "ok"
       },
       "Irisandhomes": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "Itshectorav": {
         "permalink": "https://www.instagram.com/p/DdDjJWITZYp/",
@@ -1766,8 +1632,8 @@
         "status": "ok"
       },
       "Itskevzhao": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "Jay.invests": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
@@ -1782,72 +1648,78 @@
         "status": "error"
       },
       "Signed.angela": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DdDeJeCNciU/",
+        "posted": true,
+        "status": "ok"
       },
       "Zhenginmotion": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "_victoriaponte": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "abourinaris": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DdDG8aBtJVk/",
+        "posted": true,
+        "status": "ok"
       },
       "alexyee.ventures": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "angiechack": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DdC1mbxj681/",
+        "posted": true,
+        "status": "ok"
       },
       "brucedao.str": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DdCHDRhoH9L/",
+        "posted": true,
+        "status": "ok"
       },
       "cincycashflow": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DdC1mbxj681/",
+        "posted": true,
+        "status": "ok"
       },
       "daronkfong": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "eddiebriant.re": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "goblinkingnyc": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "heytracymai": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DdCxgEdkQ7I/",
+        "posted": true,
+        "status": "ok"
       },
       "ialanng": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "iamleilanisoon": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "intamfan": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "jackrinstagram": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "janeevanswalther": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "lj.exist": {
         "posted": false,
@@ -1858,82 +1730,88 @@
         "status": "error"
       },
       "miso.mind": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "muhan.being": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DdC24SfAPTP/",
+        "posted": true,
+        "status": "ok"
       },
       "mylivingnotebook": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "nancyrhuang": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "ohgreatspirit": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DdDHZrZI2Cj/",
+        "posted": true,
+        "status": "ok"
       },
       "realtorharry_": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "ringoyippp": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "rt.invests": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DdC36csyLlW/",
+        "posted": true,
+        "status": "ok"
       },
       "saamkavusi": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DdDIOIqOgme/",
+        "posted": true,
+        "status": "ok"
       },
       "stateofKhai": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DdCI0nwRYKU/",
+        "posted": true,
+        "status": "ok"
       },
       "sylchoice": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "thenextmandy": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "trentl3af": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "tt.talks": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "underwriting.jams": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "watthemichael": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "xcatherineann": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       }
     },
     "2026-09-09": {
       "Bakaproof": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DdFj9xFEWpr/",
+        "posted": true,
+        "status": "ok"
       },
       "Borderlessclub": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "Bymaihoang": {
         "permalink": "https://www.instagram.com/p/DdFsdB8NbFm/",
@@ -1950,8 +1828,9 @@
         "status": "ok"
       },
       "Irisandhomes": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DdGACytgZbY/",
+        "posted": true,
+        "status": "ok"
       },
       "Itshectorav": {
         "permalink": "https://www.instagram.com/p/DdGMYsCTLhv/",
@@ -1959,8 +1838,8 @@
         "status": "ok"
       },
       "Itskevzhao": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "Jay.invests": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
@@ -1975,72 +1854,76 @@
         "status": "error"
       },
       "Signed.angela": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "Zhenginmotion": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DdFgRQXMgtZ/",
+        "posted": true,
+        "status": "ok"
       },
       "_victoriaponte": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "abourinaris": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DdFw8BKtUYQ/",
+        "posted": true,
+        "status": "ok"
       },
       "alexyee.ventures": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "angiechack": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DdFfscVqvml/",
+        "posted": true,
+        "status": "ok"
       },
       "brucedao.str": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "cincycashflow": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "daronkfong": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "eddiebriant.re": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "goblinkingnyc": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "heytracymai": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DdGBcECkQ2R/",
+        "posted": true,
+        "status": "ok"
       },
       "ialanng": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "iamleilanisoon": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "intamfan": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "jackrinstagram": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "janeevanswalther": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "lj.exist": {
         "permalink": "https://www.instagram.com/p/DdDq79QB16s/",
@@ -2052,82 +1935,87 @@
         "status": "error"
       },
       "miso.mind": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "muhan.being": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DdFW-UlFOvu/",
+        "posted": true,
+        "status": "ok"
       },
       "mylivingnotebook": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "nancyrhuang": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "ohgreatspirit": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DdF3xBEI0MS/",
+        "posted": true,
+        "status": "ok"
       },
       "realtorharry_": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "ringoyippp": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "rt.invests": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "saamkavusi": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DdFvSRQuytS/",
+        "posted": true,
+        "status": "ok"
       },
       "stateofKhai": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "sylchoice": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "thenextmandy": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "trentl3af": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "tt.talks": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DdF8FYDRJps/",
+        "posted": true,
+        "status": "ok"
       },
       "underwriting.jams": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "watthemichael": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "xcatherineann": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       }
     },
     "2026-09-10": {
       "Bakaproof": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DdH99LLjhSR/",
+        "posted": true,
+        "status": "ok"
       },
       "Borderlessclub": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "Bymaihoang": {
         "permalink": "https://www.instagram.com/p/DdIVznHDvd4/",
@@ -2144,8 +2032,8 @@
         "status": "ok"
       },
       "Irisandhomes": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "Itshectorav": {
         "permalink": "https://www.instagram.com/p/DdH6QXLy-k9/",
@@ -2153,8 +2041,8 @@
         "status": "ok"
       },
       "Itskevzhao": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "Jay.invests": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
@@ -2169,72 +2057,76 @@
         "status": "error"
       },
       "Signed.angela": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "Zhenginmotion": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DdIDSMuNkIb/",
+        "posted": true,
+        "status": "ok"
       },
       "_victoriaponte": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "abourinaris": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DdHZIQcJ27_/",
+        "posted": true,
+        "status": "ok"
       },
       "alexyee.ventures": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "angiechack": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "brucedao.str": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "cincycashflow": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "daronkfong": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "eddiebriant.re": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "goblinkingnyc": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "heytracymai": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DdIV6-bDSsA/",
+        "posted": true,
+        "status": "ok"
       },
       "ialanng": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "iamleilanisoon": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DdISxTDsdFM/",
+        "posted": true,
+        "status": "ok"
       },
       "intamfan": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "jackrinstagram": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "janeevanswalther": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "lj.exist": {
         "posted": false,
@@ -2245,82 +2137,89 @@
         "status": "error"
       },
       "miso.mind": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "muhan.being": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DdHIu61jBy5/",
+        "posted": true,
+        "status": "ok"
       },
       "mylivingnotebook": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "nancyrhuang": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "ohgreatspirit": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DdHPHopIYCs/",
+        "posted": true,
+        "status": "ok"
       },
       "realtorharry_": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "ringoyippp": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DdIp4WNNB_v/",
+        "posted": true,
+        "status": "ok"
       },
       "rt.invests": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "saamkavusi": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DdIZUkjuZP6/",
+        "posted": true,
+        "status": "ok"
       },
       "stateofKhai": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "sylchoice": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "thenextmandy": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "trentl3af": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DdH1NaVxTtz/",
+        "posted": true,
+        "status": "ok"
       },
       "tt.talks": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DdHKY9ZFKth/",
+        "posted": true,
+        "status": "ok"
       },
       "underwriting.jams": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "watthemichael": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "xcatherineann": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       }
     },
     "2026-09-11": {
       "Bakaproof": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DdKcBwCDn2X/",
+        "posted": true,
+        "status": "ok"
       },
       "Borderlessclub": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "Bymaihoang": {
         "permalink": "https://www.instagram.com/p/DdKcFeRBWJm/",
@@ -2337,8 +2236,9 @@
         "status": "ok"
       },
       "Irisandhomes": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DdJxUuHgWsf/",
+        "posted": true,
+        "status": "ok"
       },
       "Itshectorav": {
         "permalink": "https://www.instagram.com/p/DdLZUz0TwC4/",
@@ -2346,8 +2246,8 @@
         "status": "ok"
       },
       "Itskevzhao": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "Jay.invests": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
@@ -2362,72 +2262,75 @@
         "status": "error"
       },
       "Signed.angela": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "Zhenginmotion": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "_victoriaponte": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "abourinaris": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "alexyee.ventures": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "angiechack": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "brucedao.str": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "cincycashflow": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DdJ83SICDed/",
+        "posted": true,
+        "status": "ok"
       },
       "daronkfong": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "eddiebriant.re": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "goblinkingnyc": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "heytracymai": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DdKn9gCjcsl/",
+        "posted": true,
+        "status": "ok"
       },
       "ialanng": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "iamleilanisoon": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DdKp5TwvfcB/",
+        "posted": true,
+        "status": "ok"
       },
       "intamfan": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "jackrinstagram": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "janeevanswalther": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "lj.exist": {
         "permalink": "https://www.instagram.com/p/DdLTRa0Bufg/",
@@ -2439,82 +2342,88 @@
         "status": "error"
       },
       "miso.mind": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DdLQaSXB69A/",
+        "posted": true,
+        "status": "ok"
       },
       "muhan.being": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DdK0Ipjj56e/",
+        "posted": true,
+        "status": "ok"
       },
       "mylivingnotebook": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "nancyrhuang": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "ohgreatspirit": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "realtorharry_": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "ringoyippp": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "rt.invests": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DdKb1loDEmb/",
+        "posted": true,
+        "status": "ok"
       },
       "saamkavusi": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DdK9sNLOuBV/",
+        "posted": true,
+        "status": "ok"
       },
       "stateofKhai": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "sylchoice": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "thenextmandy": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "trentl3af": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DdLDCPQt_43/",
+        "posted": true,
+        "status": "ok"
       },
       "tt.talks": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "underwriting.jams": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "watthemichael": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "xcatherineann": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       }
     },
     "2026-09-12": {
       "Bakaproof": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DdNHCx-PNdb/",
+        "posted": true,
+        "status": "ok"
       },
       "Borderlessclub": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "Bymaihoang": {
         "permalink": "https://www.instagram.com/p/DdNnOTGjczO/",
@@ -2531,8 +2440,8 @@
         "status": "ok"
       },
       "Irisandhomes": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "Itshectorav": {
         "permalink": "https://www.instagram.com/p/DdN6SdpT2Dp/",
@@ -2540,8 +2449,8 @@
         "status": "ok"
       },
       "Itskevzhao": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "Jay.invests": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
@@ -2556,72 +2465,75 @@
         "status": "error"
       },
       "Signed.angela": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "Zhenginmotion": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "_victoriaponte": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "abourinaris": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "alexyee.ventures": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "angiechack": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "brucedao.str": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "cincycashflow": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DdL1HwhjB7e/",
+        "posted": true,
+        "status": "ok"
       },
       "daronkfong": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "eddiebriant.re": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "goblinkingnyc": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "heytracymai": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DdNRkUnjRrp/",
+        "posted": true,
+        "status": "ok"
       },
       "ialanng": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "iamleilanisoon": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DdLrQQLhLET/",
+        "posted": true,
+        "status": "ok"
       },
       "intamfan": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "jackrinstagram": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "janeevanswalther": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "lj.exist": {
         "posted": false,
@@ -2632,72 +2544,281 @@
         "status": "error"
       },
       "miso.mind": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DdMePvJlFbW/",
+        "posted": true,
+        "status": "ok"
       },
       "muhan.being": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DdNiIFrj5vY/",
+        "posted": true,
+        "status": "ok"
       },
       "mylivingnotebook": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "nancyrhuang": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "ohgreatspirit": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "realtorharry_": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "ringoyippp": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "rt.invests": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "saamkavusi": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DdNUZbfu483/",
+        "posted": true,
+        "status": "ok"
       },
       "stateofKhai": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "sylchoice": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
       "thenextmandy": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "trentl3af": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DdNPAaVxK30/",
+        "posted": true,
+        "status": "ok"
       },
       "tt.talks": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DdML6_DlOSq/",
+        "posted": true,
+        "status": "ok"
       },
       "underwriting.jams": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "watthemichael": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "xcatherineann": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
+        "permalink": "https://www.instagram.com/p/DdNp-CBNEhS/",
+        "posted": true,
+        "status": "ok"
+      }
+    },
+    "2026-09-13": {
+      "Bakaproof": {
+        "permalink": "https://www.instagram.com/p/DdPlbS-D9-a/",
+        "posted": true,
+        "status": "ok"
+      },
+      "Borderlessclub": {
+        "posted": false,
+        "status": "ok"
+      },
+      "Bymaihoang": {
+        "posted": false,
+        "status": "ok"
+      },
+      "ChewyyyL": {
+        "message": "account is private or has no visible posts",
         "status": "error"
+      },
+      "FinanciallyGolden": {
+        "permalink": "https://www.instagram.com/p/DdP8ZnwtA-d/",
+        "posted": true,
+        "status": "ok"
+      },
+      "Irisandhomes": {
+        "posted": false,
+        "status": "ok"
+      },
+      "Itshectorav": {
+        "permalink": "https://www.instagram.com/p/DdP-H_YziJy/",
+        "posted": true,
+        "status": "ok"
+      },
+      "Itskevzhao": {
+        "posted": false,
+        "status": "ok"
+      },
+      "Jay.invests": {
+        "message": "account is private or has no visible posts",
+        "status": "error"
+      },
+      "Kirossound": {
+        "message": "account is private or has no visible posts",
+        "status": "error"
+      },
+      "Michael.dc.santos": {
+        "message": "account is private or has no visible posts",
+        "status": "error"
+      },
+      "Signed.angela": {
+        "posted": false,
+        "status": "ok"
+      },
+      "Zhenginmotion": {
+        "permalink": "https://www.instagram.com/p/DdP4Bpnlr9h/",
+        "posted": true,
+        "status": "ok"
+      },
+      "_victoriaponte": {
+        "posted": false,
+        "status": "ok"
+      },
+      "abourinaris": {
+        "posted": false,
+        "status": "ok"
+      },
+      "alexyee.ventures": {
+        "permalink": "https://www.instagram.com/p/DdP4GioqO0f/",
+        "posted": true,
+        "status": "ok"
+      },
+      "angiechack": {
+        "posted": false,
+        "status": "ok"
+      },
+      "brucedao.str": {
+        "posted": false,
+        "status": "ok"
+      },
+      "cincycashflow": {
+        "permalink": "https://www.instagram.com/p/DdPGc-VjTuv/",
+        "posted": true,
+        "status": "ok"
+      },
+      "daronkfong": {
+        "message": "account is private or has no visible posts",
+        "status": "error"
+      },
+      "eddiebriant.re": {
+        "posted": false,
+        "status": "ok"
+      },
+      "goblinkingnyc": {
+        "message": "account is private or has no visible posts",
+        "status": "error"
+      },
+      "heytracymai": {
+        "permalink": "https://www.instagram.com/p/DdP7uBzNqPb/",
+        "posted": true,
+        "status": "ok"
+      },
+      "ialanng": {
+        "message": "account is private or has no visible posts",
+        "status": "error"
+      },
+      "iamleilanisoon": {
+        "posted": false,
+        "status": "ok"
+      },
+      "intamfan": {
+        "message": "account is private or has no visible posts",
+        "status": "error"
+      },
+      "jackrinstagram": {
+        "posted": false,
+        "status": "ok"
+      },
+      "janeevanswalther": {
+        "posted": false,
+        "status": "ok"
+      },
+      "lj.exist": {
+        "message": "account is private or has no visible posts",
+        "status": "error"
+      },
+      "minhdoan.ngo": {
+        "message": "account is private or has no visible posts",
+        "status": "error"
+      },
+      "miso.mind": {
+        "posted": false,
+        "status": "ok"
+      },
+      "muhan.being": {
+        "permalink": "https://www.instagram.com/p/DdQBRb8AQzl/",
+        "posted": true,
+        "status": "ok"
+      },
+      "mylivingnotebook": {
+        "posted": false,
+        "status": "ok"
+      },
+      "nancyrhuang": {
+        "posted": false,
+        "status": "ok"
+      },
+      "ohgreatspirit": {
+        "posted": false,
+        "status": "ok"
+      },
+      "realtorharry_": {
+        "message": "account is private or has no visible posts",
+        "status": "error"
+      },
+      "ringoyippp": {
+        "posted": false,
+        "status": "ok"
+      },
+      "rt.invests": {
+        "posted": false,
+        "status": "ok"
+      },
+      "saamkavusi": {
+        "permalink": "https://www.instagram.com/p/DdQOC-0u8A0/",
+        "posted": true,
+        "status": "ok"
+      },
+      "stateofKhai": {
+        "posted": false,
+        "status": "ok"
+      },
+      "sylchoice": {
+        "message": "account is private or has no visible posts",
+        "status": "error"
+      },
+      "thenextmandy": {
+        "permalink": "https://www.instagram.com/p/DdOohLJNwdw/",
+        "posted": true,
+        "status": "ok"
+      },
+      "trentl3af": {
+        "permalink": "https://www.instagram.com/p/DdPl8Nox49q/",
+        "posted": true,
+        "status": "ok"
+      },
+      "tt.talks": {
+        "permalink": "https://www.instagram.com/p/DdO6YXgE99s/",
+        "posted": true,
+        "status": "ok"
+      },
+      "underwriting.jams": {
+        "posted": false,
+        "status": "ok"
+      },
+      "watthemichael": {
+        "posted": false,
+        "status": "ok"
+      },
+      "xcatherineann": {
+        "permalink": "https://www.instagram.com/p/DdQVd2pBrly/",
+        "posted": true,
+        "status": "ok"
       }
     }
   },
@@ -2750,5 +2871,5 @@
     "eddiebriant.re",
     "nancyrhuang"
   ],
-  "updated_at": "2026-09-13T10:51:43.471375-07:00"
+  "updated_at": "2026-09-14T07:30:13.216145-07:00"
 }
