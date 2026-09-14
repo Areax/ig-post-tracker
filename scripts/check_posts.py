@@ -151,6 +151,11 @@ Optional env vars:
   PROXY_SERVER, PROXY_USERNAME, - unset by default (direct connection). Set all three together
   PROXY_PASSWORD                 to route the whole browser instance through a residential proxy
                                   (e.g. IPRoyal) - see resolve_proxy_config's docstring for why.
+  IG_SESSION_STATE_JSON         - unset by default (fully anonymous, unchanged). Set to a real
+                                  logged-in account's Playwright storage_state (JSON) to unlock
+                                  pagination past each account's ~12 most recent posts on
+                                  MAX_FEED_PAGES > 1 backfills - see resolve_authenticated_state's
+                                  docstring for why anonymous access can't do this at all.
 """
 
 from __future__ import annotations
@@ -290,6 +295,38 @@ PROXY_SERVER = os.environ.get("PROXY_SERVER")
 PROXY_USERNAME = os.environ.get("PROXY_USERNAME")
 PROXY_PASSWORD = os.environ.get("PROXY_PASSWORD")
 
+# Optional authenticated session - the one thing confirmed, three
+# independent ways on 2026-09-14, to actually remove the wall on getting
+# more than each account's ~12 most recent posts while anonymous:
+#   1. GraphQL: "Unauthorized logged out query." (error code 1675002) on
+#      the pagination query a real browser fires on page load.
+#   2. The legacy REST endpoint this project's own fetch_media_paginated
+#      targets (/api/v1/feed/user/): consistent 401s regardless of fresh
+#      session, fresh proxy IP, or matching headers.
+#   3. Live network capture while actually scrolling a real profile grid:
+#      the browser never once requests more of that account's posts -
+#      not via feed/user, not via the anonymous-specific GraphQL
+#      operation a public reference implementation documents
+#      (PolarisLoggedOutDesktopWWWProfilePostsTabContentQuery_connection,
+#      doc_id 7950326061742207 as of this research - Instagram rotates
+#      doc_ids every 2-4 weeks, so treat it as a starting point, not a
+#      permanent value). It fires suggested-account/experiment queries
+#      instead.
+# Unset (the default), this changes nothing - every request stays fully
+# anonymous, exactly as it always has, and MAX_FEED_PAGES > 1 backfills
+# stay capped at whatever the first page already gave. Set to a real
+# logged-in account's Playwright storage_state (cookies + localStorage,
+# as JSON - see https://playwright.dev/python/docs/auth#reuse-signed-in-state
+# for how to produce one: log into a real, dedicated account once with a
+# real browser under Playwright, then `context.storage_state(path=...)`)
+# to use that identity for the whole browser context instead, which
+# should - unverified here, since this needs a real account's
+# credentials this script has no way to supply itself - unlock both the
+# GraphQL pagination query and feed/user for real, since both walls
+# above are specifically about being logged OUT, not about anything
+# account- or client-specific.
+IG_SESSION_STATE_JSON = os.environ.get("IG_SESSION_STATE_JSON")
+
 # Confirmed in production, 2026-09-13: routing through IPRoyal's residential
 # proxy, 39/47 handles failed with "Page.goto: Timeout 30000ms exceeded" -
 # not an Instagram block at all (no rate-limit message, no 401 - the page
@@ -367,6 +404,26 @@ def resolve_proxy_config() -> dict | None:
     if not (PROXY_SERVER and PROXY_USERNAME and PROXY_PASSWORD):
         return None
     return {"server": PROXY_SERVER, "username": PROXY_USERNAME, "password": PROXY_PASSWORD}
+
+
+def resolve_authenticated_state() -> dict | None:
+    """A real logged-in account's Playwright storage_state, parsed from
+    IG_SESSION_STATE_JSON - see that env var's own comment for what this
+    unlocks and why. None (the default, and whenever the JSON is missing
+    or malformed) means stay fully anonymous, exactly as before this
+    existed - a broken/malformed value is treated as "not configured"
+    rather than crashing the run, since going deeper is optional, opt-in
+    machinery, never the core daily check itself.
+    """
+    if not IG_SESSION_STATE_JSON:
+        return None
+    try:
+        state = json.loads(IG_SESSION_STATE_JSON)
+    except ValueError:
+        return None
+    if not isinstance(state, dict):
+        return None
+    return state
 
 
 def resolve_window(tz: ZoneInfo) -> list[date]:
@@ -1142,11 +1199,16 @@ def main() -> None:
     if purged:
         print(f"purged {purged} stale row(s) for today or later ({today.isoformat()})", file=sys.stderr)
 
-    persisted_state = db.load_session_cookies(conn)
-    if persisted_state:
-        print("loaded persisted browser state from a prior run")
+    authenticated_state = resolve_authenticated_state()
+    if authenticated_state:
+        persisted_state = authenticated_state
+        print("using a provided authenticated session - see IG_SESSION_STATE_JSON's comment")
     else:
-        print("no persisted browser state yet - this run will establish and save a fresh one")
+        persisted_state = db.load_session_cookies(conn)
+        if persisted_state:
+            print("loaded persisted browser state from a prior run")
+        else:
+            print("no persisted browser state yet - this run will establish and save a fresh one")
 
     proxy_config = resolve_proxy_config()
     print(f"using proxy {PROXY_SERVER}" if proxy_config else "no proxy configured - connecting directly")
@@ -1244,9 +1306,16 @@ def main() -> None:
 
             i += 1
 
-        state_now = context.storage_state()
-        db.save_session_cookies(conn, state_now, datetime.now(tz).isoformat())
-        print("saved browser state for next run")
+        # Never persist an authenticated session into the anonymous
+        # cookie jar - they're different identities on purpose, and
+        # saving one over the other would silently corrupt whichever
+        # baseline every future anonymous run relies on.
+        if authenticated_state:
+            print("authenticated session used for this run only - not saved (anonymous baseline left untouched)")
+        else:
+            state_now = context.storage_state()
+            db.save_session_cookies(conn, state_now, datetime.now(tz).isoformat())
+            print("saved browser state for next run")
 
         browser.close()
 

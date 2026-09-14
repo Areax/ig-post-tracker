@@ -98,6 +98,15 @@ jobs:
           PROXY_SERVER: ${{ secrets.PROXY_SERVER }}
           PROXY_USERNAME: ${{ secrets.PROXY_USERNAME }}
           PROXY_PASSWORD: ${{ secrets.PROXY_PASSWORD }}
+          # Unset by default - fully anonymous, unchanged. Set this repo
+          # secret to a real logged-in account's Playwright storage_state
+          # (JSON) to unlock pagination past each account's ~12 most
+          # recent posts on MAX_FEED_PAGES > 1 backfills - see
+          # IG_SESSION_STATE_JSON's comment in scripts/check_posts.py for
+          # what this is, why anonymous access can't do this at all
+          # (confirmed three independent ways, 2026-09-14), and how to
+          # produce one.
+          IG_SESSION_STATE_JSON: ${{ secrets.IG_SESSION_STATE_JSON }}
         run: python3 scripts/check_posts.py
 
       - name: Save tracker DB cache
