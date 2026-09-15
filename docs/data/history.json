@@ -86,8 +86,8 @@
         "status": "ok"
       },
       "daronkfong": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "eddiebriant.re": {
         "posted": false,
@@ -287,8 +287,8 @@
         "status": "ok"
       },
       "daronkfong": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "eddiebriant.re": {
         "posted": false,
@@ -493,8 +493,8 @@
         "status": "ok"
       },
       "daronkfong": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "eddiebriant.re": {
         "posted": false,
@@ -699,8 +699,8 @@
         "status": "ok"
       },
       "daronkfong": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "eddiebriant.re": {
         "posted": false,
@@ -904,8 +904,8 @@
         "status": "ok"
       },
       "daronkfong": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "eddiebriant.re": {
         "posted": false,
@@ -1111,8 +1111,8 @@
         "status": "ok"
       },
       "daronkfong": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "eddiebriant.re": {
         "posted": false,
@@ -1315,8 +1315,8 @@
         "status": "ok"
       },
       "daronkfong": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "eddiebriant.re": {
         "posted": false,
@@ -1522,8 +1522,8 @@
         "status": "ok"
       },
       "daronkfong": {
-        "message": "account is private or has no visible posts",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "eddiebriant.re": {
         "posted": false,
@@ -1643,7 +1643,217 @@
         "status": "ok"
       }
     },
-    "2026-09-14": {},
+    "2026-09-14": {
+      "Bakaproof": {
+        "permalink": "https://www.instagram.com/p/DdSNpt4gJQr/",
+        "posted": true,
+        "status": "ok"
+      },
+      "Borderlessclub": {
+        "posted": false,
+        "status": "ok"
+      },
+      "Bymaihoang": {
+        "posted": false,
+        "status": "ok"
+      },
+      "ChewyyyL": {
+        "posted": false,
+        "status": "ok"
+      },
+      "FinanciallyGolden": {
+        "permalink": "https://www.instagram.com/p/DdSPD_IMbg4/",
+        "posted": true,
+        "status": "ok"
+      },
+      "Irisandhomes": {
+        "posted": false,
+        "status": "ok"
+      },
+      "Itshectorav": {
+        "permalink": "https://www.instagram.com/p/DdSxuEjTVVC/",
+        "posted": true,
+        "status": "ok"
+      },
+      "Itskevzhao": {
+        "posted": false,
+        "status": "ok"
+      },
+      "Jay.invests": {
+        "permalink": "https://www.instagram.com/p/DdSoICSG9-l/",
+        "posted": true,
+        "status": "ok"
+      },
+      "Kirossound": {
+        "message": "account is private or has no visible posts",
+        "status": "error"
+      },
+      "Michael.dc.santos": {
+        "posted": false,
+        "status": "ok"
+      },
+      "Signed.angela": {
+        "permalink": "https://www.instagram.com/p/DdS4n-xtZ1h/",
+        "posted": true,
+        "status": "ok"
+      },
+      "Zhenginmotion": {
+        "permalink": "https://www.instagram.com/p/DdSvk6yMEDF/",
+        "posted": true,
+        "status": "ok"
+      },
+      "_victoriaponte": {
+        "posted": false,
+        "status": "ok"
+      },
+      "abourinaris": {
+        "permalink": "https://www.instagram.com/p/DdSU0X4pyJf/",
+        "posted": true,
+        "status": "ok"
+      },
+      "alexyee.ventures": {
+        "permalink": "https://www.instagram.com/p/DdTBVSqKMjP/",
+        "posted": true,
+        "status": "ok"
+      },
+      "angiechack": {
+        "posted": false,
+        "status": "ok"
+      },
+      "brucedao.str": {
+        "posted": false,
+        "status": "ok"
+      },
+      "cincycashflow": {
+        "permalink": "https://www.instagram.com/p/DdR3t-REw4W/",
+        "posted": true,
+        "status": "ok"
+      },
+      "daronkfong": {
+        "permalink": "https://www.instagram.com/p/DdTBFxPRLSm/",
+        "posted": true,
+        "status": "ok"
+      },
+      "eddiebriant.re": {
+        "posted": false,
+        "status": "ok"
+      },
+      "goblinkingnyc": {
+        "posted": false,
+        "status": "ok"
+      },
+      "heytracymai": {
+        "posted": false,
+        "status": "ok"
+      },
+      "ialanng": {
+        "message": "account is private or has no visible posts",
+        "status": "error"
+      },
+      "iamleilanisoon": {
+        "permalink": "https://www.instagram.com/p/DdSHofByvuP/",
+        "posted": true,
+        "status": "ok"
+      },
+      "intamfan": {
+        "permalink": "https://www.instagram.com/p/DdRNPLExcne/",
+        "posted": true,
+        "status": "ok"
+      },
+      "jackrinstagram": {
+        "posted": false,
+        "status": "ok"
+      },
+      "janeevanswalther": {
+        "posted": false,
+        "status": "ok"
+      },
+      "lj.exist": {
+        "posted": false,
+        "status": "ok"
+      },
+      "minhdoan.ngo": {
+        "permalink": "https://www.instagram.com/p/DdSKMIxT__P/",
+        "posted": true,
+        "status": "ok"
+      },
+      "miso.mind": {
+        "permalink": "https://www.instagram.com/p/DdRn6OJBi6g/",
+        "posted": true,
+        "status": "ok"
+      },
+      "muhan.being": {
+        "permalink": "https://www.instagram.com/p/DdScOfeD5IM/",
+        "posted": true,
+        "status": "ok"
+      },
+      "mylivingnotebook": {
+        "posted": false,
+        "status": "ok"
+      },
+      "nancyrhuang": {
+        "posted": false,
+        "status": "ok"
+      },
+      "ohgreatspirit": {
+        "posted": false,
+        "status": "ok"
+      },
+      "realtorharry_": {
+        "permalink": "https://www.instagram.com/p/DdRXxqLFb1s/",
+        "posted": true,
+        "status": "ok"
+      },
+      "ringoyippp": {
+        "posted": false,
+        "status": "ok"
+      },
+      "rt.invests": {
+        "permalink": "https://www.instagram.com/p/DdSaQ2ZypXo/",
+        "posted": true,
+        "status": "ok"
+      },
+      "saamkavusi": {
+        "permalink": "https://www.instagram.com/p/DdSmvJAOQJ1/",
+        "posted": true,
+        "status": "ok"
+      },
+      "stateofKhai": {
+        "posted": false,
+        "status": "ok"
+      },
+      "sylchoice": {
+        "message": "account is private or has no visible posts",
+        "status": "error"
+      },
+      "thenextmandy": {
+        "posted": false,
+        "status": "ok"
+      },
+      "trentl3af": {
+        "permalink": "https://www.instagram.com/p/DdSMY8yRFFK/",
+        "posted": true,
+        "status": "ok"
+      },
+      "tt.talks": {
+        "posted": false,
+        "status": "ok"
+      },
+      "underwriting.jams": {
+        "posted": false,
+        "status": "ok"
+      },
+      "watthemichael": {
+        "permalink": "https://www.instagram.com/p/DdS8riDuqtC/",
+        "posted": true,
+        "status": "ok"
+      },
+      "xcatherineann": {
+        "permalink": "https://www.instagram.com/p/DdTH4bnxvXz/",
+        "posted": true,
+        "status": "ok"
+      }
+    },
     "2026-09-15": {},
     "2026-09-16": {},
     "2026-09-17": {},
@@ -1707,5 +1917,5 @@
     "eddiebriant.re",
     "nancyrhuang"
   ],
-  "updated_at": "2026-09-14T18:19:12.288365-07:00"
+  "updated_at": "2026-09-15T06:02:16.576441-07:00"
 }
