@@ -89,6 +89,13 @@ jobs:
           # you want the fixed window to persist, since every scheduled run
           # reads it fresh - unset it to go back to the normal rolling window.
           WINDOW_START_DATE: ${{ vars.WINDOW_START_DATE }}
+          # How many days the pinned window above spans - only meaningful
+          # together with WINDOW_START_DATE. Was NOT wired here until
+          # 2026-09-14 - setting only WINDOW_START_DATE silently fell back
+          # to this script default (14) regardless of intent, which is why
+          # the site's "Sep 14 + 2 weeks always visible, previous week
+          # toggle" design broke when the window got repinned without this.
+          HISTORY_DAYS: ${{ vars.HISTORY_DAYS || '14' }}
           # Unset by default - direct connection, unchanged. Set all three
           # repo secrets (Settings > Secrets and variables > Actions) to
           # route through a residential proxy instead, once one is set up -
