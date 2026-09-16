@@ -1666,8 +1666,9 @@
         "status": "ok"
       },
       "Bymaihoang": {
-        "message": "account is private or has no visible posts",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DdUoXH4IJmz/",
+        "posted": true,
+        "status": "ok"
       },
       "ChewyyyL": {
         "posted": false,
@@ -1719,8 +1720,9 @@
         "status": "ok"
       },
       "abourinaris": {
-        "message": "account is private or has no visible posts",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DdUn3S8Pget/",
+        "posted": true,
+        "status": "ok"
       },
       "alexyee.ventures": {
         "posted": false,
@@ -1934,5 +1936,5 @@
     "eddiebriant.re",
     "nancyrhuang"
   ],
-  "updated_at": "2026-09-16T07:52:31.887118-07:00"
+  "updated_at": "2026-09-16T08:25:27.170591-07:00"
 }
