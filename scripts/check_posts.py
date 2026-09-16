@@ -919,33 +919,41 @@ def resolve_identity(
             timeline = user.get("edge_owner_to_timeline_media", {})
             edges = timeline.get("edges", [])
             count = timeline.get("count")
-            # IG's own `is_private` flag is the precise signal when it's
-            # there, but in practice this endpoint doesn't reliably set it
-            # even for accounts confirmed private by hand (tested live
-            # against Kirossound, 2026-09-13: is_private absent, yet
-            # edges/count were both empty too) - `total_post_count` itself
-            # turned out not to be a reliable public/private signal either
-            # (also None for a real, healthy public account, torch_boy,
-            # same day). The one signal that's actually held up: no edges
-            # AND no count at all means nothing about this account's posts
-            # was visible to us, private flag or not - treat that the same
-            # way as a confirmed private account rather than silently
-            # leaving it as an unexplained blank forever (see
-            # bucket_media_by_day/check_handle's own fallback for the
-            # equivalent guard on the id-only fallback paths below).
-            if user.get("is_private") or (not edges and count is None):
+            # IG's own `is_private` flag is the one signal trustworthy
+            # enough to act on immediately - a hard, explicit assertion
+            # from IG itself.
+            if user.get("is_private"):
                 return None, None, None, "account is private or has no visible posts", False, None
-            media = [
-                {
-                    "taken_at": e.get("node", {}).get("taken_at_timestamp"),
-                    "code": e.get("node", {}).get("shortcode"),
-                    "media_type": None,
-                    "product_type": None,
-                }
-                for e in edges
-            ]
-            return user["id"], user.get("profile_pic_url"), media, None, False, timeline.get("count")
-        error = "no user data returned (account may not exist)"
+            if edges or count is not None:
+                media = [
+                    {
+                        "taken_at": e.get("node", {}).get("taken_at_timestamp"),
+                        "code": e.get("node", {}).get("shortcode"),
+                        "media_type": None,
+                        "product_type": None,
+                    }
+                    for e in edges
+                ]
+                return user["id"], user.get("profile_pic_url"), media, None, False, timeline.get("count")
+            # No edges AND no count, without an explicit is_private flag,
+            # used to be trusted outright as "private" - wrong in
+            # production, confirmed live 2026-09-16: web_profile_info
+            # returned this exact empty-but-200 shape for abourinaris,
+            # alexyee.ventures and Zhenginmotion, all demonstrably public
+            # and actively posting (same session that minute also got an
+            # explicit 401 on a fresh request for abourinaris - this looks
+            # like the same soft-block wearing a "looks like private"
+            # disguise, not a real signal about the account). Don't return
+            # here - fall through to the grid/embedded/HTML fallbacks below
+            # (used for an outright API failure), which read the
+            # already-rendered page directly instead of trusting this one
+            # XHR. Only if those also come up empty does
+            # check_handle's own "not media and total_post_count is None"
+            # guard call it private, the same as it always has for the
+            # id-only fallback paths.
+            error = "account is private or has no visible posts"
+        else:
+            error = "no user data returned (account may not exist)"
 
     # web_profile_info failed outright - try recovering both the id and
     # real post data from the same already-loaded page (no extra request
