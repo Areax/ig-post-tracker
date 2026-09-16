@@ -166,6 +166,7 @@ import os
 import random
 import re
 import sqlite3
+import string
 import sys
 import time
 from datetime import date, datetime, timedelta
@@ -283,17 +284,35 @@ HISTORY_DAYS = int(os.environ.get("HISTORY_DAYS", "14"))
 # proxy to be used at all - unset (the default), this changes nothing and
 # every request goes out directly, exactly as before this existed.
 #   PROXY_SERVER   - e.g. "http://geo.iproyal.com:12321"
-#   PROXY_USERNAME - proxy account username (often encodes session/sticky
-#                    params per the provider's own format, e.g.
-#                    "user-session-abc123")
-#   PROXY_PASSWORD - proxy account password
-# Use ONE sticky session per run (not per-request rotation) - this script
-# already relies on a single consistent identity (persisted cookies) for
-# the whole run, and switching IPs mid-run would undermine that far more
-# than it would help.
+#   PROXY_USERNAME - proxy account username
+#   PROXY_PASSWORD - proxy account password, WITHOUT any session suffix -
+#                    resolve_proxy_config appends its own per-rotation
+#                    "_session-<id>_lifetime-<mins>m" (IPRoyal's syntax)
+#                    when a session_id is given
+# Originally one sticky session for the whole run, on the theory that
+# switching IPs mid-run would undermine the single consistent identity
+# (persisted cookies) the run already relies on. Reversed 2026-09-16: in
+# production, that one sticky IP was instead getting hammered by every
+# handle across every run, for days on end (47 handles x 2 runs/day),
+# which burns an IP's reputation with Instagram just as fast as GitHub's
+# own shared runner IP did - confirmed live the same day (a fresh browser
+# session still got an immediate 401 through it). Real residential
+# traffic doesn't sit behind one unchanging IP for days either, so
+# rotating periodically while keeping the same cookies is not a
+# consistency violation - see PROXY_ROTATE_EVERY below.
 PROXY_SERVER = os.environ.get("PROXY_SERVER")
 PROXY_USERNAME = os.environ.get("PROXY_USERNAME")
 PROXY_PASSWORD = os.environ.get("PROXY_PASSWORD")
+# How many requests to make through one proxy session before rotating to
+# a fresh IPRoyal session (and, with it, almost certainly a new exit IP -
+# see resolve_proxy_config). Only meaningful when the proxy is configured
+# at all.
+PROXY_ROTATE_EVERY = int(os.environ.get("PROXY_ROTATE_EVERY", "5"))
+# How long a single rotation's IPRoyal session is allowed to live before
+# IPRoyal itself would cycle it - comfortably longer than
+# PROXY_ROTATE_EVERY requests' worth of pacing so we're always the one
+# deciding when to rotate, not IPRoyal timing out mid-batch.
+PROXY_SESSION_LIFETIME_MINUTES = int(os.environ.get("PROXY_SESSION_LIFETIME_MINUTES", "10"))
 
 # Optional authenticated session - the one thing confirmed, three
 # independent ways on 2026-09-14, to actually remove the wall on getting
@@ -393,17 +412,37 @@ def load_handles(path: Path) -> list[str]:
     return handles
 
 
-def resolve_proxy_config() -> dict | None:
+def random_session_id() -> str:
+    """An 8-character alphanumeric id, IPRoyal's required shape for the
+    `_session-<id>` password suffix (see resolve_proxy_config)."""
+    return "".join(random.choices(string.ascii_lowercase + string.digits, k=8))
+
+
+def resolve_proxy_config(session_id: str | None = None) -> dict | None:
     """Playwright-shaped proxy config from PROXY_SERVER/USERNAME/PASSWORD,
     or None if they're not all set (the default - direct connection,
     unchanged from before this existed). Deliberately all-or-nothing: a
     partially-configured proxy (e.g. server set but no credentials) is
     almost certainly a mistake, not an intentional unauthenticated-proxy
     setup, so it's treated as "not configured" rather than guessed at.
+
+    `session_id`, when given, is appended as IPRoyal's own
+    `_session-<id>_lifetime-<minutes>m` PASSWORD suffix (confirmed live,
+    2026-09-16: the same suffix on the USERNAME instead makes Chromium's
+    proxy auth fail outright with ERR_PROXY_AUTH_UNSUPPORTED - IPRoyal's
+    own docs example puts it on the password:
+    "username123:password321_country-br_session-sgn34f3e_lifetime-10m").
+    A fresh id resolves to a fresh (confirmed live: different every time)
+    exit IP, sticky for PROXY_SESSION_LIFETIME_MINUTES. Omit it to get
+    PROXY_PASSWORD as-is (IPRoyal's own default rotation behavior for
+    that bare credential).
     """
     if not (PROXY_SERVER and PROXY_USERNAME and PROXY_PASSWORD):
         return None
-    return {"server": PROXY_SERVER, "username": PROXY_USERNAME, "password": PROXY_PASSWORD}
+    password = PROXY_PASSWORD
+    if session_id:
+        password = f"{password}_session-{session_id}_lifetime-{PROXY_SESSION_LIFETIME_MINUTES}m"
+    return {"server": PROXY_SERVER, "username": PROXY_USERNAME, "password": password}
 
 
 def resolve_authenticated_state() -> dict | None:
@@ -1313,6 +1352,23 @@ def fetch_avatar_bytes(page: Page, url: str) -> tuple[bytes | None, str | None, 
     return resp.body(), content_type, None
 
 
+def open_context(browser, storage_state: dict | None, proxy_cfg: dict | None):
+    """New context + page, carrying `storage_state` (cookies) forward -
+    used both for the initial context and every proxy rotation
+    afterwards, so the same identity survives switching exit IPs. Falls
+    back to a state-less context on a bad `storage_state` (e.g. stale
+    shape from a prior architecture) rather than crashing the run."""
+    kwargs = dict(user_agent=DESKTOP_UA, viewport={"width": 1280, "height": 800})
+    if proxy_cfg:
+        kwargs["proxy"] = proxy_cfg
+    try:
+        context = browser.new_context(storage_state=storage_state, **kwargs)
+    except Exception as exc:
+        print(f"persisted browser state was invalid, starting fresh: {exc}", file=sys.stderr)
+        context = browser.new_context(**kwargs)
+    return context, context.new_page()
+
+
 def main() -> None:
     handles = load_handles(HANDLES_FILE)
     if not handles:
@@ -1352,24 +1408,20 @@ def main() -> None:
             print("no persisted browser state yet - this run will establish and save a fresh one")
 
     proxy_config = resolve_proxy_config()
-    print(f"using proxy {PROXY_SERVER}" if proxy_config else "no proxy configured - connecting directly")
+    if proxy_config:
+        print(f"using proxy {PROXY_SERVER}, rotating IP every {PROXY_ROTATE_EVERY} request(s)")
+    else:
+        print("no proxy configured - connecting directly")
 
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=HEADLESS, proxy=proxy_config)
-        try:
-            context = browser.new_context(
-                storage_state=persisted_state,
-                user_agent=DESKTOP_UA,
-                viewport={"width": 1280, "height": 800},
-            )
-        except Exception as exc:
-            # Guards against stale state from a prior architecture (e.g. a
-            # flat cookie dict from the pre-Playwright curl_cffi version,
-            # which isn't valid storage_state shape) - fall back to a
-            # fresh context rather than crashing the whole run.
-            print(f"persisted browser state was invalid, starting fresh: {exc}", file=sys.stderr)
-            context = browser.new_context(user_agent=DESKTOP_UA, viewport={"width": 1280, "height": 800})
-        page = context.new_page()
+        # No proxy at browser-launch time even when one is configured -
+        # every context below gets its own per-rotation proxy instead (a
+        # per-context proxy overrides the browser-level one for Chromium),
+        # so the very first context is never an exception to the rotation.
+        browser = p.chromium.launch(headless=HEADLESS)
+        context, page = open_context(
+            browser, persisted_state, resolve_proxy_config(random_session_id()) if proxy_config else None,
+        )
 
         consecutive_blocks = 0
         cooldowns_used = 0
@@ -1393,6 +1445,15 @@ def main() -> None:
 
             if request_count > 0:
                 time.sleep(MIN_REQUEST_INTERVAL + random.uniform(0, REQUEST_JITTER))
+
+            if proxy_config and request_count > 0 and request_count % PROXY_ROTATE_EVERY == 0:
+                session_id = random_session_id()
+                print(f"  rotating proxy session ({request_count} requests on the last one) -> {session_id}", file=sys.stderr)
+                state_now = context.storage_state()
+                page.close()
+                context.close()
+                context, page = open_context(browser, state_now, resolve_proxy_config(session_id))
+
             request_count += 1
 
             results_by_date, error, was_blocked, profile_pic_url = check_handle(handle, window, tz, page, conn)

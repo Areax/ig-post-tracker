@@ -105,6 +105,13 @@ jobs:
           PROXY_SERVER: ${{ secrets.PROXY_SERVER }}
           PROXY_USERNAME: ${{ secrets.PROXY_USERNAME }}
           PROXY_PASSWORD: ${{ secrets.PROXY_PASSWORD }}
+          # Only meaningful when the proxy above is configured - how many
+          # requests to make through one IPRoyal session (one exit IP)
+          # before rotating to a fresh one. Defaults to 5 in the script
+          # itself if unset here - see PROXY_ROTATE_EVERY's comment in
+          # scripts/check_posts.py for why one sticky IP for the whole
+          # run turned out to be the wrong call.
+          PROXY_ROTATE_EVERY: ${{ vars.PROXY_ROTATE_EVERY || '5' }}
           # Unset by default - fully anonymous, unchanged. Set this repo
           # secret to a real logged-in account's Playwright storage_state
           # (JSON) to unlock pagination past each account's ~12 most
