@@ -292,11 +292,11 @@
         return;
       }
 
-      // The primary Sep 14 + 2 weeks window always shows. Any earlier
-      // reference days tacked on the front (e.g. Sep 12/13) are collapsed
+      // The primary Sep 15 + 13 days window always shows. Any earlier
+      // reference days tacked on the front (e.g. Sep 13/14) are collapsed
       // by default - expandable via a "previous week" toggle rather than
       // always shown.
-      const ALWAYS_VISIBLE_DAYS = 14;
+      const ALWAYS_VISIBLE_DAYS = 13;
       const hiddenCount = Math.max(0, dates.length - ALWAYS_VISIBLE_DAYS);
       const isExtraDay = (d, i) => i < hiddenCount;
 
