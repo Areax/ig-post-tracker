@@ -1710,8 +1710,8 @@
         "status": "ok"
       },
       "Zhenginmotion": {
-        "message": "account is private or has no visible posts",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "_victoriaponte": {
         "permalink": "https://www.instagram.com/p/DdVVVMUx4d-/",
@@ -1731,8 +1731,9 @@
         "status": "ok"
       },
       "brucedao.str": {
-        "message": "account is private or has no visible posts",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DdUFKukNF99/",
+        "posted": true,
+        "status": "ok"
       },
       "cincycashflow": {
         "permalink": "https://www.instagram.com/p/DdU3vODj_LM/",
@@ -1740,8 +1741,8 @@
         "status": "ok"
       },
       "daronkfong": {
-        "message": "account is private or has no visible posts",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "eddiebriant.re": {
         "posted": false,
@@ -1796,12 +1797,14 @@
         "status": "ok"
       },
       "muhan.being": {
-        "message": "account is private or has no visible posts",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DdU4b6QDXhV/",
+        "posted": true,
+        "status": "ok"
       },
       "mylivingnotebook": {
-        "message": "account is private or has no visible posts",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DdU_XjiRnGD/",
+        "posted": true,
+        "status": "ok"
       },
       "nancyrhuang": {
         "posted": false,
@@ -1832,8 +1835,8 @@
         "status": "ok"
       },
       "stateofKhai": {
-        "message": "account is private or has no visible posts",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "sylchoice": {
         "message": "account is private or has no visible posts",
@@ -1931,5 +1934,5 @@
     "eddiebriant.re",
     "nancyrhuang"
   ],
-  "updated_at": "2026-09-16T05:55:05.877468-07:00"
+  "updated_at": "2026-09-16T07:52:31.887118-07:00"
 }
