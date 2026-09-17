@@ -195,7 +195,7 @@
         "status": "ok"
       },
       "tt.talks": {
-        "permalink": "https://www.instagram.com/p/Dc_3KtKEyBh/",
+        "permalink": "https://www.instagram.com/p/Dc__sp1Teei/",
         "posted": true,
         "status": "ok"
       },
@@ -206,6 +206,10 @@
       "watthemichael": {
         "posted": false,
         "status": "ok"
+      },
+      "with_alann": {
+        "message": "account is private or has no visible posts",
+        "status": "error"
       },
       "xcatherineann": {
         "posted": false,
@@ -419,6 +423,10 @@
         "posted": false,
         "status": "ok"
       },
+      "with_alann": {
+        "message": "account is private or has no visible posts",
+        "status": "error"
+      },
       "xcatherineann": {
         "posted": false,
         "status": "ok"
@@ -629,6 +637,10 @@
       "watthemichael": {
         "posted": false,
         "status": "ok"
+      },
+      "with_alann": {
+        "message": "account is private or has no visible posts",
+        "status": "error"
       },
       "xcatherineann": {
         "posted": false,
@@ -842,6 +854,10 @@
         "posted": false,
         "status": "ok"
       },
+      "with_alann": {
+        "message": "account is private or has no visible posts",
+        "status": "error"
+      },
       "xcatherineann": {
         "posted": false,
         "status": "ok"
@@ -1054,6 +1070,10 @@
         "posted": false,
         "status": "ok"
       },
+      "with_alann": {
+        "message": "account is private or has no visible posts",
+        "status": "error"
+      },
       "xcatherineann": {
         "posted": false,
         "status": "ok"
@@ -1264,6 +1284,10 @@
         "posted": false,
         "status": "ok"
       },
+      "with_alann": {
+        "message": "account is private or has no visible posts",
+        "status": "error"
+      },
       "xcatherineann": {
         "permalink": "https://www.instagram.com/p/DdNp-CBNEhS/",
         "posted": true,
@@ -1473,6 +1497,10 @@
       "watthemichael": {
         "posted": false,
         "status": "ok"
+      },
+      "with_alann": {
+        "message": "account is private or has no visible posts",
+        "status": "error"
       },
       "xcatherineann": {
         "permalink": "https://www.instagram.com/p/DdQVd2pBrly/",
@@ -1936,7 +1964,230 @@
         "status": "ok"
       }
     },
-    "2026-09-16": {},
+    "2026-09-16": {
+      "Bakaproof": {
+        "permalink": "https://www.instagram.com/p/DdXmiMkDY_b/",
+        "posted": true,
+        "status": "ok"
+      },
+      "Bymaihoang": {
+        "posted": false,
+        "status": "ok"
+      },
+      "ChewyyyL": {
+        "permalink": "https://www.instagram.com/p/DdYIFv_FhSB/",
+        "posted": true,
+        "status": "ok"
+      },
+      "FinanciallyGolden": {
+        "permalink": "https://www.instagram.com/p/DdXcOevsKHP/",
+        "posted": true,
+        "status": "ok"
+      },
+      "Irisandhomes": {
+        "posted": false,
+        "status": "ok"
+      },
+      "Itshectorav": {
+        "message": "navigation to profile page failed: Page.goto: net::ERR_TUNNEL_CONNECTION_FAILED at https://www.instagram.com/Itshectorav/\nCall log:\n  - navigating to \"https://www.instagram.com/Itshectorav/\", waiting until \"domcontentloaded\"\n",
+        "status": "error"
+      },
+      "Itskevzhao": {
+        "message": "navigation to profile page failed: Page.goto: Timeout 60000ms exceeded.\nCall log:\n  - navigating to \"https://www.instagram.com/Itskevzhao/\", waiting until \"domcontentloaded\"\n",
+        "status": "error"
+      },
+      "Jay.invests": {
+        "posted": false,
+        "status": "ok"
+      },
+      "Michael.dc.santos": {
+        "permalink": "https://www.instagram.com/p/DdYCZJiSCg2tiVdp3jpmpW-5G0ztwYHB_ZZ3-40/",
+        "posted": true,
+        "status": "ok"
+      },
+      "Signed.angela": {
+        "message": "account is private or has no visible posts",
+        "status": "error"
+      },
+      "Zhenginmotion": {
+        "message": "account is private or has no visible posts",
+        "status": "error"
+      },
+      "_victoriaponte": {
+        "message": "account is private or has no visible posts",
+        "status": "error"
+      },
+      "abourinaris": {
+        "permalink": "https://www.instagram.com/p/DdXZp5IH2kj/",
+        "posted": true,
+        "status": "ok"
+      },
+      "alexyee.ventures": {
+        "message": "navigation to profile page failed: Page.goto: net::ERR_TUNNEL_CONNECTION_FAILED at https://www.instagram.com/alexyee.ventures/\nCall log:\n  - navigating to \"https://www.instagram.com/alexyee.ventures/\", waiting until \"domcontentloaded\"\n",
+        "status": "error"
+      },
+      "angiechack": {
+        "message": "navigation to profile page failed: Page.goto: net::ERR_TUNNEL_CONNECTION_FAILED at https://www.instagram.com/angiechack/\nCall log:\n  - navigating to \"https://www.instagram.com/angiechack/\", waiting until \"domcontentloaded\"\n",
+        "status": "error"
+      },
+      "b_yanggg": {
+        "permalink": "https://www.instagram.com/p/DdXhFjZp1qt/",
+        "posted": true,
+        "status": "ok"
+      },
+      "brucedao.str": {
+        "message": "navigation to profile page failed: Page.goto: net::ERR_TUNNEL_CONNECTION_FAILED at https://www.instagram.com/brucedao.str/\nCall log:\n  - navigating to \"https://www.instagram.com/brucedao.str/\", waiting until \"domcontentloaded\"\n",
+        "status": "error"
+      },
+      "buildwith.kevin": {
+        "posted": false,
+        "status": "ok"
+      },
+      "cincycashflow": {
+        "permalink": "https://www.instagram.com/p/DdXfoeyj5MG/",
+        "posted": true,
+        "status": "ok"
+      },
+      "daronkfong": {
+        "message": "navigation to profile page failed: Page.goto: net::ERR_TUNNEL_CONNECTION_FAILED at https://www.instagram.com/daronkfong/\nCall log:\n  - navigating to \"https://www.instagram.com/daronkfong/\", waiting until \"domcontentloaded\"\n",
+        "status": "error"
+      },
+      "eddiebriant.re": {
+        "message": "account is private or has no visible posts",
+        "status": "error"
+      },
+      "goblinkingnyc": {
+        "permalink": "https://www.instagram.com/p/DdXkRIQjZCr/",
+        "posted": true,
+        "status": "ok"
+      },
+      "heytracymai": {
+        "permalink": "https://www.instagram.com/p/DdXpTUTjZXJ/",
+        "posted": true,
+        "status": "ok"
+      },
+      "iamleilanisoon": {
+        "posted": false,
+        "status": "ok"
+      },
+      "intamfan": {
+        "message": "account is private or has no visible posts",
+        "status": "error"
+      },
+      "itsperrygood": {
+        "posted": false,
+        "status": "ok"
+      },
+      "jackrinstagram": {
+        "permalink": "https://www.instagram.com/p/DdXGmg1E7xG/",
+        "posted": true,
+        "status": "ok"
+      },
+      "janeevanswalther": {
+        "posted": false,
+        "status": "ok"
+      },
+      "lissdelarosa": {
+        "posted": false,
+        "status": "ok"
+      },
+      "lj.exist": {
+        "permalink": "https://www.instagram.com/p/DdXSCehFWC_/",
+        "posted": true,
+        "status": "ok"
+      },
+      "minhdoan.ngo": {
+        "permalink": "https://www.instagram.com/p/DdXoXugzE1Y/",
+        "posted": true,
+        "status": "ok"
+      },
+      "miso.mind": {
+        "permalink": "https://www.instagram.com/p/DdYBwqqFDxc/",
+        "posted": true,
+        "status": "ok"
+      },
+      "muhan.being": {
+        "message": "navigation to profile page failed: Page.goto: net::ERR_TUNNEL_CONNECTION_FAILED at https://www.instagram.com/muhan.being/\nCall log:\n  - navigating to \"https://www.instagram.com/muhan.being/\", waiting until \"domcontentloaded\"\n",
+        "status": "error"
+      },
+      "mylivingnotebook": {
+        "permalink": "https://www.instagram.com/p/DdXk_ZkEZFf/",
+        "posted": true,
+        "status": "ok"
+      },
+      "nancyrhuang": {
+        "permalink": "https://www.instagram.com/p/DdX3RNSSlda/",
+        "posted": true,
+        "status": "ok"
+      },
+      "nelson_goes_pro": {
+        "permalink": "https://www.instagram.com/p/DdW2ZGxkd8c/",
+        "posted": true,
+        "status": "ok"
+      },
+      "ohgreatspirit": {
+        "posted": false,
+        "status": "ok"
+      },
+      "realtorharry_": {
+        "permalink": "https://www.instagram.com/p/DdXsR1xDX4T/",
+        "posted": true,
+        "status": "ok"
+      },
+      "rt.invests": {
+        "permalink": "https://www.instagram.com/p/DdWLphLjNsM/",
+        "posted": true,
+        "status": "ok"
+      },
+      "saamkavusi": {
+        "permalink": "https://www.instagram.com/p/DdXywkVODoL/",
+        "posted": true,
+        "status": "ok"
+      },
+      "stateofKhai": {
+        "message": "account is private or has no visible posts",
+        "status": "error"
+      },
+      "sylchoice": {
+        "permalink": "https://www.instagram.com/p/DdV4LkINplp/",
+        "posted": true,
+        "status": "ok"
+      },
+      "thenextmandy": {
+        "permalink": "https://www.instagram.com/p/DdWh8ACDSlM/",
+        "posted": true,
+        "status": "ok"
+      },
+      "thoughtsdescott": {
+        "posted": false,
+        "status": "ok"
+      },
+      "trentl3af": {
+        "permalink": "https://www.instagram.com/p/DdXduUEEaSk/",
+        "posted": true,
+        "status": "ok"
+      },
+      "tt.talks": {
+        "posted": false,
+        "status": "ok"
+      },
+      "underwriting.jams": {
+        "message": "account is private or has no visible posts",
+        "status": "error"
+      },
+      "watthemichael": {
+        "posted": false,
+        "status": "ok"
+      },
+      "with_alann": {
+        "message": "account is private or has no visible posts",
+        "status": "error"
+      },
+      "xcatherineann": {
+        "message": "navigation to profile page failed: Page.goto: net::ERR_TUNNEL_CONNECTION_FAILED at https://www.instagram.com/xcatherineann/\nCall log:\n  - navigating to \"https://www.instagram.com/xcatherineann/\", waiting until \"domcontentloaded\"\n",
+        "status": "error"
+      }
+    },
     "2026-09-17": {},
     "2026-09-18": {},
     "2026-09-19": {},
@@ -2001,5 +2252,5 @@
     "lissdelarosa",
     "nelson_goes_pro"
   ],
-  "updated_at": "2026-09-16T18:32:58.390009-07:00"
+  "updated_at": "2026-09-17T05:58:23.055889-07:00"
 }
