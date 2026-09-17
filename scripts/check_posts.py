@@ -391,6 +391,15 @@ MAX_PROXY_CONNECTION_RETRIES = 3
 # account (there are several in the tracked list) pays this same small
 # cost on every run, forever.
 MAX_PRIVATE_VERDICT_RETRIES = 2
+# How many DIFFERENT handles in a row can each exhaust their own
+# MAX_PROXY_CONNECTION_RETRIES budget before the run concludes the proxy
+# itself is comprehensively down (account suspended, quota/balance
+# exhausted, or a real provider outage) rather than "a string of bad
+# luck on individual rotated IPs". Confirmed in production, 2026-09-17:
+# without this, a fully-dead proxy account burned through 35 handles x 4
+# attempts each (~35+ minutes) writing nothing but errors, instead of
+# failing fast - see stopped_early's PROXY_DOWN skip reason below.
+PROXY_DOWN_HANDLE_LIMIT = 3
 
 DESKTOP_UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36"
 
@@ -1494,8 +1503,10 @@ def main() -> None:
         consecutive_blocks = 0
         consecutive_proxy_errors = 0
         consecutive_private_verdicts = 0
+        consecutive_dead_proxy_handles = 0
         cooldowns_used = 0
         stopped_early = False
+        stopped_early_reason = "skipped: stopped early after repeated blocking from Instagram this run"
         request_count = 0
 
         i = 0
@@ -1505,11 +1516,7 @@ def main() -> None:
             checked_at = datetime.now(tz).isoformat()
 
             if stopped_early:
-                db.fill_gaps_with_error(
-                    conn, handle, window,
-                    "skipped: stopped early after repeated blocking from Instagram this run",
-                    checked_at, today,
-                )
+                db.fill_gaps_with_error(conn, handle, window, stopped_early_reason, checked_at, today)
                 i += 1
                 continue
 
@@ -1548,6 +1555,19 @@ def main() -> None:
                     "session(s) in a row - recording as error",
                     file=sys.stderr,
                 )
+                consecutive_dead_proxy_handles += 1
+                if consecutive_dead_proxy_handles >= PROXY_DOWN_HANDLE_LIMIT:
+                    print(
+                        f"  {consecutive_dead_proxy_handles} handles in a row each exhausted their own "
+                        "fresh-session retries - the proxy itself looks comprehensively down (account "
+                        "suspended, quota/balance exhausted, or a provider outage), not just unlucky "
+                        "individual IPs. Stopping early instead of burning through the rest of the list.",
+                        file=sys.stderr,
+                    )
+                    stopped_early = True
+                    stopped_early_reason = "skipped: proxy appeared to be comprehensively down this run"
+            else:
+                consecutive_dead_proxy_handles = 0
 
             # A "private or no visible posts" verdict is the same kind of
             # suspect result as a dead proxy tunnel above - confirmed
