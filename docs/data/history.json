@@ -1,18 +1,14 @@
 {
   "avatars": {
     "angiechack": "angiechack.jpg",
-    "brucedao.str": "brucedao.str.jpg",
-    "ringoyippp": "ringoyippp.jpg"
+    "b_yanggg": "b_yanggg.jpg",
+    "brucedao.str": "brucedao.str.jpg"
   },
   "days": {
     "2026-09-07": {
       "Bakaproof": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
-      },
-      "Borderlessclub": {
-        "posted": false,
-        "status": "ok"
       },
       "Bymaihoang": {
         "posted": false,
@@ -45,10 +41,6 @@
         "posted": true,
         "status": "ok"
       },
-      "Kirossound": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
-      },
       "Michael.dc.santos": {
         "posted": false,
         "status": "ok"
@@ -79,7 +71,15 @@
         "posted": true,
         "status": "ok"
       },
+      "b_yanggg": {
+        "posted": false,
+        "status": "ok"
+      },
       "brucedao.str": {
+        "posted": false,
+        "status": "ok"
+      },
+      "buildwith.kevin": {
         "posted": false,
         "status": "ok"
       },
@@ -104,10 +104,6 @@
         "posted": true,
         "status": "ok"
       },
-      "ialanng": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
-      },
       "iamleilanisoon": {
         "posted": false,
         "status": "ok"
@@ -116,11 +112,19 @@
         "posted": false,
         "status": "ok"
       },
+      "itsperrygood": {
+        "posted": false,
+        "status": "ok"
+      },
       "jackrinstagram": {
         "posted": false,
         "status": "ok"
       },
       "janeevanswalther": {
+        "posted": false,
+        "status": "ok"
+      },
+      "lissdelarosa": {
         "posted": false,
         "status": "ok"
       },
@@ -150,6 +154,11 @@
         "posted": false,
         "status": "ok"
       },
+      "nelson_goes_pro": {
+        "permalink": "https://www.instagram.com/p/DdA14JCR37p/",
+        "posted": true,
+        "status": "ok"
+      },
       "ohgreatspirit": {
         "permalink": "https://www.instagram.com/p/DdA1bZ2o9Lv/",
         "posted": true,
@@ -158,10 +167,6 @@
       "realtorharry_": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
-      },
-      "ringoyippp": {
-        "posted": false,
-        "status": "ok"
       },
       "rt.invests": {
         "permalink": "https://www.instagram.com/p/DdAImNIicOD/",
@@ -177,8 +182,8 @@
         "status": "ok"
       },
       "sylchoice": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "thenextmandy": {
         "posted": false,
@@ -213,10 +218,6 @@
         "posted": true,
         "status": "ok"
       },
-      "Borderlessclub": {
-        "posted": false,
-        "status": "ok"
-      },
       "Bymaihoang": {
         "posted": false,
         "status": "ok"
@@ -246,10 +247,6 @@
       "Jay.invests": {
         "posted": false,
         "status": "ok"
-      },
-      "Kirossound": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
       },
       "Michael.dc.santos": {
         "permalink": "https://www.instagram.com/p/DdDO5khy9lx/",
@@ -283,9 +280,18 @@
         "posted": true,
         "status": "ok"
       },
+      "b_yanggg": {
+        "permalink": "https://www.instagram.com/p/DdDaOl8lm6q/",
+        "posted": true,
+        "status": "ok"
+      },
       "brucedao.str": {
         "permalink": "https://www.instagram.com/p/DdCHDRhoH9L/",
         "posted": true,
+        "status": "ok"
+      },
+      "buildwith.kevin": {
+        "posted": false,
         "status": "ok"
       },
       "cincycashflow": {
@@ -310,10 +316,6 @@
         "posted": true,
         "status": "ok"
       },
-      "ialanng": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
-      },
       "iamleilanisoon": {
         "posted": false,
         "status": "ok"
@@ -322,11 +324,20 @@
         "posted": false,
         "status": "ok"
       },
+      "itsperrygood": {
+        "permalink": "https://www.instagram.com/p/DdCUOtBjtw9/",
+        "posted": true,
+        "status": "ok"
+      },
       "jackrinstagram": {
         "posted": false,
         "status": "ok"
       },
       "janeevanswalther": {
+        "posted": false,
+        "status": "ok"
+      },
+      "lissdelarosa": {
         "posted": false,
         "status": "ok"
       },
@@ -356,6 +367,10 @@
         "posted": false,
         "status": "ok"
       },
+      "nelson_goes_pro": {
+        "posted": false,
+        "status": "ok"
+      },
       "ohgreatspirit": {
         "permalink": "https://www.instagram.com/p/DdDHZrZI2Cj/",
         "posted": true,
@@ -364,10 +379,6 @@
       "realtorharry_": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
-      },
-      "ringoyippp": {
-        "posted": false,
-        "status": "ok"
       },
       "rt.invests": {
         "permalink": "https://www.instagram.com/p/DdC36csyLlW/",
@@ -385,8 +396,8 @@
         "status": "ok"
       },
       "sylchoice": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "thenextmandy": {
         "posted": false,
@@ -417,10 +428,6 @@
       "Bakaproof": {
         "permalink": "https://www.instagram.com/p/DdFj9xFEWpr/",
         "posted": true,
-        "status": "ok"
-      },
-      "Borderlessclub": {
-        "posted": false,
         "status": "ok"
       },
       "Bymaihoang": {
@@ -456,10 +463,6 @@
         "posted": true,
         "status": "ok"
       },
-      "Kirossound": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
-      },
       "Michael.dc.santos": {
         "posted": false,
         "status": "ok"
@@ -491,7 +494,16 @@
         "posted": true,
         "status": "ok"
       },
+      "b_yanggg": {
+        "permalink": "https://www.instagram.com/p/DdE_YuSEZ-1/",
+        "posted": true,
+        "status": "ok"
+      },
       "brucedao.str": {
+        "posted": false,
+        "status": "ok"
+      },
+      "buildwith.kevin": {
         "posted": false,
         "status": "ok"
       },
@@ -516,10 +528,6 @@
         "posted": true,
         "status": "ok"
       },
-      "ialanng": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
-      },
       "iamleilanisoon": {
         "posted": false,
         "status": "ok"
@@ -528,11 +536,19 @@
         "posted": false,
         "status": "ok"
       },
+      "itsperrygood": {
+        "posted": false,
+        "status": "ok"
+      },
       "jackrinstagram": {
         "posted": false,
         "status": "ok"
       },
       "janeevanswalther": {
+        "posted": false,
+        "status": "ok"
+      },
+      "lissdelarosa": {
         "posted": false,
         "status": "ok"
       },
@@ -563,6 +579,10 @@
         "posted": false,
         "status": "ok"
       },
+      "nelson_goes_pro": {
+        "posted": false,
+        "status": "ok"
+      },
       "ohgreatspirit": {
         "permalink": "https://www.instagram.com/p/DdF3xBEI0MS/",
         "posted": true,
@@ -571,10 +591,6 @@
       "realtorharry_": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
-      },
-      "ringoyippp": {
-        "posted": false,
-        "status": "ok"
       },
       "rt.invests": {
         "posted": false,
@@ -590,8 +606,8 @@
         "status": "ok"
       },
       "sylchoice": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "thenextmandy": {
         "posted": false,
@@ -623,10 +639,6 @@
       "Bakaproof": {
         "permalink": "https://www.instagram.com/p/DdH99LLjhSR/",
         "posted": true,
-        "status": "ok"
-      },
-      "Borderlessclub": {
-        "posted": false,
         "status": "ok"
       },
       "Bymaihoang": {
@@ -661,10 +673,6 @@
         "posted": true,
         "status": "ok"
       },
-      "Kirossound": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
-      },
       "Michael.dc.santos": {
         "permalink": "https://www.instagram.com/p/DdH6hOVhqtr/",
         "posted": true,
@@ -696,7 +704,16 @@
         "posted": false,
         "status": "ok"
       },
+      "b_yanggg": {
+        "permalink": "https://www.instagram.com/p/DdHzEUrj0Cw/",
+        "posted": true,
+        "status": "ok"
+      },
       "brucedao.str": {
+        "posted": false,
+        "status": "ok"
+      },
+      "buildwith.kevin": {
         "posted": false,
         "status": "ok"
       },
@@ -721,10 +738,6 @@
         "posted": true,
         "status": "ok"
       },
-      "ialanng": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
-      },
       "iamleilanisoon": {
         "permalink": "https://www.instagram.com/p/DdISxTDsdFM/",
         "posted": true,
@@ -734,11 +747,19 @@
         "posted": false,
         "status": "ok"
       },
+      "itsperrygood": {
+        "posted": false,
+        "status": "ok"
+      },
       "jackrinstagram": {
         "posted": false,
         "status": "ok"
       },
       "janeevanswalther": {
+        "posted": false,
+        "status": "ok"
+      },
+      "lissdelarosa": {
         "posted": false,
         "status": "ok"
       },
@@ -768,6 +789,11 @@
         "posted": false,
         "status": "ok"
       },
+      "nelson_goes_pro": {
+        "permalink": "https://www.instagram.com/p/DdIe7GMR5kH/",
+        "posted": true,
+        "status": "ok"
+      },
       "ohgreatspirit": {
         "permalink": "https://www.instagram.com/p/DdHPHopIYCs/",
         "posted": true,
@@ -776,11 +802,6 @@
       "realtorharry_": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
-      },
-      "ringoyippp": {
-        "permalink": "https://www.instagram.com/p/DdIp4WNNB_v/",
-        "posted": true,
-        "status": "ok"
       },
       "rt.invests": {
         "posted": false,
@@ -796,8 +817,8 @@
         "status": "ok"
       },
       "sylchoice": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "thenextmandy": {
         "posted": false,
@@ -830,10 +851,6 @@
       "Bakaproof": {
         "permalink": "https://www.instagram.com/p/DdKcBwCDn2X/",
         "posted": true,
-        "status": "ok"
-      },
-      "Borderlessclub": {
-        "posted": false,
         "status": "ok"
       },
       "Bymaihoang": {
@@ -870,10 +887,6 @@
         "posted": true,
         "status": "ok"
       },
-      "Kirossound": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
-      },
       "Michael.dc.santos": {
         "posted": false,
         "status": "ok"
@@ -902,7 +915,16 @@
         "posted": false,
         "status": "ok"
       },
+      "b_yanggg": {
+        "permalink": "https://www.instagram.com/p/DdKfjAGP5Gn/",
+        "posted": true,
+        "status": "ok"
+      },
       "brucedao.str": {
+        "posted": false,
+        "status": "ok"
+      },
+      "buildwith.kevin": {
         "posted": false,
         "status": "ok"
       },
@@ -928,10 +950,6 @@
         "posted": true,
         "status": "ok"
       },
-      "ialanng": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
-      },
       "iamleilanisoon": {
         "permalink": "https://www.instagram.com/p/DdKp5TwvfcB/",
         "posted": true,
@@ -941,11 +959,19 @@
         "posted": false,
         "status": "ok"
       },
+      "itsperrygood": {
+        "posted": false,
+        "status": "ok"
+      },
       "jackrinstagram": {
         "posted": false,
         "status": "ok"
       },
       "janeevanswalther": {
+        "posted": false,
+        "status": "ok"
+      },
+      "lissdelarosa": {
         "posted": false,
         "status": "ok"
       },
@@ -977,6 +1003,10 @@
         "posted": false,
         "status": "ok"
       },
+      "nelson_goes_pro": {
+        "posted": false,
+        "status": "ok"
+      },
       "ohgreatspirit": {
         "posted": false,
         "status": "ok"
@@ -984,10 +1014,6 @@
       "realtorharry_": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
-      },
-      "ringoyippp": {
-        "posted": false,
-        "status": "ok"
       },
       "rt.invests": {
         "permalink": "https://www.instagram.com/p/DdKb1loDEmb/",
@@ -1004,8 +1030,8 @@
         "status": "ok"
       },
       "sylchoice": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "thenextmandy": {
         "posted": false,
@@ -1039,10 +1065,6 @@
         "posted": true,
         "status": "ok"
       },
-      "Borderlessclub": {
-        "posted": false,
-        "status": "ok"
-      },
       "Bymaihoang": {
         "permalink": "https://www.instagram.com/p/DdNnOTGjczO/",
         "posted": true,
@@ -1074,10 +1096,6 @@
         "posted": false,
         "status": "ok"
       },
-      "Kirossound": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
-      },
       "Michael.dc.santos": {
         "posted": false,
         "status": "ok"
@@ -1106,7 +1124,16 @@
         "posted": false,
         "status": "ok"
       },
+      "b_yanggg": {
+        "permalink": "https://www.instagram.com/p/DdN94BNhnx5/",
+        "posted": true,
+        "status": "ok"
+      },
       "brucedao.str": {
+        "posted": false,
+        "status": "ok"
+      },
+      "buildwith.kevin": {
         "posted": false,
         "status": "ok"
       },
@@ -1133,10 +1160,6 @@
         "posted": true,
         "status": "ok"
       },
-      "ialanng": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
-      },
       "iamleilanisoon": {
         "permalink": "https://www.instagram.com/p/DdLrQQLhLET/",
         "posted": true,
@@ -1147,11 +1170,19 @@
         "posted": true,
         "status": "ok"
       },
+      "itsperrygood": {
+        "posted": false,
+        "status": "ok"
+      },
       "jackrinstagram": {
         "posted": false,
         "status": "ok"
       },
       "janeevanswalther": {
+        "posted": false,
+        "status": "ok"
+      },
+      "lissdelarosa": {
         "posted": false,
         "status": "ok"
       },
@@ -1182,6 +1213,10 @@
         "posted": false,
         "status": "ok"
       },
+      "nelson_goes_pro": {
+        "posted": false,
+        "status": "ok"
+      },
       "ohgreatspirit": {
         "posted": false,
         "status": "ok"
@@ -1189,10 +1224,6 @@
       "realtorharry_": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
-      },
-      "ringoyippp": {
-        "posted": false,
-        "status": "ok"
       },
       "rt.invests": {
         "posted": false,
@@ -1208,8 +1239,8 @@
         "status": "ok"
       },
       "sylchoice": {
-        "message": "skipped: stopped early after repeated blocking from Instagram this run",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "thenextmandy": {
         "posted": false,
@@ -1245,10 +1276,6 @@
         "posted": true,
         "status": "ok"
       },
-      "Borderlessclub": {
-        "posted": false,
-        "status": "ok"
-      },
       "Bymaihoang": {
         "posted": false,
         "status": "ok"
@@ -1278,10 +1305,6 @@
       "Jay.invests": {
         "posted": false,
         "status": "ok"
-      },
-      "Kirossound": {
-        "message": "account is private or has no visible posts",
-        "status": "error"
       },
       "Michael.dc.santos": {
         "posted": false,
@@ -1313,7 +1336,15 @@
         "posted": false,
         "status": "ok"
       },
+      "b_yanggg": {
+        "posted": false,
+        "status": "ok"
+      },
       "brucedao.str": {
+        "posted": false,
+        "status": "ok"
+      },
+      "buildwith.kevin": {
         "posted": false,
         "status": "ok"
       },
@@ -1339,10 +1370,6 @@
         "posted": true,
         "status": "ok"
       },
-      "ialanng": {
-        "message": "account is private or has no visible posts",
-        "status": "error"
-      },
       "iamleilanisoon": {
         "posted": false,
         "status": "ok"
@@ -1352,11 +1379,19 @@
         "posted": true,
         "status": "ok"
       },
+      "itsperrygood": {
+        "posted": false,
+        "status": "ok"
+      },
       "jackrinstagram": {
         "posted": false,
         "status": "ok"
       },
       "janeevanswalther": {
+        "posted": false,
+        "status": "ok"
+      },
+      "lissdelarosa": {
         "posted": false,
         "status": "ok"
       },
@@ -1386,6 +1421,11 @@
         "posted": false,
         "status": "ok"
       },
+      "nelson_goes_pro": {
+        "permalink": "https://www.instagram.com/p/DdQYBgNRXgC/",
+        "posted": true,
+        "status": "ok"
+      },
       "ohgreatspirit": {
         "posted": false,
         "status": "ok"
@@ -1393,10 +1433,6 @@
       "realtorharry_": {
         "message": "account is private or has no visible posts",
         "status": "error"
-      },
-      "ringoyippp": {
-        "posted": false,
-        "status": "ok"
       },
       "rt.invests": {
         "posted": false,
@@ -1412,8 +1448,8 @@
         "status": "ok"
       },
       "sylchoice": {
-        "message": "account is private or has no visible posts",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "thenextmandy": {
         "permalink": "https://www.instagram.com/p/DdOohLJNwdw/",
@@ -1450,10 +1486,6 @@
         "posted": true,
         "status": "ok"
       },
-      "Borderlessclub": {
-        "posted": false,
-        "status": "ok"
-      },
       "Bymaihoang": {
         "posted": false,
         "status": "ok"
@@ -1484,10 +1516,6 @@
         "permalink": "https://www.instagram.com/p/DdSoICSG9-l/",
         "posted": true,
         "status": "ok"
-      },
-      "Kirossound": {
-        "message": "account is private or has no visible posts",
-        "status": "error"
       },
       "Michael.dc.santos": {
         "posted": false,
@@ -1521,7 +1549,16 @@
         "posted": false,
         "status": "ok"
       },
+      "b_yanggg": {
+        "permalink": "https://www.instagram.com/p/DdTHhRPsrAV/",
+        "posted": true,
+        "status": "ok"
+      },
       "brucedao.str": {
+        "posted": false,
+        "status": "ok"
+      },
+      "buildwith.kevin": {
         "posted": false,
         "status": "ok"
       },
@@ -1547,10 +1584,6 @@
         "posted": false,
         "status": "ok"
       },
-      "ialanng": {
-        "message": "account is private or has no visible posts",
-        "status": "error"
-      },
       "iamleilanisoon": {
         "permalink": "https://www.instagram.com/p/DdSHofByvuP/",
         "posted": true,
@@ -1561,11 +1594,19 @@
         "posted": true,
         "status": "ok"
       },
+      "itsperrygood": {
+        "posted": false,
+        "status": "ok"
+      },
       "jackrinstagram": {
         "posted": false,
         "status": "ok"
       },
       "janeevanswalther": {
+        "posted": false,
+        "status": "ok"
+      },
+      "lissdelarosa": {
         "posted": false,
         "status": "ok"
       },
@@ -1596,6 +1637,11 @@
         "posted": false,
         "status": "ok"
       },
+      "nelson_goes_pro": {
+        "permalink": "https://www.instagram.com/p/DdSmISax7Y1/",
+        "posted": true,
+        "status": "ok"
+      },
       "ohgreatspirit": {
         "posted": false,
         "status": "ok"
@@ -1603,10 +1649,6 @@
       "realtorharry_": {
         "permalink": "https://www.instagram.com/p/DdRXxqLFb1s/",
         "posted": true,
-        "status": "ok"
-      },
-      "ringoyippp": {
-        "posted": false,
         "status": "ok"
       },
       "rt.invests": {
@@ -1624,8 +1666,8 @@
         "status": "ok"
       },
       "sylchoice": {
-        "message": "account is private or has no visible posts",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "thenextmandy": {
         "posted": false,
@@ -1649,6 +1691,11 @@
         "posted": true,
         "status": "ok"
       },
+      "with_alann": {
+        "permalink": "https://www.instagram.com/p/DdS2M-eg2Kt/",
+        "posted": true,
+        "status": "ok"
+      },
       "xcatherineann": {
         "permalink": "https://www.instagram.com/p/DdTH4bnxvXz/",
         "posted": true,
@@ -1661,17 +1708,14 @@
         "posted": true,
         "status": "ok"
       },
-      "Borderlessclub": {
-        "posted": false,
-        "status": "ok"
-      },
       "Bymaihoang": {
         "permalink": "https://www.instagram.com/p/DdUoXH4IJmz/",
         "posted": true,
         "status": "ok"
       },
       "ChewyyyL": {
-        "posted": false,
+        "permalink": "https://www.instagram.com/p/DdVKb2dggiY/",
+        "posted": true,
         "status": "ok"
       },
       "FinanciallyGolden": {
@@ -1697,10 +1741,6 @@
         "permalink": "https://www.instagram.com/p/DdTVldYzAQo/",
         "posted": true,
         "status": "ok"
-      },
-      "Kirossound": {
-        "message": "account is private or has no visible posts",
-        "status": "error"
       },
       "Michael.dc.santos": {
         "posted": false,
@@ -1732,9 +1772,18 @@
         "posted": false,
         "status": "ok"
       },
+      "b_yanggg": {
+        "permalink": "https://www.instagram.com/p/DdVsW4IFjHC/",
+        "posted": true,
+        "status": "ok"
+      },
       "brucedao.str": {
         "permalink": "https://www.instagram.com/p/DdUFKukNF99/",
         "posted": true,
+        "status": "ok"
+      },
+      "buildwith.kevin": {
+        "posted": false,
         "status": "ok"
       },
       "cincycashflow": {
@@ -1760,10 +1809,6 @@
         "posted": true,
         "status": "ok"
       },
-      "ialanng": {
-        "message": "account is private or has no visible posts",
-        "status": "error"
-      },
       "iamleilanisoon": {
         "permalink": "https://www.instagram.com/p/DdVAU6Tieor/",
         "posted": true,
@@ -1774,12 +1819,21 @@
         "posted": true,
         "status": "ok"
       },
+      "itsperrygood": {
+        "permalink": "https://www.instagram.com/p/DdTu7zrBpaP/",
+        "posted": true,
+        "status": "ok"
+      },
       "jackrinstagram": {
         "permalink": "https://www.instagram.com/p/DdU4Kc9vbHd/",
         "posted": true,
         "status": "ok"
       },
       "janeevanswalther": {
+        "posted": false,
+        "status": "ok"
+      },
+      "lissdelarosa": {
         "posted": false,
         "status": "ok"
       },
@@ -1812,17 +1866,16 @@
         "posted": false,
         "status": "ok"
       },
+      "nelson_goes_pro": {
+        "posted": false,
+        "status": "ok"
+      },
       "ohgreatspirit": {
         "posted": false,
         "status": "ok"
       },
       "realtorharry_": {
         "permalink": "https://www.instagram.com/p/DdVHRHCN8tz/",
-        "posted": true,
-        "status": "ok"
-      },
-      "ringoyippp": {
-        "permalink": "https://www.instagram.com/p/DdVTpCbNODx/",
         "posted": true,
         "status": "ok"
       },
@@ -1841,11 +1894,16 @@
         "status": "ok"
       },
       "sylchoice": {
-        "message": "account is private or has no visible posts",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "thenextmandy": {
         "permalink": "https://www.instagram.com/p/DdUKvwrtCFt/",
+        "posted": true,
+        "status": "ok"
+      },
+      "thoughtsdescott": {
+        "permalink": "https://www.instagram.com/p/DdVMLnqxxF1/",
         "posted": true,
         "status": "ok"
       },
@@ -1866,6 +1924,10 @@
       "watthemichael": {
         "permalink": "https://www.instagram.com/p/DdVXeSfjVJr/",
         "posted": true,
+        "status": "ok"
+      },
+      "with_alann": {
+        "posted": false,
         "status": "ok"
       },
       "xcatherineann": {
@@ -1892,7 +1954,7 @@
     "minhdoan.ngo",
     "abourinaris",
     "mylivingnotebook",
-    "Kirossound",
+    "thoughtsdescott",
     "intamfan",
     "heytracymai",
     "FinanciallyGolden",
@@ -1903,7 +1965,7 @@
     "goblinkingnyc",
     "Jay.invests",
     "iamleilanisoon",
-    "Borderlessclub",
+    "itsperrygood",
     "ChewyyyL",
     "miso.mind",
     "realtorharry_",
@@ -1916,7 +1978,6 @@
     "daronkfong",
     "xcatherineann",
     "Itshectorav",
-    "ringoyippp",
     "muhan.being",
     "alexyee.ventures",
     "tt.talks",
@@ -1925,7 +1986,7 @@
     "ohgreatspirit",
     "rt.invests",
     "Bymaihoang",
-    "ialanng",
+    "with_alann",
     "jackrinstagram",
     "saamkavusi",
     "cincycashflow",
@@ -1934,7 +1995,11 @@
     "stateofKhai",
     "_victoriaponte",
     "eddiebriant.re",
-    "nancyrhuang"
+    "nancyrhuang",
+    "b_yanggg",
+    "buildwith.kevin",
+    "lissdelarosa",
+    "nelson_goes_pro"
   ],
-  "updated_at": "2026-09-16T08:25:27.170591-07:00"
+  "updated_at": "2026-09-16T18:32:58.390009-07:00"
 }
