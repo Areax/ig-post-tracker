@@ -1941,7 +1941,8 @@
         "status": "ok"
       },
       "tt.talks": {
-        "posted": false,
+        "permalink": "https://www.instagram.com/p/DdUIkaXzXcl/",
+        "posted": true,
         "status": "ok"
       },
       "underwriting.jams": {
@@ -1989,12 +1990,14 @@
         "status": "ok"
       },
       "Itshectorav": {
-        "message": "navigation to profile page failed: Page.goto: net::ERR_TUNNEL_CONNECTION_FAILED at https://www.instagram.com/Itshectorav/\nCall log:\n  - navigating to \"https://www.instagram.com/Itshectorav/\", waiting until \"domcontentloaded\"\n",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DdYKNGZzG_8/",
+        "posted": true,
+        "status": "ok"
       },
       "Itskevzhao": {
-        "message": "navigation to profile page failed: Page.goto: Timeout 60000ms exceeded.\nCall log:\n  - navigating to \"https://www.instagram.com/Itskevzhao/\", waiting until \"domcontentloaded\"\n",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DdX144jjmvo/",
+        "posted": true,
+        "status": "ok"
       },
       "Jay.invests": {
         "permalink": "https://www.instagram.com/p/DdWogrKOE8X/",
@@ -2007,16 +2010,19 @@
         "status": "ok"
       },
       "Signed.angela": {
-        "message": "account is private or has no visible posts",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DdXyPaptimr/",
+        "posted": true,
+        "status": "ok"
       },
       "Zhenginmotion": {
-        "message": "account is private or has no visible posts",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DdWo5RJB7JP/",
+        "posted": true,
+        "status": "ok"
       },
       "_victoriaponte": {
-        "message": "account is private or has no visible posts",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DdXy4uskcTc/",
+        "posted": true,
+        "status": "ok"
       },
       "abourinaris": {
         "permalink": "https://www.instagram.com/p/DdXZp5IH2kj/",
@@ -2028,8 +2034,9 @@
         "status": "error"
       },
       "angiechack": {
-        "message": "navigation to profile page failed: Page.goto: net::ERR_TUNNEL_CONNECTION_FAILED at https://www.instagram.com/angiechack/\nCall log:\n  - navigating to \"https://www.instagram.com/angiechack/\", waiting until \"domcontentloaded\"\n",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DdX9nxHqaI1/",
+        "posted": true,
+        "status": "ok"
       },
       "b_yanggg": {
         "permalink": "https://www.instagram.com/p/DdXhFjZp1qt/",
@@ -2037,8 +2044,9 @@
         "status": "ok"
       },
       "brucedao.str": {
-        "message": "navigation to profile page failed: Page.goto: net::ERR_TUNNEL_CONNECTION_FAILED at https://www.instagram.com/brucedao.str/\nCall log:\n  - navigating to \"https://www.instagram.com/brucedao.str/\", waiting until \"domcontentloaded\"\n",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DdXnWiiIGMb/",
+        "posted": true,
+        "status": "ok"
       },
       "buildwith.kevin": {
         "posted": false,
@@ -2050,12 +2058,13 @@
         "status": "ok"
       },
       "daronkfong": {
-        "message": "navigation to profile page failed: Page.goto: net::ERR_TUNNEL_CONNECTION_FAILED at https://www.instagram.com/daronkfong/\nCall log:\n  - navigating to \"https://www.instagram.com/daronkfong/\", waiting until \"domcontentloaded\"\n",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DdYAdQ7ja5L/",
+        "posted": true,
+        "status": "ok"
       },
       "eddiebriant.re": {
-        "message": "account is private or has no visible posts",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "goblinkingnyc": {
         "permalink": "https://www.instagram.com/p/DdXkRIQjZCr/",
@@ -2109,8 +2118,9 @@
         "status": "ok"
       },
       "muhan.being": {
-        "message": "navigation to profile page failed: Page.goto: net::ERR_TUNNEL_CONNECTION_FAILED at https://www.instagram.com/muhan.being/\nCall log:\n  - navigating to \"https://www.instagram.com/muhan.being/\", waiting until \"domcontentloaded\"\n",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DdWbt7XAFpw/",
+        "posted": true,
+        "status": "ok"
       },
       "mylivingnotebook": {
         "permalink": "https://www.instagram.com/p/DdXk_ZkEZFf/",
@@ -2147,8 +2157,9 @@
         "status": "ok"
       },
       "stateofKhai": {
-        "message": "account is private or has no visible posts",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DdWrerkoBIx/",
+        "posted": true,
+        "status": "ok"
       },
       "sylchoice": {
         "permalink": "https://www.instagram.com/p/DdV4LkINplp/",
@@ -2174,20 +2185,21 @@
         "status": "ok"
       },
       "underwriting.jams": {
-        "message": "account is private or has no visible posts",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "watthemichael": {
         "posted": false,
         "status": "ok"
       },
       "with_alann": {
-        "message": "account is private or has no visible posts",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "xcatherineann": {
-        "message": "navigation to profile page failed: Page.goto: net::ERR_TUNNEL_CONNECTION_FAILED at https://www.instagram.com/xcatherineann/\nCall log:\n  - navigating to \"https://www.instagram.com/xcatherineann/\", waiting until \"domcontentloaded\"\n",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DdYBAK9N2q4/",
+        "posted": true,
+        "status": "ok"
       }
     },
     "2026-09-17": {},
@@ -2254,5 +2266,5 @@
     "lissdelarosa",
     "nelson_goes_pro"
   ],
-  "updated_at": "2026-09-17T10:14:13.597094-07:00"
+  "updated_at": "2026-09-17T13:34:12.337337-07:00"
 }
