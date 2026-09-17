@@ -375,6 +375,22 @@ CONSECUTIVE_BLOCK_LIMIT = 3
 RATE_LIMIT_STATUS_CODES = (429, 401)
 COOLDOWN_SECONDS = float(os.environ.get("COOLDOWN_SECONDS", "900"))
 MAX_COOLDOWNS = int(os.environ.get("MAX_COOLDOWNS", "0"))
+# How many times in a row a dead proxy session (is_proxy_connection_error)
+# gets a fresh rotation + immediate retry on the SAME handle before giving
+# up and recording it as a real error. Each rotation is a different exit
+# IP, so this is really "how many different dead IPs in a row are we
+# willing to write off as bad luck" - low, since a real widespread proxy
+# outage should surface as an error quickly rather than retry forever.
+MAX_PROXY_CONNECTION_RETRIES = 3
+# A "private or no visible posts" verdict is only sometimes real (an
+# actually-private account) - confirmed live, 2026-09-16, it's also what
+# a soft-blocked exit IP produces for a genuinely public, active account
+# (abourinaris, alexyee.ventures, Zhenginmotion all hit this before a
+# fresh proxy session cleared it). Retry it a couple of times on a fresh
+# session before accepting it - bounded low because a genuinely private
+# account (there are several in the tracked list) pays this same small
+# cost on every run, forever.
+MAX_PRIVATE_VERDICT_RETRIES = 2
 
 DESKTOP_UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36"
 
@@ -443,6 +459,39 @@ def resolve_proxy_config(session_id: str | None = None) -> dict | None:
     if session_id:
         password = f"{password}_session-{session_id}_lifetime-{PROXY_SESSION_LIFETIME_MINUTES}m"
     return {"server": PROXY_SERVER, "username": PROXY_USERNAME, "password": password}
+
+
+# Chromium network-level error codes that mean the connection itself
+# never got established - the underlying TCP tunnel to (or through) the
+# proxy failed, as opposed to a normal HTTP response (even a blocked
+# one, like a 401) that at least proves the tunnel works. Confirmed live,
+# 2026-09-16: one rotated IPRoyal session landed on a dead exit node and
+# every one of the 5 handles in that rotation batch failed with
+# ERR_TUNNEL_CONNECTION_FAILED before the next scheduled rotation - not
+# an Instagram-side block at all, so retrying the same dead session (or
+# worse, moving on to the next handle still using it) just wastes the
+# whole batch. See is_proxy_connection_error and its call site in main().
+PROXY_CONNECTION_ERROR_CODES = (
+    "ERR_TUNNEL_CONNECTION_FAILED",
+    "ERR_PROXY_CONNECTION_FAILED",
+    "ERR_CONNECTION_REFUSED",
+    "ERR_CONNECTION_RESET",
+    "ERR_CONNECTION_CLOSED",
+    "ERR_CONNECTION_TIMED_OUT",
+    "ERR_SOCKS_CONNECTION_FAILED",
+    "ERR_SOCKS_CONNECTION_HOST_UNREACHABLE",
+    "ERR_EMPTY_RESPONSE",
+)
+
+
+def is_proxy_connection_error(error: str | None) -> bool:
+    """Whether `error` (a resolve_identity/check_handle error message,
+    which wraps goto_profile's raw Playwright error text) indicates the
+    proxy's own connection failed outright, rather than Instagram
+    returning any response at all - see PROXY_CONNECTION_ERROR_CODES."""
+    if not error:
+        return False
+    return any(code in error for code in PROXY_CONNECTION_ERROR_CODES)
 
 
 def resolve_authenticated_state() -> dict | None:
@@ -908,6 +957,16 @@ def extract_embedded_timeline(
     return None, []
 
 
+# Shared between resolve_identity and check_handle - both conclude this
+# after exhausting every recovery path available to them. Also matched
+# by main()'s own retry-on-suspect-private logic (see
+# MAX_PRIVATE_VERDICT_RETRIES) - the two paths that produce it can't be
+# told apart from the message alone (an explicit is_private:true vs. a
+# fully-exhausted set of fallbacks), so both get the same small, bounded
+# number of fresh-proxy-session retries before this verdict is accepted.
+PRIVATE_OR_NO_POSTS_MESSAGE = "account is private or has no visible posts"
+
+
 def resolve_identity(
     handle: str, page: Page
 ) -> tuple[str | None, str | None, list[dict] | None, str | None, bool, int | None]:
@@ -962,7 +1021,7 @@ def resolve_identity(
             # enough to act on immediately - a hard, explicit assertion
             # from IG itself.
             if user.get("is_private"):
-                return None, None, None, "account is private or has no visible posts", False, None
+                return None, None, None, PRIVATE_OR_NO_POSTS_MESSAGE, False, None
             if edges or count is not None:
                 media = [
                     {
@@ -990,7 +1049,7 @@ def resolve_identity(
             # check_handle's own "not media and total_post_count is None"
             # guard call it private, the same as it always has for the
             # id-only fallback paths.
-            error = "account is private or has no visible posts"
+            error = PRIVATE_OR_NO_POSTS_MESSAGE
         else:
             error = "no user data returned (account may not exist)"
 
@@ -1271,7 +1330,7 @@ def check_handle(
     # it shows as "couldn't check" with a real reason regardless of which
     # path found the id.
     if not used_known_id_fallback and not media and total_post_count is None:
-        return None, "account is private or has no visible posts", was_blocked, None
+        return None, PRIVATE_OR_NO_POSTS_MESSAGE, was_blocked, None
 
     db.save_user_id(conn, handle, user_id, datetime.now(tz).isoformat())
 
@@ -1423,7 +1482,18 @@ def main() -> None:
             browser, persisted_state, resolve_proxy_config(random_session_id()) if proxy_config else None,
         )
 
+        def rotate_proxy_session(reason: str) -> None:
+            nonlocal context, page
+            session_id = random_session_id()
+            print(f"  rotating proxy session ({reason}) -> {session_id}", file=sys.stderr)
+            state_now = context.storage_state()
+            page.close()
+            context.close()
+            context, page = open_context(browser, state_now, resolve_proxy_config(session_id))
+
         consecutive_blocks = 0
+        consecutive_proxy_errors = 0
+        consecutive_private_verdicts = 0
         cooldowns_used = 0
         stopped_early = False
         request_count = 0
@@ -1447,16 +1517,64 @@ def main() -> None:
                 time.sleep(MIN_REQUEST_INTERVAL + random.uniform(0, REQUEST_JITTER))
 
             if proxy_config and request_count > 0 and request_count % PROXY_ROTATE_EVERY == 0:
-                session_id = random_session_id()
-                print(f"  rotating proxy session ({request_count} requests on the last one) -> {session_id}", file=sys.stderr)
-                state_now = context.storage_state()
-                page.close()
-                context.close()
-                context, page = open_context(browser, state_now, resolve_proxy_config(session_id))
+                rotate_proxy_session(f"{request_count} requests on the last one")
 
             request_count += 1
 
             results_by_date, error, was_blocked, profile_pic_url = check_handle(handle, window, tz, page, conn)
+
+            # A dead proxy tunnel (is_proxy_connection_error) means the
+            # CONNECTION never worked - nothing about this handle, and
+            # nothing Instagram-side, caused it (was_blocked is always
+            # False on this path - see resolve_identity's nav_error
+            # return). Retrying the same handle on the same dead session
+            # would just fail again identically, so force an immediate
+            # rotation instead of waiting for the next scheduled one -
+            # confirmed live, 2026-09-16: without this, one dead rotated
+            # session took out its entire 5-handle batch before the next
+            # scheduled rotation finally moved past it.
+            if proxy_config and is_proxy_connection_error(error):
+                consecutive_proxy_errors += 1
+                if consecutive_proxy_errors <= MAX_PROXY_CONNECTION_RETRIES:
+                    print(
+                        f"  proxy connection failed on {handle} "
+                        f"(attempt {consecutive_proxy_errors}/{MAX_PROXY_CONNECTION_RETRIES}): {error}",
+                        file=sys.stderr,
+                    )
+                    rotate_proxy_session(f"previous session dead: {error}")
+                    continue  # retry the same handle on the new session, don't advance i or record an error
+                print(
+                    f"  giving up on {handle} after {MAX_PROXY_CONNECTION_RETRIES} dead proxy "
+                    "session(s) in a row - recording as error",
+                    file=sys.stderr,
+                )
+
+            # A "private or no visible posts" verdict is the same kind of
+            # suspect result as a dead proxy tunnel above - confirmed
+            # live, 2026-09-16, a soft-blocked exit IP produces this
+            # exact verdict for genuinely public, active accounts (see
+            # PRIVATE_OR_NO_POSTS_MESSAGE and MAX_PRIVATE_VERDICT_RETRIES).
+            # A handful of tracked accounts genuinely are private, so
+            # this can't be trusted as an infinite retry signal the way a
+            # connection failure is - bounded low instead, and always
+            # accepted eventually.
+            if proxy_config and error == PRIVATE_OR_NO_POSTS_MESSAGE:
+                consecutive_private_verdicts += 1
+                if consecutive_private_verdicts <= MAX_PRIVATE_VERDICT_RETRIES:
+                    print(
+                        f"  {handle} came back private/no-visible-posts "
+                        f"(attempt {consecutive_private_verdicts}/{MAX_PRIVATE_VERDICT_RETRIES}) "
+                        "- rotating proxy session and retrying before trusting it",
+                        file=sys.stderr,
+                    )
+                    rotate_proxy_session(f"suspect private verdict for {handle}")
+                    continue  # retry the same handle on the new session, don't advance i or record an error
+                print(
+                    f"  {handle} still private/no-visible-posts after {MAX_PRIVATE_VERDICT_RETRIES} "
+                    "retries on fresh sessions - accepting the verdict",
+                    file=sys.stderr,
+                )
+
             consecutive_blocks = consecutive_blocks + 1 if was_blocked else 0
 
             if was_blocked and consecutive_blocks >= CONSECUTIVE_BLOCK_LIMIT:
@@ -1506,6 +1624,13 @@ def main() -> None:
                 )
                 print(f"  {reason} - marking remaining handles as skipped", file=sys.stderr)
 
+            # About to move to a genuinely different handle (success or
+            # an accepted error, not a same-handle retry `continue`
+            # above) - both retry budgets are per-handle, not a
+            # run-wide streak, so they reset here regardless of whether
+            # this handle exhausted either of them.
+            consecutive_proxy_errors = 0
+            consecutive_private_verdicts = 0
             i += 1
 
         # Never persist an authenticated session into the anonymous
