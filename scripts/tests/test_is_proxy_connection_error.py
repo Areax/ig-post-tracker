@@ -33,3 +33,16 @@ def test_a_real_http_level_block_is_not_a_proxy_error():
 
 def test_the_private_message_is_not_a_proxy_error():
     assert check_posts.is_proxy_connection_error(check_posts.PRIVATE_OR_NO_POSTS_MESSAGE) is False
+
+
+def test_err_timed_out_is_recognized_distinctly_from_err_connection_timed_out():
+    """Missed live in production, 2026-09-17 (alexyee.ventures) - a
+    distinct code from ERR_CONNECTION_TIMED_OUT, and one that also
+    doesn't contain the substring "Timeout", so goto_profile's own
+    single retry-on-timeout doesn't catch it either. Must be recognized
+    here so main()'s forced-rotation retry does."""
+    error = (
+        "navigation to profile page failed: Page.goto: "
+        "net::ERR_TIMED_OUT at https://www.instagram.com/alexyee.ventures/"
+    )
+    assert check_posts.is_proxy_connection_error(error) is True

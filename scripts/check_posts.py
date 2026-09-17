@@ -487,6 +487,14 @@ PROXY_CONNECTION_ERROR_CODES = (
     "ERR_CONNECTION_RESET",
     "ERR_CONNECTION_CLOSED",
     "ERR_CONNECTION_TIMED_OUT",
+    # Distinct from ERR_CONNECTION_TIMED_OUT (the TCP handshake itself
+    # timing out) - this is a stall further along, e.g. a tunnel that
+    # connected but then never got a response. Missed live in production,
+    # 2026-09-17 (alexyee.ventures): doesn't contain the substring
+    # "Timeout" either, so goto_profile's own single retry never caught
+    # it, and it wasn't in this list yet, so main()'s forced-rotation
+    # retry didn't either - one un-retried attempt straight to error.
+    "ERR_TIMED_OUT",
     "ERR_SOCKS_CONNECTION_FAILED",
     "ERR_SOCKS_CONNECTION_HOST_UNREACHABLE",
     "ERR_EMPTY_RESPONSE",
