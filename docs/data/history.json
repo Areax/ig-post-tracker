@@ -1997,7 +1997,8 @@
         "status": "error"
       },
       "Jay.invests": {
-        "posted": false,
+        "permalink": "https://www.instagram.com/p/DdWogrKOE8X/",
+        "posted": true,
         "status": "ok"
       },
       "Michael.dc.santos": {
@@ -2071,8 +2072,9 @@
         "status": "ok"
       },
       "intamfan": {
-        "message": "account is private or has no visible posts",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/DdXTwlEiUQi/",
+        "posted": true,
+        "status": "ok"
       },
       "itsperrygood": {
         "posted": false,
@@ -2252,5 +2254,5 @@
     "lissdelarosa",
     "nelson_goes_pro"
   ],
-  "updated_at": "2026-09-17T05:58:23.055889-07:00"
+  "updated_at": "2026-09-17T10:14:13.597094-07:00"
 }
