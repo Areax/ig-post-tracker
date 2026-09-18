@@ -2,7 +2,8 @@
   "avatars": {
     "angiechack": "angiechack.jpg",
     "b_yanggg": "b_yanggg.jpg",
-    "brucedao.str": "brucedao.str.jpg"
+    "brucedao.str": "brucedao.str.jpg",
+    "ringoyippp": "ringoyippp.jpg"
   },
   "days": {
     "2026-09-07": {
@@ -167,6 +168,10 @@
       "realtorharry_": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
+      },
+      "ringoyippp": {
+        "posted": false,
+        "status": "ok"
       },
       "rt.invests": {
         "permalink": "https://www.instagram.com/p/DdAImNIicOD/",
@@ -384,6 +389,10 @@
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
+      "ringoyippp": {
+        "posted": false,
+        "status": "ok"
+      },
       "rt.invests": {
         "permalink": "https://www.instagram.com/p/DdC36csyLlW/",
         "posted": true,
@@ -600,6 +609,10 @@
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
+      "ringoyippp": {
+        "posted": false,
+        "status": "ok"
+      },
       "rt.invests": {
         "posted": false,
         "status": "ok"
@@ -814,6 +827,11 @@
       "realtorharry_": {
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
+      },
+      "ringoyippp": {
+        "permalink": "https://www.instagram.com/p/DdIp4WNNB_v/",
+        "posted": true,
+        "status": "ok"
       },
       "rt.invests": {
         "posted": false,
@@ -1031,6 +1049,10 @@
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
+      "ringoyippp": {
+        "posted": false,
+        "status": "ok"
+      },
       "rt.invests": {
         "permalink": "https://www.instagram.com/p/DdKb1loDEmb/",
         "posted": true,
@@ -1245,6 +1267,10 @@
         "message": "skipped: stopped early after repeated blocking from Instagram this run",
         "status": "error"
       },
+      "ringoyippp": {
+        "posted": false,
+        "status": "ok"
+      },
       "rt.invests": {
         "posted": false,
         "status": "ok"
@@ -1458,6 +1484,10 @@
         "message": "account is private or has no visible posts",
         "status": "error"
       },
+      "ringoyippp": {
+        "posted": false,
+        "status": "ok"
+      },
       "rt.invests": {
         "posted": false,
         "status": "ok"
@@ -1653,7 +1683,7 @@
         "status": "ok"
       },
       "muhan.being": {
-        "permalink": "https://www.instagram.com/p/DdScOfeD5IM/",
+        "permalink": "https://www.instagram.com/p/DdSOXl_EYRM/",
         "posted": true,
         "status": "ok"
       },
@@ -1677,6 +1707,10 @@
       "realtorharry_": {
         "permalink": "https://www.instagram.com/p/DdRXxqLFb1s/",
         "posted": true,
+        "status": "ok"
+      },
+      "ringoyippp": {
+        "posted": false,
         "status": "ok"
       },
       "rt.invests": {
@@ -1904,6 +1938,11 @@
       },
       "realtorharry_": {
         "permalink": "https://www.instagram.com/p/DdVHRHCN8tz/",
+        "posted": true,
+        "status": "ok"
+      },
+      "ringoyippp": {
+        "permalink": "https://www.instagram.com/p/DdVTpCbNODx/",
         "posted": true,
         "status": "ok"
       },
@@ -2147,6 +2186,10 @@
         "posted": true,
         "status": "ok"
       },
+      "ringoyippp": {
+        "posted": false,
+        "status": "ok"
+      },
       "rt.invests": {
         "permalink": "https://www.instagram.com/p/DdWLphLjNsM/",
         "posted": true,
@@ -2203,7 +2246,246 @@
         "status": "ok"
       }
     },
-    "2026-09-17": {},
+    "2026-09-17": {
+      "Bakaproof": {
+        "permalink": "https://www.instagram.com/p/DdaNH3ZjXja/",
+        "posted": true,
+        "status": "ok"
+      },
+      "Bymaihoang": {
+        "permalink": "https://www.instagram.com/p/DdZzz5HBqqc/",
+        "posted": true,
+        "status": "ok"
+      },
+      "ChewyyyL": {
+        "permalink": "https://www.instagram.com/p/DdakVBYxrH3/",
+        "posted": true,
+        "status": "ok"
+      },
+      "FinanciallyGolden": {
+        "permalink": "https://www.instagram.com/p/DdZxZlQsFJ_/",
+        "posted": true,
+        "status": "ok"
+      },
+      "Irisandhomes": {
+        "permalink": "https://www.instagram.com/p/DdYVuGLG4cd/",
+        "posted": true,
+        "status": "ok"
+      },
+      "Itshectorav": {
+        "permalink": "https://www.instagram.com/p/DdYZhE0z4ZG/",
+        "posted": true,
+        "status": "ok"
+      },
+      "Itskevzhao": {
+        "permalink": "https://www.instagram.com/p/DdakaR_O_g8/",
+        "posted": true,
+        "status": "ok"
+      },
+      "Jay.invests": {
+        "permalink": "https://www.instagram.com/p/DdZ9xt7hiBw/",
+        "posted": true,
+        "status": "ok"
+      },
+      "Michael.dc.santos": {
+        "permalink": "https://www.instagram.com/p/DdajM3DFNYh/",
+        "posted": true,
+        "status": "ok"
+      },
+      "Signed.angela": {
+        "permalink": "https://www.instagram.com/p/Ddalg-MN8p2/",
+        "posted": true,
+        "status": "ok"
+      },
+      "Zhenginmotion": {
+        "posted": false,
+        "status": "ok"
+      },
+      "_victoriaponte": {
+        "posted": false,
+        "status": "ok"
+      },
+      "abourinaris": {
+        "permalink": "https://www.instagram.com/p/DdaQEm8Nx5H/",
+        "posted": true,
+        "status": "ok"
+      },
+      "alexyee.ventures": {
+        "permalink": "https://www.instagram.com/p/DdalEd0K2M3/",
+        "posted": true,
+        "status": "ok"
+      },
+      "angiechack": {
+        "posted": false,
+        "status": "ok"
+      },
+      "b_yanggg": {
+        "permalink": "https://www.instagram.com/p/DdaybEDA87o/",
+        "posted": true,
+        "status": "ok"
+      },
+      "brucedao.str": {
+        "posted": false,
+        "status": "ok"
+      },
+      "buildwith.kevin": {
+        "posted": false,
+        "status": "ok"
+      },
+      "cincycashflow": {
+        "permalink": "https://www.instagram.com/p/DdZ_wRwksNA/",
+        "posted": true,
+        "status": "ok"
+      },
+      "daronkfong": {
+        "posted": false,
+        "status": "ok"
+      },
+      "eddiebriant.re": {
+        "posted": false,
+        "status": "ok"
+      },
+      "goblinkingnyc": {
+        "permalink": "https://www.instagram.com/p/Ddankd1NBzP/",
+        "posted": true,
+        "status": "ok"
+      },
+      "heytracymai": {
+        "permalink": "https://www.instagram.com/p/DdaLJSjteBw/",
+        "posted": true,
+        "status": "ok"
+      },
+      "iamleilanisoon": {
+        "posted": false,
+        "status": "ok"
+      },
+      "intamfan": {
+        "permalink": "https://www.instagram.com/p/DdY9P5XxBJY/",
+        "posted": true,
+        "status": "ok"
+      },
+      "itsperrygood": {
+        "posted": false,
+        "status": "ok"
+      },
+      "jackrinstagram": {
+        "permalink": "https://www.instagram.com/p/DdZdTSBz91k/",
+        "posted": true,
+        "status": "ok"
+      },
+      "janeevanswalther": {
+        "posted": false,
+        "status": "ok"
+      },
+      "lissdelarosa": {
+        "posted": false,
+        "status": "ok"
+      },
+      "lj.exist": {
+        "permalink": "https://www.instagram.com/p/DdZ7pgBhUUK/",
+        "posted": true,
+        "status": "ok"
+      },
+      "minhdoan.ngo": {
+        "permalink": "https://www.instagram.com/p/DdZ4mwEoL0O/",
+        "posted": true,
+        "status": "ok"
+      },
+      "miso.mind": {
+        "permalink": "https://www.instagram.com/p/DdatxSvuREa/",
+        "posted": true,
+        "status": "ok"
+      },
+      "muhan.being": {
+        "permalink": "https://www.instagram.com/p/DdZ4LOFktQd/",
+        "posted": true,
+        "status": "ok"
+      },
+      "mylivingnotebook": {
+        "permalink": "https://www.instagram.com/p/Ddat50Ix1yO/",
+        "posted": true,
+        "status": "ok"
+      },
+      "nancyrhuang": {
+        "posted": false,
+        "status": "ok"
+      },
+      "nelson_goes_pro": {
+        "permalink": "https://www.instagram.com/p/DdZQD3qx2iR/",
+        "posted": true,
+        "status": "ok"
+      },
+      "ohgreatspirit": {
+        "posted": false,
+        "status": "ok"
+      },
+      "realtorharry_": {
+        "permalink": "https://www.instagram.com/p/DdabshaNOzB/",
+        "posted": true,
+        "status": "ok"
+      },
+      "ringoyippp": {
+        "posted": false,
+        "status": "ok"
+      },
+      "rt.invests": {
+        "permalink": "https://www.instagram.com/p/DdZ-HyMh_iB/",
+        "posted": true,
+        "status": "ok"
+      },
+      "saamkavusi": {
+        "permalink": "https://www.instagram.com/p/Ddapo0jOAKv/",
+        "posted": true,
+        "status": "ok"
+      },
+      "stateofKhai": {
+        "posted": false,
+        "status": "ok"
+      },
+      "sylchoice": {
+        "permalink": "https://www.instagram.com/p/DdYayXZsOEc/",
+        "posted": true,
+        "status": "ok"
+      },
+      "thenextmandy": {
+        "permalink": "https://www.instagram.com/p/DdZo3bLxLuB/",
+        "posted": true,
+        "status": "ok"
+      },
+      "thoughtsdescott": {
+        "permalink": "https://www.instagram.com/p/DdZp_dxGSrt/",
+        "posted": true,
+        "status": "ok"
+      },
+      "trentl3af": {
+        "permalink": "https://www.instagram.com/p/DdaLbQdxbom/",
+        "posted": true,
+        "status": "ok"
+      },
+      "tt.talks": {
+        "permalink": "https://www.instagram.com/p/DdapLeIE2Ia/",
+        "posted": true,
+        "status": "ok"
+      },
+      "underwriting.jams": {
+        "posted": false,
+        "status": "ok"
+      },
+      "watthemichael": {
+        "permalink": "https://www.instagram.com/p/DdahuocNFqu/",
+        "posted": true,
+        "status": "ok"
+      },
+      "with_alann": {
+        "posted": false,
+        "status": "ok"
+      },
+      "xcatherineann": {
+        "permalink": "https://www.instagram.com/p/DdabE-URyfq/",
+        "posted": true,
+        "status": "ok"
+      }
+    },
     "2026-09-18": {},
     "2026-09-19": {},
     "2026-09-20": {},
@@ -2265,7 +2547,8 @@
     "b_yanggg",
     "buildwith.kevin",
     "lissdelarosa",
-    "nelson_goes_pro"
+    "nelson_goes_pro",
+    "ringoyippp"
   ],
-  "updated_at": "2026-09-17T13:58:10.806239-07:00"
+  "updated_at": "2026-09-18T05:34:34.902387-07:00"
 }
