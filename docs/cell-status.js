@@ -58,7 +58,8 @@
       }
     }
     const rate = totalChecked ? Math.round((totalPosted / totalChecked) * 100) : 0;
-    return { totalPosted, totalChecked, errorCount, rate };
+    const missedCount = totalChecked - totalPosted;
+    return { totalPosted, totalChecked, errorCount, missedCount, rate };
   }
 
   return { classifyCell, computeHandleStats, computeOverallStats };

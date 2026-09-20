@@ -259,23 +259,22 @@
     // currently collapsed); `visibleDates` is scoped to whatever the
     // table actually shows right now - collapsed by default to just the
     // always-visible window, or every date once "previous week" is
-    // expanded. Posting rate and failed-check count must track the
+    // expanded. Posting rate and missed-post count must track the
     // latter, the same way updateRateBadges' per-handle badges already
-    // do - otherwise the summary tiles quietly average in (or flag
-    // errors from) reference days the page isn't even showing, which is
-    // exactly what made "48%" and "16 failed checks" not match what was
-    // on screen when the collapsed previous-week days (all 16 of that
-    // run's errors, and a lower posting rate) were the ones being
-    // counted instead of the visible ones.
+    // do - otherwise the summary tiles quietly average in reference days
+    // the page isn't even showing, which is exactly what made "48%" not
+    // match what was on screen when the collapsed previous-week days
+    // (a lower posting rate) were the ones being counted instead of the
+    // visible ones.
     function renderStats(handles, days, dates, visibleDates) {
       const container = document.getElementById("stats");
-      const { rate, errorCount } = CellStatus.computeOverallStats(handles, days, visibleDates);
+      const { rate, missedCount } = CellStatus.computeOverallStats(handles, days, visibleDates);
       const tiles = [
         { value: handles.length, label: handles.length === 1 ? "Handle tracked" : "Handles tracked" },
         { value: `${dates.length}d`, label: "Window" },
         { value: `${rate}%`, label: "Overall posting rate" },
+        { value: missedCount, label: missedCount === 1 ? "Missed post" : "Missed posts" },
       ];
-      if (errorCount > 0) tiles.push({ value: errorCount, label: "Failed checks" });
       container.innerHTML = tiles
         .map((t) => `<div class="stat-tile"><div class="value">${t.value}</div><div class="label">${t.label}</div></div>`)
         .join("");

@@ -93,3 +93,16 @@ test("computeOverallStats rate is 0 (not NaN) when nothing has been checked yet"
   const stats = CellStatus.computeOverallStats(["a"], {}, []);
   assert.equal(stats.rate, 0);
 });
+
+test("computeOverallStats missedCount is checked-but-not-posted, excluding errors and pending", () => {
+  const days = {
+    "2026-08-17": { a: { status: "ok", posted: true }, b: { status: "ok", posted: false } },
+    "2026-08-18": { a: { status: "ok", posted: false }, b: { status: "error", message: "boom" } },
+    "2026-08-19": {}, // pending for both - no entry at all - must not count as missed
+  };
+  const dates = Object.keys(days);
+
+  const stats = CellStatus.computeOverallStats(["a", "b"], days, dates);
+
+  assert.equal(stats.missedCount, 2, "a on 08-18 and b on 08-17 - not b's error, not a's pending day");
+});
