@@ -254,9 +254,22 @@
       };
     }
 
-    function renderStats(handles, days, dates) {
+    // `dates` is every tracked day (drives the "Window" tile, which is
+    // meant to describe the whole tracked span regardless of what's
+    // currently collapsed); `visibleDates` is scoped to whatever the
+    // table actually shows right now - collapsed by default to just the
+    // always-visible window, or every date once "previous week" is
+    // expanded. Posting rate and failed-check count must track the
+    // latter, the same way updateRateBadges' per-handle badges already
+    // do - otherwise the summary tiles quietly average in (or flag
+    // errors from) reference days the page isn't even showing, which is
+    // exactly what made "48%" and "16 failed checks" not match what was
+    // on screen when the collapsed previous-week days (all 16 of that
+    // run's errors, and a lower posting rate) were the ones being
+    // counted instead of the visible ones.
+    function renderStats(handles, days, dates, visibleDates) {
       const container = document.getElementById("stats");
-      const { rate, errorCount } = CellStatus.computeOverallStats(handles, days, dates);
+      const { rate, errorCount } = CellStatus.computeOverallStats(handles, days, visibleDates);
       const tiles = [
         { value: handles.length, label: handles.length === 1 ? "Handle tracked" : "Handles tracked" },
         { value: `${dates.length}d`, label: "Window" },
@@ -328,7 +341,7 @@
       }
 
       updatedEl.textContent = data.updated_at ? `Updated ${new Date(data.updated_at).toLocaleString()}` : "";
-      renderStats(handles, days, dates);
+      renderStats(handles, days, dates, dates.slice(hiddenCount));
       document.getElementById("legend").style.display = "flex";
       document.getElementById("disclaimer").style.display = "block";
 
@@ -405,6 +418,7 @@
           toggle.classList.toggle("expanded", expanded);
           toggle.querySelector(".toggle-label").textContent = expanded ? `Hide ${label}` : `Show ${label}`;
           updateRateBadges(expanded);
+          renderStats(handles, days, dates, expanded ? dates : dates.slice(hiddenCount));
         });
         card.appendChild(toggle);
       }
