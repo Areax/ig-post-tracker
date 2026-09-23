@@ -3426,7 +3426,215 @@
         "status": "ok"
       }
     },
-    "2026-09-22": {},
+    "2026-09-22": {
+      "Bakaproof": {
+        "message": "skipped: stopped early after repeated blocking from Instagram this run",
+        "status": "error"
+      },
+      "Bymaihoang": {
+        "message": "skipped: stopped early after repeated blocking from Instagram this run",
+        "status": "error"
+      },
+      "ChewyyyL": {
+        "message": "skipped: stopped early after repeated blocking from Instagram this run",
+        "status": "error"
+      },
+      "FinanciallyGolden": {
+        "message": "rate limited (HTTP 401: Please wait a few minutes before you try again.); HTML fallback failed: could not find numeric user id on profile page",
+        "status": "error"
+      },
+      "Irisandhomes": {
+        "message": "skipped: stopped early after repeated blocking from Instagram this run",
+        "status": "error"
+      },
+      "Itshectorav": {
+        "message": "skipped: stopped early after repeated blocking from Instagram this run",
+        "status": "error"
+      },
+      "Itskevzhao": {
+        "message": "skipped: stopped early after repeated blocking from Instagram this run",
+        "status": "error"
+      },
+      "Jay.invests": {
+        "message": "skipped: stopped early after repeated blocking from Instagram this run",
+        "status": "error"
+      },
+      "Michael.dc.santos": {
+        "message": "skipped: stopped early after repeated blocking from Instagram this run",
+        "status": "error"
+      },
+      "Signed.angela": {
+        "message": "skipped: stopped early after repeated blocking from Instagram this run",
+        "status": "error"
+      },
+      "Zhenginmotion": {
+        "message": "skipped: stopped early after repeated blocking from Instagram this run",
+        "status": "error"
+      },
+      "_victoriaponte": {
+        "message": "skipped: stopped early after repeated blocking from Instagram this run",
+        "status": "error"
+      },
+      "abourinaris": {
+        "posted": false,
+        "status": "ok"
+      },
+      "alexyee.ventures": {
+        "message": "skipped: stopped early after repeated blocking from Instagram this run",
+        "status": "error"
+      },
+      "angiechack": {
+        "message": "skipped: stopped early after repeated blocking from Instagram this run",
+        "status": "error"
+      },
+      "b_yanggg": {
+        "message": "skipped: stopped early after repeated blocking from Instagram this run",
+        "status": "error"
+      },
+      "brucedao.str": {
+        "message": "skipped: stopped early after repeated blocking from Instagram this run",
+        "status": "error"
+      },
+      "buildwith.kevin": {
+        "message": "skipped: stopped early after repeated blocking from Instagram this run",
+        "status": "error"
+      },
+      "cincycashflow": {
+        "message": "skipped: stopped early after repeated blocking from Instagram this run",
+        "status": "error"
+      },
+      "daronkfong": {
+        "message": "skipped: stopped early after repeated blocking from Instagram this run",
+        "status": "error"
+      },
+      "eddiebriant.re": {
+        "message": "skipped: stopped early after repeated blocking from Instagram this run",
+        "status": "error"
+      },
+      "goblinkingnyc": {
+        "message": "skipped: stopped early after repeated blocking from Instagram this run",
+        "status": "error"
+      },
+      "heytracymai": {
+        "message": "rate limited (HTTP 401: Please wait a few minutes before you try again.); HTML fallback failed: could not find numeric user id on profile page",
+        "status": "error"
+      },
+      "iamleilanisoon": {
+        "message": "skipped: stopped early after repeated blocking from Instagram this run",
+        "status": "error"
+      },
+      "intamfan": {
+        "message": "rate limited (HTTP 401: Please wait a few minutes before you try again.); HTML fallback failed: could not find numeric user id on profile page",
+        "status": "error"
+      },
+      "itsperrygood": {
+        "message": "skipped: stopped early after repeated blocking from Instagram this run",
+        "status": "error"
+      },
+      "jackrinstagram": {
+        "message": "skipped: stopped early after repeated blocking from Instagram this run",
+        "status": "error"
+      },
+      "janeevanswalther": {
+        "message": "skipped: stopped early after repeated blocking from Instagram this run",
+        "status": "error"
+      },
+      "lissdelarosa": {
+        "message": "skipped: stopped early after repeated blocking from Instagram this run",
+        "status": "error"
+      },
+      "lj.exist": {
+        "permalink": "https://www.instagram.com/p/DdnZjueBL50/",
+        "posted": true,
+        "status": "ok"
+      },
+      "minhdoan.ngo": {
+        "permalink": "https://www.instagram.com/p/DdmwicBTTWy/",
+        "posted": true,
+        "status": "ok"
+      },
+      "miso.mind": {
+        "message": "skipped: stopped early after repeated blocking from Instagram this run",
+        "status": "error"
+      },
+      "muhan.being": {
+        "message": "skipped: stopped early after repeated blocking from Instagram this run",
+        "status": "error"
+      },
+      "mylivingnotebook": {
+        "permalink": "https://www.instagram.com/p/DdnVV2nFA5l/",
+        "posted": true,
+        "status": "ok"
+      },
+      "nancyrhuang": {
+        "message": "skipped: stopped early after repeated blocking from Instagram this run",
+        "status": "error"
+      },
+      "nelson_goes_pro": {
+        "message": "skipped: stopped early after repeated blocking from Instagram this run",
+        "status": "error"
+      },
+      "ohgreatspirit": {
+        "message": "skipped: stopped early after repeated blocking from Instagram this run",
+        "status": "error"
+      },
+      "realtorharry_": {
+        "message": "skipped: stopped early after repeated blocking from Instagram this run",
+        "status": "error"
+      },
+      "ringoyippp": {
+        "message": "skipped: stopped early after repeated blocking from Instagram this run",
+        "status": "error"
+      },
+      "rt.invests": {
+        "message": "skipped: stopped early after repeated blocking from Instagram this run",
+        "status": "error"
+      },
+      "saamkavusi": {
+        "message": "skipped: stopped early after repeated blocking from Instagram this run",
+        "status": "error"
+      },
+      "stateofKhai": {
+        "message": "skipped: stopped early after repeated blocking from Instagram this run",
+        "status": "error"
+      },
+      "sylchoice": {
+        "message": "skipped: stopped early after repeated blocking from Instagram this run",
+        "status": "error"
+      },
+      "thenextmandy": {
+        "message": "skipped: stopped early after repeated blocking from Instagram this run",
+        "status": "error"
+      },
+      "thoughtsdescott": {
+        "posted": false,
+        "status": "ok"
+      },
+      "trentl3af": {
+        "message": "skipped: stopped early after repeated blocking from Instagram this run",
+        "status": "error"
+      },
+      "tt.talks": {
+        "message": "skipped: stopped early after repeated blocking from Instagram this run",
+        "status": "error"
+      },
+      "underwriting.jams": {
+        "message": "skipped: stopped early after repeated blocking from Instagram this run",
+        "status": "error"
+      },
+      "watthemichael": {
+        "message": "skipped: stopped early after repeated blocking from Instagram this run",
+        "status": "error"
+      },
+      "with_alann": {
+        "message": "skipped: stopped early after repeated blocking from Instagram this run",
+        "status": "error"
+      },
+      "xcatherineann": {
+        "message": "skipped: stopped early after repeated blocking from Instagram this run",
+        "status": "error"
+      }
+    },
     "2026-09-23": {},
     "2026-09-24": {},
     "2026-09-25": {},
@@ -3486,5 +3694,5 @@
     "nelson_goes_pro",
     "ringoyippp"
   ],
-  "updated_at": "2026-09-22T06:02:49.330835-07:00"
+  "updated_at": "2026-09-23T05:56:53.740894-07:00"
 }
