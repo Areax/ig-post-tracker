@@ -375,6 +375,23 @@ CONSECUTIVE_BLOCK_LIMIT = 3
 RATE_LIMIT_STATUS_CODES = (429, 401)
 COOLDOWN_SECONDS = float(os.environ.get("COOLDOWN_SECONDS", "900"))
 MAX_COOLDOWNS = int(os.environ.get("MAX_COOLDOWNS", "0"))
+# When the circuit breaker above trips, try a fresh proxy session before
+# falling back to a same-IP cooldown (or giving up, the default with
+# MAX_COOLDOWNS=0) - a 401 is Instagram blocking a specific IP's
+# reputation, the same class of problem PROXY_ROTATE_EVERY/
+# MAX_PROXY_CONNECTION_RETRIES/MAX_PRIVATE_VERDICT_RETRIES already treat
+# a fresh session as the fix for elsewhere in this file. Confirmed in
+# production, 2026-09-23: 3 consecutive real 401s (not a dead tunnel,
+# not an ambiguous "private" result - an actual blocking HTTP response)
+# ended the run at handle 8 of 51 with no attempt to switch IPs first.
+# Bounded low, separately from MAX_PROXY_CONNECTION_RETRIES/
+# MAX_PRIVATE_VERDICT_RETRIES's per-handle budgets: this one is run-wide
+# (consecutive_blocks itself already spans multiple different handles),
+# so exhausting it means several *different* fresh IPs all got blocked
+# in a row - a real sustained/broad block, not one bad IP, at which
+# point more rotating won't help and the existing cooldown/give-up path
+# below is the right call.
+MAX_BLOCK_ROTATION_RETRIES = int(os.environ.get("MAX_BLOCK_ROTATION_RETRIES", "2"))
 # How many times in a row a dead proxy session (is_proxy_connection_error)
 # gets a fresh rotation + immediate retry on the SAME handle before giving
 # up and recording it as a real error. Each rotation is a different exit
@@ -1512,6 +1529,7 @@ def main() -> None:
         consecutive_proxy_errors = 0
         consecutive_private_verdicts = 0
         consecutive_dead_proxy_handles = 0
+        block_rotations_used = 0
         cooldowns_used = 0
         stopped_early = False
         stopped_early_reason = "skipped: stopped early after repeated blocking from Instagram this run"
@@ -1606,6 +1624,16 @@ def main() -> None:
             consecutive_blocks = consecutive_blocks + 1 if was_blocked else 0
 
             if was_blocked and consecutive_blocks >= CONSECUTIVE_BLOCK_LIMIT:
+                if proxy_config and block_rotations_used < MAX_BLOCK_ROTATION_RETRIES:
+                    block_rotations_used += 1
+                    print(
+                        f"  {consecutive_blocks} consecutive blocks (latest: {handle}) - trying a fresh "
+                        f"proxy session before giving up (rotation {block_rotations_used}/{MAX_BLOCK_ROTATION_RETRIES})",
+                        file=sys.stderr,
+                    )
+                    rotate_proxy_session(f"consecutive block limit hit on {handle}")
+                    consecutive_blocks = 0
+                    continue  # retry the same handle on the new session, don't advance i or record an error yet
                 if cooldowns_used < MAX_COOLDOWNS:
                     cooldowns_used += 1
                     print(
