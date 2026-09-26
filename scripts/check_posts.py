@@ -375,23 +375,26 @@ CONSECUTIVE_BLOCK_LIMIT = 3
 RATE_LIMIT_STATUS_CODES = (429, 401)
 COOLDOWN_SECONDS = float(os.environ.get("COOLDOWN_SECONDS", "900"))
 MAX_COOLDOWNS = int(os.environ.get("MAX_COOLDOWNS", "0"))
-# When the circuit breaker above trips, try a fresh proxy session before
-# falling back to a same-IP cooldown (or giving up, the default with
-# MAX_COOLDOWNS=0) - a 401 is Instagram blocking a specific IP's
-# reputation, the same class of problem PROXY_ROTATE_EVERY/
-# MAX_PROXY_CONNECTION_RETRIES/MAX_PRIVATE_VERDICT_RETRIES already treat
-# a fresh session as the fix for elsewhere in this file. Confirmed in
-# production, 2026-09-23: 3 consecutive real 401s (not a dead tunnel,
-# not an ambiguous "private" result - an actual blocking HTTP response)
-# ended the run at handle 8 of 51 with no attempt to switch IPs first.
-# Bounded low, separately from MAX_PROXY_CONNECTION_RETRIES/
-# MAX_PRIVATE_VERDICT_RETRIES's per-handle budgets: this one is run-wide
-# (consecutive_blocks itself already spans multiple different handles),
-# so exhausting it means several *different* fresh IPs all got blocked
-# in a row - a real sustained/broad block, not one bad IP, at which
-# point more rotating won't help and the existing cooldown/give-up path
-# below is the right call.
-MAX_BLOCK_ROTATION_RETRIES = int(os.environ.get("MAX_BLOCK_ROTATION_RETRIES", "2"))
+# A single handle's own real block (was_blocked - a 401/403/429 HTTP
+# response, not a dead tunnel or an ambiguous "private" verdict) gets a
+# fresh proxy session and an immediate retry, the same as
+# MAX_PROXY_CONNECTION_RETRIES/MAX_PRIVATE_VERDICT_RETRIES already do for
+# their own failure shapes - a block is Instagram flagging a specific
+# IP's reputation, and rotating is the fix elsewhere in this file too.
+# This replaced an earlier version (2026-09-24) that only rotated once
+# CONSECUTIVE_BLOCK_LIMIT (3) DIFFERENT handles had already failed in a
+# row - confirmed in production, 2026-09-26, that a run can go two
+# isolated handles deep into a block (tt.talks+janeevanswalther,
+# eddiebriant.re+nancyrhuang - both exactly 2, both surrounded by
+# otherwise-successful handles) without ever reaching 3, so those never
+# got a single retry attempt and were recorded as permanent errors on
+# the very first hit. Retrying per-handle, immediately, catches both
+# that case and the original 3-in-a-row one - a handle that exhausts its
+# own retry budget still falls through into consecutive_blocks/
+# CONSECUTIVE_BLOCK_LIMIT below as before, so a genuinely broad/sustained
+# block (many different handles, each already rotated and still failing)
+# still stops the run rather than burning through fresh sessions forever.
+MAX_BLOCKED_RETRIES = int(os.environ.get("MAX_BLOCKED_RETRIES", "2"))
 # How many times in a row a dead proxy session (is_proxy_connection_error)
 # gets a fresh rotation + immediate retry on the SAME handle before giving
 # up and recording it as a real error. Each rotation is a different exit
@@ -1528,8 +1531,8 @@ def main() -> None:
         consecutive_blocks = 0
         consecutive_proxy_errors = 0
         consecutive_private_verdicts = 0
+        consecutive_blocked_retries = 0
         consecutive_dead_proxy_handles = 0
-        block_rotations_used = 0
         cooldowns_used = 0
         stopped_early = False
         stopped_early_reason = "skipped: stopped early after repeated blocking from Instagram this run"
@@ -1621,19 +1624,33 @@ def main() -> None:
                     file=sys.stderr,
                 )
 
-            consecutive_blocks = consecutive_blocks + 1 if was_blocked else 0
-
-            if was_blocked and consecutive_blocks >= CONSECUTIVE_BLOCK_LIMIT:
-                if proxy_config and block_rotations_used < MAX_BLOCK_ROTATION_RETRIES:
-                    block_rotations_used += 1
+            # A real block (was_blocked - a 401/403/429 HTTP response)
+            # gets its own immediate fresh-session retry first, exactly
+            # like a dead tunnel or a suspect "private" verdict above -
+            # see MAX_BLOCKED_RETRIES's comment for the production
+            # incident (two isolated 2-in-a-row blocks, neither reaching
+            # the 3-in-a-row threshold below) that this per-handle retry
+            # is specifically for. Only a handle that exhausts its own
+            # retry budget (or has no proxy to rotate to) counts toward
+            # consecutive_blocks - the broader signal that several
+            # *different* handles, each already having tried a fresh
+            # session on their own, are still failing: a real
+            # sustained/broad block, not one bad IP.
+            if was_blocked:
+                consecutive_blocked_retries += 1
+                if proxy_config and consecutive_blocked_retries <= MAX_BLOCKED_RETRIES:
                     print(
-                        f"  {consecutive_blocks} consecutive blocks (latest: {handle}) - trying a fresh "
-                        f"proxy session before giving up (rotation {block_rotations_used}/{MAX_BLOCK_ROTATION_RETRIES})",
+                        f"  {handle} blocked (attempt {consecutive_blocked_retries}/{MAX_BLOCKED_RETRIES}) "
+                        "- rotating proxy session and retrying",
                         file=sys.stderr,
                     )
-                    rotate_proxy_session(f"consecutive block limit hit on {handle}")
-                    consecutive_blocks = 0
-                    continue  # retry the same handle on the new session, don't advance i or record an error yet
+                    rotate_proxy_session(f"blocked on {handle}")
+                    continue  # retry the same handle on the new session, don't advance i or record an error
+                consecutive_blocks += 1
+            else:
+                consecutive_blocks = 0
+
+            if consecutive_blocks >= CONSECUTIVE_BLOCK_LIMIT:
                 if cooldowns_used < MAX_COOLDOWNS:
                     cooldowns_used += 1
                     print(
@@ -1682,11 +1699,12 @@ def main() -> None:
 
             # About to move to a genuinely different handle (success or
             # an accepted error, not a same-handle retry `continue`
-            # above) - both retry budgets are per-handle, not a
+            # above) - all three retry budgets are per-handle, not a
             # run-wide streak, so they reset here regardless of whether
-            # this handle exhausted either of them.
+            # this handle exhausted any of them.
             consecutive_proxy_errors = 0
             consecutive_private_verdicts = 0
+            consecutive_blocked_retries = 0
             i += 1
 
         # Never persist an authenticated session into the anonymous
