@@ -267,6 +267,52 @@ def test_export_window_with_no_handles_returns_empty_shell(conn):
     assert snapshot == {"handles": [], "days": {"2026-08-17": {}}}
 
 
+def test_handles_with_errors_finds_only_handles_with_an_error_in_window(conn):
+    """Powers a targeted retry (RETRY_FAILING_ONLY) that only re-checks
+    handles currently showing a failure, instead of re-checking everyone
+    to fix a few - see the docstring in check_posts.py's
+    select_handles_to_check for why that matters (bandwidth)."""
+    db.upsert_ok(conn, "healthy", {"2026-08-17": {"status": "ok", "posted": True}}, "t")
+    db.fill_gaps_with_error(conn, "broken", [date(2026, 8, 17)], "boom", "t", today=date(2026, 8, 20))
+    window = [date(2026, 8, 17)]
+
+    result = db.handles_with_errors(conn, ["healthy", "broken"], window)
+
+    assert result == ["broken"]
+
+
+def test_handles_with_errors_ignores_errors_outside_the_window(conn):
+    db.fill_gaps_with_error(conn, "a", [date(2026, 8, 1)], "boom", "t", today=date(2026, 8, 20))
+
+    result = db.handles_with_errors(conn, ["a"], [date(2026, 8, 17)])
+
+    assert result == []
+
+
+def test_handles_with_errors_only_considers_the_given_handles(conn):
+    """Even if some OTHER tracked handle has an error, it must not show
+    up unless it was actually passed in - callers scope this to
+    all_handles (or a smaller set) on purpose."""
+    db.fill_gaps_with_error(conn, "not_requested", [date(2026, 8, 17)], "boom", "t", today=date(2026, 8, 20))
+
+    result = db.handles_with_errors(conn, ["requested"], [date(2026, 8, 17)])
+
+    assert result == []
+
+
+def test_handles_with_errors_preserves_the_input_order(conn):
+    db.fill_gaps_with_error(conn, "z", [date(2026, 8, 17)], "boom", "t", today=date(2026, 8, 20))
+    db.fill_gaps_with_error(conn, "a", [date(2026, 8, 17)], "boom", "t", today=date(2026, 8, 20))
+
+    result = db.handles_with_errors(conn, ["z", "a"], [date(2026, 8, 17)])
+
+    assert result == ["z", "a"]
+
+
+def test_handles_with_errors_with_no_handles_returns_empty(conn):
+    assert db.handles_with_errors(conn, [], [date(2026, 8, 17)]) == []
+
+
 def test_has_avatar_and_save_avatar_round_trip(conn):
     assert db.has_avatar(conn, "torch_boy") is False
 

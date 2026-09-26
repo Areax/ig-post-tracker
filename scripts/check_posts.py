@@ -272,6 +272,20 @@ HANDLES_FILE = Path(os.environ.get("HANDLES_FILE", "handles.csv"))
 DB_FILE = Path(os.environ.get("DB_FILE", "data/tracker.db"))
 HISTORY_FILE = Path(os.environ.get("HISTORY_FILE", "docs/data/history.json"))
 HISTORY_DAYS = int(os.environ.get("HISTORY_DAYS", "14"))
+# Comma-separated handle names (matched against HANDLES_FILE, @ optional)
+# to check THIS RUN ONLY, instead of every tracked handle - a targeted
+# retry that doesn't re-check the handles that already succeeded, unlike
+# just re-running the whole workflow (which re-burns proxy bandwidth on
+# everyone). The exported site JSON still always covers every tracked
+# handle regardless (see main()'s own all_handles vs. handles split) -
+# only which handles get a FRESH check this run is narrowed.
+TARGET_HANDLES = os.environ.get("TARGET_HANDLES")
+# Instead of naming handles explicitly, automatically retry whichever
+# tracked handles currently have an "error" status anywhere in the
+# tracked window - the common case ("just fix whoever's currently
+# failing") without having to look up and type out names by hand.
+# Ignored if TARGET_HANDLES is also set (an explicit list wins).
+RETRY_FAILING_ONLY = os.environ.get("RETRY_FAILING_ONLY", "").strip().lower() in ("1", "true", "yes")
 
 # Optional residential proxy (e.g. IPRoyal) for the whole browser instance -
 # added 2026-09-13 after GitHub Actions' shared runner IP got rate-limited
@@ -1465,32 +1479,67 @@ def open_context(browser, storage_state: dict | None, proxy_cfg: dict | None):
     return context, context.new_page()
 
 
+def select_handles_to_check(all_handles: list[str], conn: sqlite3.Connection, window: list[date]) -> list[str]:
+    """Narrows `all_handles` down to just the ones this run should
+    actually check - TARGET_HANDLES (explicit) or RETRY_FAILING_ONLY
+    (auto-detected from the DB) for a targeted retry, or `all_handles`
+    unchanged for a normal full run (both unset - the common case).
+    Order is always `all_handles`'s own order. The exported site JSON
+    still always covers every tracked handle regardless of this
+    narrowing - see main()'s own all_handles vs. handles split."""
+    if TARGET_HANDLES:
+        requested = {h.strip().lstrip("@") for h in TARGET_HANDLES.split(",") if h.strip()}
+        unknown = requested - set(all_handles)
+        if unknown:
+            print(
+                f"TARGET_HANDLES named handle(s) not in {HANDLES_FILE.name}, ignoring: {', '.join(sorted(unknown))}",
+                file=sys.stderr,
+            )
+        return [h for h in all_handles if h in requested]
+
+    if RETRY_FAILING_ONLY:
+        return db.handles_with_errors(conn, all_handles, window)
+
+    return all_handles
+
+
 def main() -> None:
-    handles = load_handles(HANDLES_FILE)
-    if not handles:
+    all_handles = load_handles(HANDLES_FILE)
+    if not all_handles:
         print("no handles to check, exiting", file=sys.stderr)
         sys.exit(1)
 
     tz = ZoneInfo(TRACKER_TIMEZONE)
     window = resolve_window(tz)
-    # 1 request/handle for web_profile_info, + (MAX_FEED_PAGES - 1) more
-    # if deep feed/user pagination is enabled, +1 more for a first-time
-    # avatar fetch. This is a rough upper-bound estimate, not exact, and
-    # doesn't count real browser page-load overhead (a few seconds per
-    # navigation) on top of the pacing sleep.
-    est_minutes = round(len(handles) * MAX_FEED_PAGES * MIN_REQUEST_INTERVAL / 60, 1)
-    print(
-        f"checking {len(handles)} handle(s) for posts across "
-        f"{window[0].isoformat()}..{window[-1].isoformat()} ({TRACKER_TIMEZONE}), "
-        f"~{est_minutes}+ min at current pacing (assuming no blocks; excludes browser page-load overhead)"
-    )
-
     conn = db.connect(DB_FILE)
 
     today = datetime.now(tz).date()
     purged = db.purge_future_dates(conn, today)
     if purged:
         print(f"purged {purged} stale row(s) for today or later ({today.isoformat()})", file=sys.stderr)
+
+    handles = select_handles_to_check(all_handles, conn, window)
+    if not handles:
+        reason = (
+            "TARGET_HANDLES matched none of the tracked handles" if TARGET_HANDLES
+            else "RETRY_FAILING_ONLY set but nothing currently has an error in the tracked window"
+        )
+        print(f"{reason} - nothing to check, exiting", file=sys.stderr)
+        conn.close()
+        return  # nothing changed - don't rewrite history.json into a no-op commit
+
+    # 1 request/handle for web_profile_info, + (MAX_FEED_PAGES - 1) more
+    # if deep feed/user pagination is enabled, +1 more for a first-time
+    # avatar fetch. This is a rough upper-bound estimate, not exact, and
+    # doesn't count real browser page-load overhead (a few seconds per
+    # navigation) on top of the pacing sleep.
+    est_minutes = round(len(handles) * MAX_FEED_PAGES * MIN_REQUEST_INTERVAL / 60, 1)
+    targeted_note = f" (a targeted retry, out of {len(all_handles)} tracked total)" if len(handles) != len(all_handles) else ""
+    print(
+        f"checking {len(handles)} handle(s){targeted_note} for posts across "
+        f"{window[0].isoformat()}..{window[-1].isoformat()} ({TRACKER_TIMEZONE}), "
+        f"~{est_minutes}+ min at current pacing (assuming no blocks; excludes browser page-load overhead)"
+    )
 
     authenticated_state = resolve_authenticated_state()
     if authenticated_state:
@@ -1720,8 +1769,12 @@ def main() -> None:
 
         browser.close()
 
-    snapshot = db.export_window(conn, handles, window)
-    snapshot["avatars"] = db.export_avatars(conn, handles, HISTORY_FILE.parent / "avatars")
+    # Always the full tracked list here, regardless of `handles` having
+    # been narrowed to a targeted retry above - the site must keep
+    # showing every handle, with whichever of them just got fresh data
+    # this run and everyone else's data as the DB already had it.
+    snapshot = db.export_window(conn, all_handles, window)
+    snapshot["avatars"] = db.export_avatars(conn, all_handles, HISTORY_FILE.parent / "avatars")
     snapshot["updated_at"] = datetime.now(tz).isoformat()
     conn.close()
 

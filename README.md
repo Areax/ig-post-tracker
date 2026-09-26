@@ -165,7 +165,18 @@ cron values can't reference repo variables directly.
 
 You can also trigger a run manually any time from the Actions tab
 ("Daily Instagram post check" → Run workflow) — manual runs always
-execute regardless of the guard.
+execute regardless of the guard. That dialog also has two optional
+inputs for a *targeted* retry, so fixing a few currently-failing handles
+doesn't burn proxy bandwidth re-checking everyone who already succeeded:
+- **handles** — comma-separated handle(s) to check, e.g. `tt.talks,
+  angiechack`; everyone else is left untouched this run.
+- **Retry only failing handles** — a checkbox that auto-detects and
+  re-checks whichever tracked handles currently have an error anywhere
+  in the tracked window, no need to type out names.
+
+The site (`docs/data/history.json`) always reflects every tracked
+handle either way — only which handles get a *fresh* check this run is
+narrowed; everyone else's data stays exactly as the last run left it.
 
 ## How it works
 

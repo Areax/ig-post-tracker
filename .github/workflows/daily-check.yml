@@ -23,7 +23,27 @@ on:
   schedule:
     - cron: "30 8 * * *"
     - cron: "30 7 * * *"
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      handles:
+        description: >-
+          Optional: comma-separated handle(s) to check (@ optional), e.g.
+          "tt.talks, angiechack" - leave empty to check everyone. Lets you
+          retry just the handles currently showing a failure without
+          re-checking (and re-spending proxy bandwidth on) everyone who
+          already succeeded. Takes priority over "Retry only failing
+          handles" below if both are filled in.
+        required: false
+        type: string
+      retry_failing_only:
+        description: >-
+          Only re-check whichever tracked handles currently have an error
+          anywhere in the tracked window (auto-detected from the DB) -
+          the "just fix whoever's currently failing" button, no need to
+          type out names. Ignored if the handles field above is filled in.
+        required: false
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -121,6 +141,12 @@ jobs:
           # (confirmed three independent ways, 2026-09-14), and how to
           # produce one.
           IG_SESSION_STATE_JSON: ${{ secrets.IG_SESSION_STATE_JSON }}
+          # Both blank/false by default (a normal full run, unchanged) -
+          # only set on a manual workflow_dispatch run that filled in the
+          # matching input above. See TARGET_HANDLES/RETRY_FAILING_ONLY's
+          # own comments in scripts/check_posts.py.
+          TARGET_HANDLES: ${{ github.event.inputs.handles }}
+          RETRY_FAILING_ONLY: ${{ github.event.inputs.retry_failing_only }}
         run: python3 scripts/check_posts.py
 
       - name: Save tracker DB cache

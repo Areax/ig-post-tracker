@@ -299,6 +299,29 @@ def purge_future_dates(conn: sqlite3.Connection, today: date) -> int:
     return cursor.rowcount
 
 
+def handles_with_errors(conn: sqlite3.Connection, handles: list[str], window: list[date]) -> list[str]:
+    """Which of `handles` have at least one 'error' status row within
+    `window` - powers a targeted retry (RETRY_FAILING_ONLY in
+    check_posts.py's main()) that only re-checks handles currently
+    showing a failure, instead of re-checking everyone to fix a few.
+    Returns handles in their original `handles` order, not DB order."""
+    if not handles:
+        return []
+    window_isos = [d.isoformat() for d in window]
+    placeholders_h = ",".join("?" * len(handles))
+    placeholders_d = ",".join("?" * len(window_isos))
+    rows = conn.execute(
+        f"""
+        SELECT DISTINCT handle
+        FROM checks
+        WHERE status = 'error' AND handle IN ({placeholders_h}) AND check_date IN ({placeholders_d})
+        """,
+        (*handles, *window_isos),
+    ).fetchall()
+    found = {row[0] for row in rows}
+    return [h for h in handles if h in found]
+
+
 def export_window(conn: sqlite3.Connection, handles: list[str], window: list[date]) -> dict:
     """Builds the same {handles, days} shape the static site's history.json has always had."""
     window_isos = [d.isoformat() for d in window]
