@@ -3962,16 +3962,17 @@
         "status": "ok"
       },
       "b_yanggg": {
-        "message": "rate limited (HTTP 401: Please wait a few minutes before you try again.); HTML fallback failed: could not find numeric user id on profile page",
-        "status": "error"
+        "permalink": "https://www.instagram.com/p/Dds2IRfhq_s/",
+        "posted": true,
+        "status": "ok"
       },
       "brucedao.str": {
         "posted": false,
         "status": "ok"
       },
       "buildwith.kevin": {
-        "message": "rate limited (HTTP 401: Please wait a few minutes before you try again.); HTML fallback failed: could not find numeric user id on profile page",
-        "status": "error"
+        "posted": false,
+        "status": "ok"
       },
       "cincycashflow": {
         "permalink": "https://www.instagram.com/p/DdsEa9Nj3bC/",
@@ -4119,7 +4120,231 @@
         "status": "ok"
       }
     },
-    "2026-09-25": {},
+    "2026-09-25": {
+      "Bakaproof": {
+        "permalink": "https://www.instagram.com/p/DdufowHCUeH/",
+        "posted": true,
+        "status": "ok"
+      },
+      "Bymaihoang": {
+        "posted": false,
+        "status": "ok"
+      },
+      "ChewyyyL": {
+        "posted": false,
+        "status": "ok"
+      },
+      "FinanciallyGolden": {
+        "permalink": "https://www.instagram.com/p/DduslVQsR8V/",
+        "posted": true,
+        "status": "ok"
+      },
+      "Irisandhomes": {
+        "posted": false,
+        "status": "ok"
+      },
+      "Itshectorav": {
+        "permalink": "https://www.instagram.com/p/Ddvbd6hTwQX/",
+        "posted": true,
+        "status": "ok"
+      },
+      "Itskevzhao": {
+        "posted": false,
+        "status": "ok"
+      },
+      "Jay.invests": {
+        "permalink": "https://www.instagram.com/p/DdtEoyZm97N/",
+        "posted": true,
+        "status": "ok"
+      },
+      "Michael.dc.santos": {
+        "posted": false,
+        "status": "ok"
+      },
+      "Signed.angela": {
+        "posted": false,
+        "status": "ok"
+      },
+      "Zhenginmotion": {
+        "posted": false,
+        "status": "ok"
+      },
+      "_victoriaponte": {
+        "posted": false,
+        "status": "ok"
+      },
+      "abourinaris": {
+        "permalink": "https://www.instagram.com/p/DduZnhHvAeA/",
+        "posted": true,
+        "status": "ok"
+      },
+      "alexyee.ventures": {
+        "posted": false,
+        "status": "ok"
+      },
+      "angiechack": {
+        "permalink": "https://www.instagram.com/p/DdtphceIO-v/",
+        "posted": true,
+        "status": "ok"
+      },
+      "b_yanggg": {
+        "permalink": "https://www.instagram.com/p/DdvcF10vBSb/",
+        "posted": true,
+        "status": "ok"
+      },
+      "brucedao.str": {
+        "posted": false,
+        "status": "ok"
+      },
+      "buildwith.kevin": {
+        "posted": false,
+        "status": "ok"
+      },
+      "cincycashflow": {
+        "permalink": "https://www.instagram.com/p/Ddupy4tP_M2/",
+        "posted": true,
+        "status": "ok"
+      },
+      "daronkfong": {
+        "posted": false,
+        "status": "ok"
+      },
+      "eddiebriant.re": {
+        "message": "rate limited (HTTP 401: Please wait a few minutes before you try again.); HTML fallback failed: could not find numeric user id on profile page",
+        "status": "error"
+      },
+      "goblinkingnyc": {
+        "posted": false,
+        "status": "ok"
+      },
+      "heytracymai": {
+        "posted": false,
+        "status": "ok"
+      },
+      "iamleilanisoon": {
+        "posted": false,
+        "status": "ok"
+      },
+      "intamfan": {
+        "permalink": "https://www.instagram.com/p/DdtbyxtReMX/",
+        "posted": true,
+        "status": "ok"
+      },
+      "itsperrygood": {
+        "posted": false,
+        "status": "ok"
+      },
+      "jackrinstagram": {
+        "posted": false,
+        "status": "ok"
+      },
+      "janeevanswalther": {
+        "message": "rate limited (HTTP 401: Please wait a few minutes before you try again.); HTML fallback failed: could not find numeric user id on profile page",
+        "status": "error"
+      },
+      "lissdelarosa": {
+        "permalink": "https://www.instagram.com/p/DdtDo7EHNy1/",
+        "posted": true,
+        "status": "ok"
+      },
+      "lj.exist": {
+        "permalink": "https://www.instagram.com/p/DdvMQ2WBHUn/",
+        "posted": true,
+        "status": "ok"
+      },
+      "minhdoan.ngo": {
+        "permalink": "https://www.instagram.com/p/DduIofovTej/",
+        "posted": true,
+        "status": "ok"
+      },
+      "miso.mind": {
+        "posted": false,
+        "status": "ok"
+      },
+      "muhan.being": {
+        "permalink": "https://www.instagram.com/p/DdvQV7VFhzJ/",
+        "posted": true,
+        "status": "ok"
+      },
+      "mylivingnotebook": {
+        "posted": false,
+        "status": "ok"
+      },
+      "nancyrhuang": {
+        "message": "rate limited (HTTP 401: Please wait a few minutes before you try again.); HTML fallback failed: could not find numeric user id on profile page",
+        "status": "error"
+      },
+      "nelson_goes_pro": {
+        "posted": false,
+        "status": "ok"
+      },
+      "ohgreatspirit": {
+        "permalink": "https://www.instagram.com/p/Ddu56RQIrFN/",
+        "posted": true,
+        "status": "ok"
+      },
+      "realtorharry_": {
+        "posted": false,
+        "status": "ok"
+      },
+      "ringoyippp": {
+        "posted": false,
+        "status": "ok"
+      },
+      "rt.invests": {
+        "permalink": "https://www.instagram.com/p/DdtAPwkyGco/",
+        "posted": true,
+        "status": "ok"
+      },
+      "saamkavusi": {
+        "permalink": "https://www.instagram.com/p/DdvFxOEu3Xn/",
+        "posted": true,
+        "status": "ok"
+      },
+      "stateofKhai": {
+        "posted": false,
+        "status": "ok"
+      },
+      "sylchoice": {
+        "posted": false,
+        "status": "ok"
+      },
+      "thenextmandy": {
+        "permalink": "https://www.instagram.com/p/DduLYjqxpjh/",
+        "posted": true,
+        "status": "ok"
+      },
+      "thoughtsdescott": {
+        "permalink": "https://www.instagram.com/p/DdukGbykZKu/",
+        "posted": true,
+        "status": "ok"
+      },
+      "trentl3af": {
+        "permalink": "https://www.instagram.com/p/DdvDzBntWh1/",
+        "posted": true,
+        "status": "ok"
+      },
+      "tt.talks": {
+        "message": "rate limited (HTTP 401: Please wait a few minutes before you try again.); HTML fallback failed: could not find numeric user id on profile page",
+        "status": "error"
+      },
+      "underwriting.jams": {
+        "posted": false,
+        "status": "ok"
+      },
+      "watthemichael": {
+        "posted": false,
+        "status": "ok"
+      },
+      "with_alann": {
+        "posted": false,
+        "status": "ok"
+      },
+      "xcatherineann": {
+        "posted": false,
+        "status": "ok"
+      }
+    },
     "2026-09-26": {},
     "2026-09-27": {}
   },
@@ -4176,5 +4401,5 @@
     "nelson_goes_pro",
     "ringoyippp"
   ],
-  "updated_at": "2026-09-25T06:12:34.724375-07:00"
+  "updated_at": "2026-09-26T05:39:00.952741-07:00"
 }
