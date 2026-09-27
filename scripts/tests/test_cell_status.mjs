@@ -106,3 +106,39 @@ test("computeOverallStats missedCount is checked-but-not-posted, excluding error
 
   assert.equal(stats.missedCount, 2, "a on 08-18 and b on 08-17 - not b's error, not a's pending day");
 });
+
+test("countHandlesPostedEveryDay counts only handles posted on every checked day", () => {
+  const days = {
+    "2026-08-17": {
+      a: { status: "ok", posted: true },
+      b: { status: "ok", posted: true },
+      c: { status: "ok", posted: false },
+    },
+    "2026-08-18": {
+      a: { status: "ok", posted: true },
+      b: { status: "ok", posted: false },
+      c: { status: "ok", posted: true },
+    },
+  };
+  const dates = Object.keys(days);
+
+  const count = CellStatus.countHandlesPostedEveryDay(["a", "b", "c"], days, dates);
+
+  assert.equal(count, 1, "only a posted on both checked days");
+});
+
+test("countHandlesPostedEveryDay excludes a handle with zero checked days", () => {
+  const days = { "2026-08-17": {} }; // nobody checked yet
+  const count = CellStatus.countHandlesPostedEveryDay(["a"], days, Object.keys(days));
+  assert.equal(count, 0, "no data yet is not a perfect streak");
+});
+
+test("countHandlesPostedEveryDay ignores error days when judging a streak", () => {
+  const days = {
+    "2026-08-17": { a: { status: "ok", posted: true } },
+    "2026-08-18": { a: { status: "error", message: "boom" } },
+    "2026-08-19": { a: { status: "ok", posted: true } },
+  };
+  const count = CellStatus.countHandlesPostedEveryDay(["a"], days, Object.keys(days));
+  assert.equal(count, 1, "a's error day must not break its otherwise-perfect streak");
+});

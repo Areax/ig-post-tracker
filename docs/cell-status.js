@@ -62,5 +62,17 @@
     return { totalPosted, totalChecked, errorCount, missedCount, rate };
   }
 
-  return { classifyCell, computeHandleStats, computeOverallStats };
+  function countHandlesPostedEveryDay(handles, days, dates) {
+    let count = 0;
+    for (const handle of handles) {
+      const { postedCount, checkedCount } = computeHandleStats(days, dates, handle);
+      // checkedCount > 0 excludes a handle with nothing checked yet in
+      // this range from trivially counting as "posted every day" - zero
+      // days checked is not a perfect streak, it's no data.
+      if (checkedCount > 0 && postedCount === checkedCount) count++;
+    }
+    return count;
+  }
+
+  return { classifyCell, computeHandleStats, computeOverallStats, countHandlesPostedEveryDay };
 });

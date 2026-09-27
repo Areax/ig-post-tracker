@@ -62,6 +62,13 @@
     overflow: hidden;
   }
   .table-scroll { overflow-x: auto; }
+  .week-toggles-row { display: flex; border-bottom: 1px solid var(--border); }
+  .week-toggles-row .extra-days-toggle {
+    flex: 1;
+    border-bottom: none;
+    justify-content: center;
+  }
+  .week-toggles-row .extra-days-toggle:not(:last-child) { border-right: 1px solid var(--border); }
   .extra-days-toggle {
     display: flex;
     align-items: center;
@@ -100,8 +107,9 @@
     border-color: var(--accent);
   }
   .extra-days-toggle.expanded .toggle-box svg { opacity: 1; transform: scale(1); }
-  th.extra-day, td.extra-day { display: none; }
-  table.extra-days-expanded th.extra-day, table.extra-days-expanded td.extra-day { display: table-cell; }
+  th.prev-week-day, td.prev-week-day, th.next-week-day, td.next-week-day { display: none; }
+  table.prev-week-expanded th.prev-week-day, table.prev-week-expanded td.prev-week-day { display: table-cell; }
+  table.next-week-expanded th.next-week-day, table.next-week-expanded td.next-week-day { display: table-cell; }
   table { border-collapse: collapse; width: 100%; min-width: 680px; font-size: 0.85rem; }
   thead th {
     text-align: center;
@@ -167,6 +175,17 @@
     padding: 0.15rem 0.55rem;
   }
   .rate-badge b { color: var(--fg); font-size: 0.75rem; }
+  .rate-badge.perfect {
+    border-color: transparent;
+    background: linear-gradient(90deg, #ff5f6d, #ffc371, #47e0a5, #4facfe, #a855f7, #ff5f6d);
+    background-size: 300% 100%;
+    animation: rate-badge-rainbow 5s linear infinite;
+    color: #fff;
+  }
+  .rate-badge.perfect b { color: #fff; }
+  @keyframes rate-badge-rainbow {
+    to { background-position: 300% 50%; }
+  }
 
   td.day-col { padding: 0.5rem 0.4rem; text-align: center; }
   .cell {
@@ -256,26 +275,24 @@
       };
     }
 
-    // `dates` is every tracked day (drives the "Window" tile, which is
-    // meant to describe the whole tracked span regardless of what's
-    // currently collapsed); `visibleDates` is scoped to whatever the
-    // table actually shows right now - collapsed by default to just the
-    // always-visible window, or every date once "previous week" is
-    // expanded. Posting rate and missed-post count must track the
-    // latter, the same way updateRateBadges' per-handle badges already
-    // do - otherwise the summary tiles quietly average in reference days
-    // the page isn't even showing, which is exactly what made "48%" not
-    // match what was on screen when the collapsed previous-week days
-    // (a lower posting rate) were the ones being counted instead of the
-    // visible ones.
-    function renderStats(handles, days, dates, visibleDates) {
+    // `visibleDates` is scoped to whatever the table actually shows right
+    // now - collapsed by default to just the always-visible window, or
+    // wider once "previous week"/"next week" is expanded. Every tile here
+    // must track that, the same way updateRateBadges' per-handle badges
+    // already do - otherwise the summary tiles quietly average in (or
+    // count streaks across) reference days the page isn't even showing,
+    // which is exactly what made "48%" not match what was on screen when
+    // the collapsed previous-week days (a lower posting rate) were the
+    // ones being counted instead of the visible ones.
+    function renderStats(handles, days, visibleDates) {
       const container = document.getElementById("stats");
       const { rate, missedCount } = CellStatus.computeOverallStats(handles, days, visibleDates);
+      const perfectCount = CellStatus.countHandlesPostedEveryDay(handles, days, visibleDates);
       const tiles = [
         { value: handles.length, label: handles.length === 1 ? "Handle tracked" : "Handles tracked" },
-        { value: `${dates.length}d`, label: "Window" },
         { value: `${rate}%`, label: "Overall posting rate" },
         { value: missedCount, label: missedCount === 1 ? "Missed post" : "Missed posts" },
+        { value: perfectCount, label: "Posted every day" },
       ];
       container.innerHTML = tiles
         .map((t) => `<div class="stat-tile"><div class="value">${t.value}</div><div class="label">${t.label}</div></div>`)
@@ -306,13 +323,22 @@
         return;
       }
 
-      // The primary Sep 15 + 13 days window always shows. Any earlier
-      // reference days tacked on the front (e.g. Sep 13/14) are collapsed
-      // by default - expandable via a "previous week" toggle rather than
-      // always shown.
-      const ALWAYS_VISIBLE_DAYS = 13;
-      const hiddenCount = Math.max(0, dates.length - ALWAYS_VISIBLE_DAYS);
-      const isExtraDay = (d, i) => i < hiddenCount;
+      // The primary Sep 15-25 window always shows. Earlier reference days
+      // tacked on the front (Sep 7-14) and later ones tacked on the back
+      // (Sep 26 onward) are both collapsed by default - each independently
+      // expandable via its own "previous week"/"next week" toggle rather
+      // than always shown. Both are fixed day-COUNTS from either end of
+      // the tracked window, not derived from "today" - the window itself
+      // is pinned (WINDOW_START_DATE/HISTORY_DAYS in the backend), so
+      // counting from the array's own ends is equivalent to fixed
+      // calendar dates for as long as the window stays pinned; only needs
+      // updating here if the window's shape is deliberately changed again.
+      const LEADING_HIDDEN_DAYS = 8;
+      const TRAILING_HIDDEN_DAYS = 9;
+      const isPrevWeekDay = (d, i) => i < LEADING_HIDDEN_DAYS;
+      const isNextWeekDay = (d, i) => i >= dates.length - TRAILING_HIDDEN_DAYS;
+      const visibleDates = (prevExpanded, nextExpanded) =>
+        dates.filter((d, i) => (prevExpanded || !isPrevWeekDay(d, i)) && (nextExpanded || !isNextWeekDay(d, i)));
 
       // A date only counts toward anyone's rate badge once it's actually
       // been reached by a check - i.e. at least one handle has a real
@@ -321,28 +347,30 @@
       // itself (rather than a separately-computed "today") means the
       // badges correctly read 0/0 while the currently-visible window
       // hasn't started yet, with no floor/clamp math needed. Scoped to
-      // whatever's currently visible (previous week included only when
-      // expanded) - the badge reflects the same days the table shows, on
-      // purpose: 0/0 by default is correct when Sep 14+ genuinely has no
-      // data yet, and expanding "previous week" is how you see the real
-      // numbers, not a change to what the collapsed default means.
+      // whatever's currently visible (previous/next week included only
+      // when their own toggle is expanded) - the badge reflects the same
+      // days the table shows, on purpose: 0/0 by default is correct when a
+      // day genuinely has no data yet, and expanding a toggle is how you
+      // see the real numbers, not a change to what the collapsed default
+      // means.
       const reachedDates = new Set(dates.filter((d) => handles.some((h) => (days[d] || {})[h] != null)));
-      const visibleReachedDates = (expanded) =>
-        (expanded ? dates : dates.slice(hiddenCount)).filter((d) => reachedDates.has(d));
 
-      function updateRateBadges(expanded) {
-        const relevant = visibleReachedDates(expanded);
+      function updateRateBadges(prevExpanded, nextExpanded) {
+        const relevant = visibleDates(prevExpanded, nextExpanded).filter((d) => reachedDates.has(d));
         for (const handle of handles) {
           const { postedCount, checkedCount } = CellStatus.computeHandleStats(days, relevant, handle);
           const badge = table.querySelector(`.rate-badge[data-handle="${CSS.escape(handle)}"]`);
           if (!badge) continue;
           badge.querySelector(".posted-count").textContent = postedCount;
           badge.querySelector(".checked-count").textContent = checkedCount;
+          // A little flair for a perfect streak - checkedCount > 0
+          // excludes "nothing checked yet" from trivially counting.
+          badge.classList.toggle("perfect", checkedCount > 0 && postedCount === checkedCount);
         }
       }
 
       updatedEl.textContent = data.updated_at ? `Updated ${new Date(data.updated_at).toLocaleString()}` : "";
-      renderStats(handles, days, dates, dates.slice(hiddenCount));
+      renderStats(handles, days, visibleDates(false, false));
       document.getElementById("legend").style.display = "flex";
       document.getElementById("disclaimer").style.display = "block";
 
@@ -353,7 +381,7 @@
       let headHtml = '<th class="handle-col">Handle</th>';
       dates.forEach((d, i) => {
         const { date, weekday } = fmtDayLabel(d);
-        const cls = isExtraDay(d, i) ? ' class="extra-day"' : "";
+        const cls = isPrevWeekDay(d, i) ? ' class="prev-week-day"' : isNextWeekDay(d, i) ? ' class="next-week-day"' : "";
         headHtml += `<th${cls}>${date}<span class="weekday">${weekday}</span></th>`;
       });
       headRow.innerHTML = headHtml;
@@ -383,7 +411,7 @@
         dates.forEach((d, i) => {
           const result = (days[d] || {})[handle];
           const td = document.createElement("td");
-          td.className = isExtraDay(d, i) ? "day-col extra-day" : "day-col";
+          td.className = isPrevWeekDay(d, i) ? "day-col prev-week-day" : isNextWeekDay(d, i) ? "day-col next-week-day" : "day-col";
 
           const status = CellStatus.classifyCell(result);
           if (status.cls === "pending") {
@@ -402,27 +430,36 @@
         tbody.appendChild(row);
       }
       table.appendChild(tbody);
-      updateRateBadges(false);
+      updateRateBadges(false, false);
 
       content.innerHTML = "";
       const card = document.createElement("div");
       card.className = "card";
 
-      if (hiddenCount > 0) {
+      let prevExpanded = false;
+      let nextExpanded = false;
+
+      function createWeekToggle(label, tableClass) {
         const toggle = document.createElement("div");
         toggle.className = "extra-days-toggle";
         const checkSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
-        const label = "previous week";
         toggle.innerHTML = `<span class="toggle-box">${checkSvg}</span><span class="toggle-label">Show ${label}</span>`;
         toggle.addEventListener("click", () => {
-          const expanded = table.classList.toggle("extra-days-expanded");
+          const expanded = table.classList.toggle(tableClass);
           toggle.classList.toggle("expanded", expanded);
           toggle.querySelector(".toggle-label").textContent = expanded ? `Hide ${label}` : `Show ${label}`;
-          updateRateBadges(expanded);
-          renderStats(handles, days, dates, expanded ? dates : dates.slice(hiddenCount));
+          if (tableClass === "prev-week-expanded") prevExpanded = expanded; else nextExpanded = expanded;
+          updateRateBadges(prevExpanded, nextExpanded);
+          renderStats(handles, days, visibleDates(prevExpanded, nextExpanded));
         });
-        card.appendChild(toggle);
+        return toggle;
       }
+
+      const toggleRow = document.createElement("div");
+      toggleRow.className = "week-toggles-row";
+      if (LEADING_HIDDEN_DAYS > 0) toggleRow.appendChild(createWeekToggle("previous week", "prev-week-expanded"));
+      if (TRAILING_HIDDEN_DAYS > 0) toggleRow.appendChild(createWeekToggle("next week", "next-week-expanded"));
+      if (toggleRow.children.length > 0) card.appendChild(toggleRow);
 
       const scrollWrap = document.createElement("div");
       scrollWrap.className = "table-scroll";
