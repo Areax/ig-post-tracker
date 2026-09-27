@@ -44,6 +44,19 @@ on:
         required: false
         type: boolean
         default: false
+      export_only:
+        description: >-
+          Skip every live check entirely (no browser, no proxy, no
+          Instagram traffic at all) and just regenerate the site from
+          whatever's already in the DB, using the current window
+          (WINDOW_START_DATE/HISTORY_DAYS repo variables). Use this after
+          changing only the window/config, never after adding/removing
+          handles or expecting fresh post data - there is nothing to
+          check, so the handles/retry-only-failing inputs above are
+          ignored when this is on.
+        required: false
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -70,8 +83,11 @@ jobs:
         if: steps.guard.outputs.should_run == 'true'
         run: pip install -r scripts/requirements.txt
 
+      # Skipped for export_only - it never launches a browser at all (see
+      # EXPORT_ONLY's comment in scripts/check_posts.py), so downloading
+      # the ~150MB Chromium binary here would be pure waste.
       - name: Install Playwright's Chromium browser
-        if: steps.guard.outputs.should_run == 'true'
+        if: steps.guard.outputs.should_run == 'true' && github.event.inputs.export_only != 'true'
         run: python3 -m playwright install --with-deps chromium
 
       # data/tracker.db (post history + the persisted browser session) is
@@ -147,6 +163,7 @@ jobs:
           # own comments in scripts/check_posts.py.
           TARGET_HANDLES: ${{ github.event.inputs.handles }}
           RETRY_FAILING_ONLY: ${{ github.event.inputs.retry_failing_only }}
+          EXPORT_ONLY: ${{ github.event.inputs.export_only }}
         run: python3 scripts/check_posts.py
 
       - name: Save tracker DB cache

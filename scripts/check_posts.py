@@ -286,6 +286,20 @@ TARGET_HANDLES = os.environ.get("TARGET_HANDLES")
 # failing") without having to look up and type out names by hand.
 # Ignored if TARGET_HANDLES is also set (an explicit list wins).
 RETRY_FAILING_ONLY = os.environ.get("RETRY_FAILING_ONLY", "").strip().lower() in ("1", "true", "yes")
+# Skip live checking entirely - no browser, no proxy, no Instagram
+# traffic at all - and just regenerate HISTORY_FILE from whatever's
+# already in DB_FILE with the CURRENT window (WINDOW_START_DATE/
+# HISTORY_DAYS). For when only the window/config changed and every
+# handle's already-checked data is still valid - e.g. widening
+# HISTORY_DAYS just adds more (necessarily still-empty, since they're
+# in the future) trailing days, which no live check could populate
+# anyway (see bucket_media_by_day - today-or-later never gets written).
+# Confirmed live, 2026-09-27: reached for a full re-check run to do
+# exactly this, wasting ~15+ minutes of proxy bandwidth on 51 handles
+# that didn't need touching at all - this exists so that mistake isn't
+# repeated. TARGET_HANDLES/RETRY_FAILING_ONLY are ignored when this is
+# set, since there is nothing to check.
+EXPORT_ONLY = os.environ.get("EXPORT_ONLY", "").strip().lower() in ("1", "true", "yes")
 
 # Optional residential proxy (e.g. IPRoyal) for the whole browser instance -
 # added 2026-09-13 after GitHub Actions' shared runner IP got rate-limited
@@ -1503,6 +1517,19 @@ def select_handles_to_check(all_handles: list[str], conn: sqlite3.Connection, wi
     return all_handles
 
 
+def write_history_snapshot(conn: sqlite3.Connection, all_handles: list[str], window: list[date], tz: ZoneInfo) -> None:
+    """Regenerates HISTORY_FILE from DB_FILE for the given window -
+    always the full tracked list, regardless of any targeted-retry
+    narrowing elsewhere, so the site keeps showing every handle. Shared
+    between EXPORT_ONLY's no-network path and a normal run's own final
+    export, so both write the exact same shape the same way."""
+    snapshot = db.export_window(conn, all_handles, window)
+    snapshot["avatars"] = db.export_avatars(conn, all_handles, HISTORY_FILE.parent / "avatars")
+    snapshot["updated_at"] = datetime.now(tz).isoformat()
+    HISTORY_FILE.parent.mkdir(parents=True, exist_ok=True)
+    HISTORY_FILE.write_text(json.dumps(snapshot, indent=2, sort_keys=True) + "\n")
+
+
 def main() -> None:
     all_handles = load_handles(HANDLES_FILE)
     if not all_handles:
@@ -1517,6 +1544,16 @@ def main() -> None:
     purged = db.purge_future_dates(conn, today)
     if purged:
         print(f"purged {purged} stale row(s) for today or later ({today.isoformat()})", file=sys.stderr)
+
+    if EXPORT_ONLY:
+        print(
+            "EXPORT_ONLY set - skipping every live check (no browser, no proxy, no Instagram "
+            "traffic) and just regenerating the site from the existing DB with the current window",
+        )
+        write_history_snapshot(conn, all_handles, window, tz)
+        conn.close()
+        print(f"wrote {HISTORY_FILE} (export-only, DB untouched)")
+        return
 
     handles = select_handles_to_check(all_handles, conn, window)
     if not handles:
@@ -1773,13 +1810,8 @@ def main() -> None:
     # been narrowed to a targeted retry above - the site must keep
     # showing every handle, with whichever of them just got fresh data
     # this run and everyone else's data as the DB already had it.
-    snapshot = db.export_window(conn, all_handles, window)
-    snapshot["avatars"] = db.export_avatars(conn, all_handles, HISTORY_FILE.parent / "avatars")
-    snapshot["updated_at"] = datetime.now(tz).isoformat()
+    write_history_snapshot(conn, all_handles, window, tz)
     conn.close()
-
-    HISTORY_FILE.parent.mkdir(parents=True, exist_ok=True)
-    HISTORY_FILE.write_text(json.dumps(snapshot, indent=2, sort_keys=True) + "\n")
     print(f"wrote {HISTORY_FILE} and {DB_FILE}")
 
 

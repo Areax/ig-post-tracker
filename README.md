@@ -165,14 +165,23 @@ cron values can't reference repo variables directly.
 
 You can also trigger a run manually any time from the Actions tab
 ("Daily Instagram post check" → Run workflow) — manual runs always
-execute regardless of the guard. That dialog also has two optional
-inputs for a *targeted* retry, so fixing a few currently-failing handles
+execute regardless of the guard. That dialog also has optional inputs
+for a *targeted* retry, so fixing a few currently-failing handles
 doesn't burn proxy bandwidth re-checking everyone who already succeeded:
 - **handles** — comma-separated handle(s) to check, e.g. `tt.talks,
   angiechack`; everyone else is left untouched this run.
 - **Retry only failing handles** — a checkbox that auto-detects and
   re-checks whichever tracked handles currently have an error anywhere
   in the tracked window, no need to type out names.
+- **Export only** — a checkbox that skips every live check entirely (no
+  browser, no proxy, no Instagram traffic at all) and just regenerates
+  the site from whatever's already in the DB with the current window.
+  Use this after changing only `WINDOW_START_DATE`/`HISTORY_DAYS` (e.g.
+  widening the window) - the new trailing days are necessarily still in
+  the future either way, so no live check could populate them anyway;
+  this just makes them show up as pending instead of not existing in
+  the JSON at all. Ignores the other two inputs above (there's nothing
+  to check).
 
 The site (`docs/data/history.json`) always reflects every tracked
 handle either way — only which handles get a *fresh* check this run is
