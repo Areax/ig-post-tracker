@@ -324,21 +324,25 @@
       }
 
       // The primary Sep 15-25 window always shows. Earlier reference days
-      // tacked on the front (Sep 7-14) and later ones tacked on the back
-      // (Sep 26 onward) are both collapsed by default - each independently
-      // expandable via its own "previous week"/"next week" toggle rather
-      // than always shown. Both are fixed day-COUNTS from either end of
-      // the tracked window, not derived from "today" - the window itself
-      // is pinned (WINDOW_START_DATE/HISTORY_DAYS in the backend), so
-      // counting from the array's own ends is equivalent to fixed
-      // calendar dates for as long as the window stays pinned; only needs
-      // updating here if the window's shape is deliberately changed again.
-      const LEADING_HIDDEN_DAYS = 8;
-      const TRAILING_HIDDEN_DAYS = 9;
-      const isPrevWeekDay = (d, i) => i < LEADING_HIDDEN_DAYS;
-      const isNextWeekDay = (d, i) => i >= dates.length - TRAILING_HIDDEN_DAYS;
+      // (Sep 7-14) and later ones (Sep 26 onward) are both collapsed by
+      // default - each independently expandable via its own "previous
+      // week"/"next week" toggle rather than always shown. Fixed
+      // CALENDAR-DATE boundaries on purpose, not day-counts from either
+      // end of the `dates` array: an earlier version counted from the
+      // array's own ends, which silently depends on exactly how many
+      // days happen to be in the exported JSON at any given moment - it
+      // broke in production, 2026-09-27, when the backend's window was
+      // still 21 days (not yet the intended 28), so counting 9 back from
+      // the end landed on Sep 19 instead of Sep 26, shrinking the always-
+      // visible middle to 4 days. Comparing against fixed date strings
+      // instead means the default view is always correct for whatever
+      // data actually exists right now, independent of the backend.
+      const ALWAYS_VISIBLE_START = "2026-09-15";
+      const ALWAYS_VISIBLE_END = "2026-09-25";
+      const isPrevWeekDay = (d) => d < ALWAYS_VISIBLE_START;
+      const isNextWeekDay = (d) => d > ALWAYS_VISIBLE_END;
       const visibleDates = (prevExpanded, nextExpanded) =>
-        dates.filter((d, i) => (prevExpanded || !isPrevWeekDay(d, i)) && (nextExpanded || !isNextWeekDay(d, i)));
+        dates.filter((d) => (prevExpanded || !isPrevWeekDay(d)) && (nextExpanded || !isNextWeekDay(d)));
 
       // A date only counts toward anyone's rate badge once it's actually
       // been reached by a check - i.e. at least one handle has a real
@@ -381,7 +385,7 @@
       let headHtml = '<th class="handle-col">Handle</th>';
       dates.forEach((d, i) => {
         const { date, weekday } = fmtDayLabel(d);
-        const cls = isPrevWeekDay(d, i) ? ' class="prev-week-day"' : isNextWeekDay(d, i) ? ' class="next-week-day"' : "";
+        const cls = isPrevWeekDay(d) ? ' class="prev-week-day"' : isNextWeekDay(d) ? ' class="next-week-day"' : "";
         headHtml += `<th${cls}>${date}<span class="weekday">${weekday}</span></th>`;
       });
       headRow.innerHTML = headHtml;
@@ -411,7 +415,7 @@
         dates.forEach((d, i) => {
           const result = (days[d] || {})[handle];
           const td = document.createElement("td");
-          td.className = isPrevWeekDay(d, i) ? "day-col prev-week-day" : isNextWeekDay(d, i) ? "day-col next-week-day" : "day-col";
+          td.className = isPrevWeekDay(d) ? "day-col prev-week-day" : isNextWeekDay(d) ? "day-col next-week-day" : "day-col";
 
           const status = CellStatus.classifyCell(result);
           if (status.cls === "pending") {
@@ -457,8 +461,8 @@
 
       const toggleRow = document.createElement("div");
       toggleRow.className = "week-toggles-row";
-      if (LEADING_HIDDEN_DAYS > 0) toggleRow.appendChild(createWeekToggle("previous week", "prev-week-expanded"));
-      if (TRAILING_HIDDEN_DAYS > 0) toggleRow.appendChild(createWeekToggle("next week", "next-week-expanded"));
+      if (dates.some(isPrevWeekDay)) toggleRow.appendChild(createWeekToggle("previous week", "prev-week-expanded"));
+      if (dates.some(isNextWeekDay)) toggleRow.appendChild(createWeekToggle("next week", "next-week-expanded"));
       if (toggleRow.children.length > 0) card.appendChild(toggleRow);
 
       const scrollWrap = document.createElement("div");
