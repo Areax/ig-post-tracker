@@ -353,11 +353,11 @@
       // instead means the default view is always correct for whatever
       // data actually exists right now, independent of the backend.
       //
-      // Nov 2026 cohort: the 14 days from Sun Nov 22 always show; the
-      // week before (Nov 15-21) and the week after (Dec 6-12) collapse
-      // behind the two toggles. Set either to null to stop collapsing
-      // that side.
-      const ALWAYS_VISIBLE_START = "2026-11-22";
+      // Nov 2026 cohort: Nov 23 - Dec 5 always show; the days before
+      // (Nov 15-22, Nov 22 included on request) and the week after
+      // (Dec 6-12) collapse behind the two toggles. Set either to null
+      // to stop collapsing that side.
+      const ALWAYS_VISIBLE_START = "2026-11-23";
       const ALWAYS_VISIBLE_END = "2026-12-05";
       const isPrevWeekDay = (d) => ALWAYS_VISIBLE_START !== null && d < ALWAYS_VISIBLE_START;
       const isNextWeekDay = (d) => ALWAYS_VISIBLE_END !== null && d > ALWAYS_VISIBLE_END;
