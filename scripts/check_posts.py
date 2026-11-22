@@ -1,6 +1,11 @@
 """
 Daily Instagram post checker (self-hosted, unauthenticated, real browser).
 
+Handles marked "tiktok" in handles.csv's optional second column are
+checked on TikTok instead, by a much simpler path that shares only the
+window/coverage/storage logic below - see check_tiktok_handle. Everything
+else in this docstring is about Instagram.
+
 For every handle in handles.csv, navigates a real (headless) Chromium
 browser to that handle's profile page, then fetches Instagram's internal
 `web_profile_info` and `/api/v1/feed/user/<id>/` endpoints from *within*
@@ -483,6 +488,41 @@ def load_handles(path: Path) -> list[str]:
                 continue
             handles.append(handle)
     return handles
+
+
+SUPPORTED_PLATFORMS = ("instagram", "tiktok")
+
+
+def load_platforms(path: Path) -> dict[str, str]:
+    """Which platform each handle in HANDLES_FILE is checked on - the
+    optional second CSV column ("tiktok"), defaulting to "instagram" so
+    every existing one-column row keeps meaning exactly what it always
+    did. Only non-default handles get an entry. A handle is tracked on
+    one platform only: the DB and the exported JSON both key on the bare
+    handle name, so the same name on two platforms would collide.
+    An unknown platform name is an error here rather than a silent
+    fallback to Instagram - checking the wrong site for someone would
+    record confident, wrong "didn't post" days.
+    """
+    platforms: dict[str, str] = {}
+    if not path.exists():
+        return platforms
+    with path.open(newline="") as f:
+        for row in csv.reader(f):
+            if len(row) < 2:
+                continue
+            handle = row[0].strip().lstrip("@")
+            platform = row[1].strip().lower()
+            if not handle or handle.lower() == "handle" or not platform:
+                continue
+            if platform not in SUPPORTED_PLATFORMS:
+                raise ValueError(
+                    f"{path.name}: unknown platform {platform!r} for {handle} "
+                    f"(expected one of: {', '.join(SUPPORTED_PLATFORMS)})"
+                )
+            if platform != "instagram":
+                platforms[handle] = platform
+    return platforms
 
 
 def random_session_id() -> str:
@@ -1032,6 +1072,20 @@ def extract_embedded_timeline(
 PRIVATE_OR_NO_POSTS_MESSAGE = "account is private or has no visible posts"
 
 
+def extract_profile_pic_url(page: Page) -> str | None:
+    """The profile photo's URL from the already-loaded profile page's own
+    og:image tag - the only avatar source on resolve_identity's fallback
+    paths, which never see web_profile_info's `profile_pic_url`. Without
+    this, a handle that only ever resolves through a fallback (seen for
+    all 10 Instagram handles in one local run, 2026-11-22) shows a
+    letter placeholder on the site forever. Best-effort: None on any
+    failure, since a missing photo must never fail the check itself."""
+    try:
+        return page.eval_on_selector('meta[property="og:image"]', "el => el.content") or None
+    except Exception:
+        return None
+
+
 def resolve_identity(
     handle: str, page: Page
 ) -> tuple[str | None, str | None, list[dict] | None, str | None, bool, int | None]:
@@ -1129,11 +1183,11 @@ def resolve_identity(
     # ACCESSIBILITY_CAPTION_TZ for the shared Pacific-time caveat).
     grid_user_id, grid_media = extract_grid_timeline(page)
     if grid_user_id:
-        return grid_user_id, None, grid_media, None, False, None
+        return grid_user_id, extract_profile_pic_url(page), grid_media, None, False, None
 
     embedded_user_id, embedded_media = extract_embedded_timeline(page)
     if embedded_user_id:
-        return embedded_user_id, None, embedded_media, None, False, None
+        return embedded_user_id, extract_profile_pic_url(page), embedded_media, None, False, None
 
     time.sleep(MIN_REQUEST_INTERVAL + random.uniform(0, REQUEST_JITTER))
     try:
@@ -1464,6 +1518,136 @@ def check_handle(
     return results, None, was_blocked, profile_pic_url
 
 
+# TikTok's own profile page (tiktok.com/@name) is not usable from an
+# automated browser: confirmed live, 2026-11-22, the page itself loads
+# and reports the account (46 videos, public), but the /api/post/item_list
+# call that fills the video grid comes back with an empty body and the
+# grid stays empty. The creator EMBED page is a different, much more
+# open surface - plain HTTP, no JS, no signed request - and carries the
+# account's most recent videos as JSON in a script tag.
+TIKTOK_EMBED_URL_TEMPLATE = "https://www.tiktok.com/embed/@{handle}"
+TIKTOK_EMBED_STATE_PATTERN = re.compile(
+    r'<script id="__FRONTITY_CONNECT_STATE__"[^>]*>(.*?)</script>', re.S
+)
+# The embed page returned 12 videos for an account with 46 (2026-11-22).
+# Fewer than this many means the list is the account's entire history,
+# not a truncated page - see check_tiktok_handle's coverage rule.
+TIKTOK_EMBED_FULL_PAGE = 10
+# TikTok lets a creator pin up to 3 videos to the top of their profile.
+TIKTOK_MAX_PINNED = 3
+TIKTOK_UNREADABLE_MESSAGE = "could not read TikTok profile (blocked or unexpected page)"
+
+
+def tiktok_id_to_timestamp(video_id: str) -> int:
+    """A TikTok video id is a 64-bit number whose top 32 bits are the
+    upload time in unix seconds - the embed page carries no explicit
+    createTime field, and does not need one."""
+    return int(video_id) >> 32
+
+
+def parse_tiktok_embed(html: str, handle: str) -> tuple[list[dict] | None, str | None, str | None]:
+    """Returns (media, profile_pic_url, error_message) from a creator
+    embed page's HTML. `media` is in the page's own order (pinned videos
+    first, then newest to oldest) - see split_tiktok_pinned."""
+    match = TIKTOK_EMBED_STATE_PATTERN.search(html or "")
+    if not match:
+        return None, None, TIKTOK_UNREADABLE_MESSAGE
+    try:
+        state = json.loads(match.group(1))
+    except ValueError:
+        return None, None, TIKTOK_UNREADABLE_MESSAGE
+    pages = (state.get("source") or {}).get("data") or {}
+    data = next((v for k, v in pages.items() if k.startswith("/embed/@") and isinstance(v, dict)), None)
+    if data is None:
+        return None, None, TIKTOK_UNREADABLE_MESSAGE
+
+    user = data.get("userInfo") or {}
+    if data.get("isError"):
+        return None, None, f"TikTok account not found or unavailable (error {data.get('errorCode')})"
+    if user.get("privateAccount"):
+        return None, None, PRIVATE_OR_NO_POSTS_MESSAGE
+
+    media = []
+    for item in data.get("videoList") or []:
+        video_id = str(item.get("id") or "")
+        if not video_id.isdigit() or item.get("privateItem"):
+            continue
+        media.append({
+            "taken_at": tiktok_id_to_timestamp(video_id),
+            "code": video_id,
+            "media_type": None,
+            "product_type": "tiktok",
+            "permalink": f"https://www.tiktok.com/@{handle}/video/{video_id}",
+        })
+    return media, user.get("avatarThumbUrl"), None
+
+
+def split_tiktok_pinned(media: list[dict]) -> tuple[list[dict], list[dict]]:
+    """Splits the embed page's list into (pinned, chronological).
+
+    Pinned videos come first, in whatever order the creator pinned them;
+    everything after is newest to oldest. The page does not flag which
+    are pinned, so: drop leading items (never more than
+    TIKTOK_MAX_PINNED) until what remains is newest-to-oldest. A pinned
+    video that happens to already sit in date order stays in the
+    chronological list, which is harmless - the list is still gapless
+    back to its oldest entry, the only property coverage depends on.
+    """
+    for pinned_count in range(0, min(TIKTOK_MAX_PINNED, len(media)) + 1):
+        rest = media[pinned_count:]
+        if all(rest[i]["taken_at"] >= rest[i + 1]["taken_at"] for i in range(len(rest) - 1)):
+            return media[:pinned_count], rest
+    return media[:TIKTOK_MAX_PINNED], media[TIKTOK_MAX_PINNED:]
+
+
+def check_tiktok_handle(
+    handle: str, window: list[date], tz: ZoneInfo, page: Page, conn: sqlite3.Connection
+) -> tuple[dict[str, dict] | None, str | None, bool, str | None]:
+    """check_handle's TikTok counterpart - same return shape, same
+    coverage rule (bucket_media_by_day), different source: one plain GET
+    of the creator embed page, sent through the browser context so it
+    uses the same proxy session as everything else."""
+    url = TIKTOK_EMBED_URL_TEMPLATE.format(handle=handle)
+    try:
+        resp = page.context.request.get(url, headers={"User-Agent": DESKTOP_UA}, timeout=NAV_TIMEOUT_MS)
+    except PlaywrightError as exc:
+        return None, f"navigation to profile page failed: {exc}", False, None
+    if is_blocking_error(resp.status):
+        return None, f"rate limited (HTTP {resp.status})", True, None
+
+    media, profile_pic_url, error = parse_tiktok_embed(resp.text(), handle)
+    if error:
+        return None, error, error == TIKTOK_UNREADABLE_MESSAGE, None
+    if not media:
+        return None, PRIVATE_OR_NO_POSTS_MESSAGE, False, None
+
+    for node in media:
+        node["posted_at"] = datetime.fromtimestamp(node["taken_at"], tz=tz).isoformat()
+    db.save_posts(conn, handle, media, datetime.now(tz).isoformat())
+
+    pinned, chronological = split_tiktok_pinned(media)
+    # An old pinned video must not stretch coverage back to its own date:
+    # the days between it and the oldest chronological video were never
+    # fetched, so they are unknown, not "didn't post".
+    oldest_covered = min((n["taken_at"] for n in chronological), default=None)
+    in_coverage = chronological + [
+        n for n in pinned if oldest_covered is not None and n["taken_at"] >= oldest_covered
+    ]
+    today = datetime.now(tz).date()
+    results = bucket_media_by_day(
+        in_coverage, window, tz, today, feed_exhausted=len(media) < TIKTOK_EMBED_FULL_PAGE
+    )
+    # A pinned video outside coverage is still real proof of a post on
+    # its own day, even though it says nothing about the days around it.
+    window_set = set(window)
+    for node in pinned:
+        posted_date = datetime.fromtimestamp(node["taken_at"], tz=tz).date()
+        key = posted_date.isoformat()
+        if posted_date in window_set and posted_date < today and not results.get(key, {}).get("posted"):
+            results[key] = {"status": "ok", "posted": True, "permalink": node["permalink"]}
+    return results, None, False, profile_pic_url
+
+
 def fetch_avatar_bytes(page: Page, url: str) -> tuple[bytes | None, str | None, str | None]:
     """Returns (content, content_type, error_message)."""
     try:
@@ -1517,7 +1701,13 @@ def select_handles_to_check(all_handles: list[str], conn: sqlite3.Connection, wi
     return all_handles
 
 
-def write_history_snapshot(conn: sqlite3.Connection, all_handles: list[str], window: list[date], tz: ZoneInfo) -> None:
+def write_history_snapshot(
+    conn: sqlite3.Connection,
+    all_handles: list[str],
+    window: list[date],
+    tz: ZoneInfo,
+    platforms: dict[str, str] | None = None,
+) -> None:
     """Regenerates HISTORY_FILE from DB_FILE for the given window -
     always the full tracked list, regardless of any targeted-retry
     narrowing elsewhere, so the site keeps showing every handle. Shared
@@ -1526,12 +1716,16 @@ def write_history_snapshot(conn: sqlite3.Connection, all_handles: list[str], win
     snapshot = db.export_window(conn, all_handles, window)
     snapshot["avatars"] = db.export_avatars(conn, all_handles, HISTORY_FILE.parent / "avatars")
     snapshot["updated_at"] = datetime.now(tz).isoformat()
+    # Only non-Instagram handles are listed - the site treats a missing
+    # entry as Instagram (see load_platforms).
+    snapshot["platforms"] = {h: p for h, p in (platforms or {}).items() if h in all_handles}
     HISTORY_FILE.parent.mkdir(parents=True, exist_ok=True)
     HISTORY_FILE.write_text(json.dumps(snapshot, indent=2, sort_keys=True) + "\n")
 
 
 def main() -> None:
     all_handles = load_handles(HANDLES_FILE)
+    platforms = load_platforms(HANDLES_FILE)
     if not all_handles:
         print("no handles to check, exiting", file=sys.stderr)
         sys.exit(1)
@@ -1550,7 +1744,7 @@ def main() -> None:
             "EXPORT_ONLY set - skipping every live check (no browser, no proxy, no Instagram "
             "traffic) and just regenerating the site from the existing DB with the current window",
         )
-        write_history_snapshot(conn, all_handles, window, tz)
+        write_history_snapshot(conn, all_handles, window, tz, platforms)
         conn.close()
         print(f"wrote {HISTORY_FILE} (export-only, DB untouched)")
         return
@@ -1643,7 +1837,8 @@ def main() -> None:
 
             request_count += 1
 
-            results_by_date, error, was_blocked, profile_pic_url = check_handle(handle, window, tz, page, conn)
+            checker = check_tiktok_handle if platforms.get(handle) == "tiktok" else check_handle
+            results_by_date, error, was_blocked, profile_pic_url = checker(handle, window, tz, page, conn)
 
             # A dead proxy tunnel (is_proxy_connection_error) means the
             # CONNECTION never worked - nothing about this handle, and
@@ -1810,7 +2005,7 @@ def main() -> None:
     # been narrowed to a targeted retry above - the site must keep
     # showing every handle, with whichever of them just got fresh data
     # this run and everyone else's data as the DB already had it.
-    write_history_snapshot(conn, all_handles, window, tz)
+    write_history_snapshot(conn, all_handles, window, tz, platforms)
     conn.close()
     print(f"wrote {HISTORY_FILE} and {DB_FILE}")
 

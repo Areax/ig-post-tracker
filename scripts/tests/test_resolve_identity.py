@@ -143,3 +143,31 @@ def test_confirmed_zero_post_count_is_not_flagged_as_private(monkeypatch):
     assert error is None
     assert total_post_count == 0
     assert media == []
+
+
+def test_grid_fallback_takes_the_avatar_from_the_page_itself(monkeypatch):
+    """The fallback paths never see web_profile_info's profile_pic_url -
+    without the page's own og:image, a handle that only resolves through
+    a fallback never gets a photo on the site."""
+    _mock_web_profile_info(monkeypatch, {"id": "123", "is_private": False})
+    monkeypatch.setattr(check_posts, "extract_grid_timeline", lambda page: ("123", []))
+
+    class _PageWithOgImage(_FakePage):
+        def eval_on_selector(self, selector, expression):
+            assert selector == 'meta[property="og:image"]'
+            return "https://cdn/avatar.jpg"
+
+    _, avatar, _, error, _, _ = check_posts.resolve_identity("some_handle", page=_PageWithOgImage())
+
+    assert error is None
+    assert avatar == "https://cdn/avatar.jpg"
+
+
+def test_missing_og_image_is_not_an_error(monkeypatch):
+    _mock_web_profile_info(monkeypatch, {"id": "123", "is_private": False})
+    monkeypatch.setattr(check_posts, "extract_grid_timeline", lambda page: ("123", []))
+
+    user_id, avatar, _, error, _, _ = check_posts.resolve_identity("some_handle", page=_FakePage())
+
+    assert user_id == "123" and error is None
+    assert avatar is None

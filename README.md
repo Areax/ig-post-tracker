@@ -149,6 +149,13 @@ then `python3 -m playwright install chromium` once.
 Edit `handles.csv`, one handle per line (with or without `@`), and push.
 Next daily run picks it up automatically.
 
+A handle is checked on Instagram unless its line names another platform
+in a second column: `meghchasesfreedom,tiktok` checks that TikTok
+account instead. One platform per handle. TikTok is read from the
+creator embed page (`tiktok.com/embed/@name`), which lists roughly the
+12 most recent videos - enough for a daily check, not for a deep
+backfill.
+
 ## 3. Changing the schedule
 
 The daily job fires twice in UTC (covering both PST and PDT, roughly

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Instagram Post Tracker</title>
+<title>Post Tracker</title>
 <style>
   :root {
     color-scheme: light;
@@ -162,6 +162,16 @@
   }
   .handle-link { color: var(--fg); text-decoration: none; font-weight: 600; font-size: 0.9rem; }
   .handle-link:hover { color: var(--accent); }
+  .platform-tag {
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 0.05rem 0.3rem;
+  }
   .rate-badge {
     display: inline-flex;
     align-items: baseline;
@@ -241,10 +251,10 @@
 <body>
   <div class="wrap">
     <header>
-      <h1>Instagram Post Tracker</h1>
+      <h1>Post Tracker</h1>
       <span class="updated" id="updated"></span>
     </header>
-    <p class="top-hint">Tip: green checkmarks are clickable &mdash; they link straight to the Instagram post.</p>
+    <p class="top-hint">Tip: green checkmarks are clickable &mdash; they link straight to the post.</p>
     <div id="stats" class="stats"></div>
     <div id="content"></div>
     <div class="legend" id="legend" style="display:none">
@@ -316,6 +326,11 @@
       const handles = data.handles || [];
       const days = data.days || {};
       const avatars = data.avatars || {};
+      // Only non-Instagram handles are listed (see load_platforms in
+      // scripts/check_posts.py) - a missing entry means Instagram.
+      const platforms = data.platforms || {};
+      const profileUrl = (handle) =>
+        platforms[handle] === "tiktok" ? `https://www.tiktok.com/@${handle}` : `https://instagram.com/${handle}`;
       const dates = Object.keys(days).sort();
 
       if (handles.length === 0 || dates.length === 0) {
@@ -337,10 +352,15 @@
       // visible middle to 4 days. Comparing against fixed date strings
       // instead means the default view is always correct for whatever
       // data actually exists right now, independent of the backend.
-      const ALWAYS_VISIBLE_START = "2026-09-15";
-      const ALWAYS_VISIBLE_END = "2026-09-25";
-      const isPrevWeekDay = (d) => d < ALWAYS_VISIBLE_START;
-      const isNextWeekDay = (d) => d > ALWAYS_VISIBLE_END;
+      //
+      // Nov 2026 cohort: the 14 days from Sun Nov 22 always show; the
+      // week before (Nov 15-21) and the week after (Dec 6-12) collapse
+      // behind the two toggles. Set either to null to stop collapsing
+      // that side.
+      const ALWAYS_VISIBLE_START = "2026-11-22";
+      const ALWAYS_VISIBLE_END = "2026-12-05";
+      const isPrevWeekDay = (d) => ALWAYS_VISIBLE_START !== null && d < ALWAYS_VISIBLE_START;
+      const isNextWeekDay = (d) => ALWAYS_VISIBLE_END !== null && d > ALWAYS_VISIBLE_END;
       const visibleDates = (prevExpanded, nextExpanded) =>
         dates.filter((d) => (prevExpanded || !isPrevWeekDay(d)) && (nextExpanded || !isNextWeekDay(d)));
 
@@ -360,16 +380,19 @@
       const reachedDates = new Set(dates.filter((d) => handles.some((h) => (days[d] || {})[h] != null)));
 
       function updateRateBadges(prevExpanded, nextExpanded) {
-        const relevant = visibleDates(prevExpanded, nextExpanded).filter((d) => reachedDates.has(d));
+        const visible = visibleDates(prevExpanded, nextExpanded);
+        const relevant = visible.filter((d) => reachedDates.has(d));
         for (const handle of handles) {
           const { postedCount, checkedCount } = CellStatus.computeHandleStats(days, relevant, handle);
           const badge = table.querySelector(`.rate-badge[data-handle="${CSS.escape(handle)}"]`);
           if (!badge) continue;
           badge.querySelector(".posted-count").textContent = postedCount;
           badge.querySelector(".checked-count").textContent = checkedCount;
-          // A little flair for a perfect streak - checkedCount > 0
-          // excludes "nothing checked yet" from trivially counting.
-          badge.classList.toggle("perfect", checkedCount > 0 && postedCount === checkedCount);
+          // A little flair, earned only once it is final: every day
+          // on screen is a green check. A day with no data yet counts
+          // against it the same as a miss - 6/6 partway through the
+          // window is a streak so far, not a finished one.
+          badge.classList.toggle("perfect", CellStatus.isCompletePerfectStreak(postedCount, visible.length));
         }
       }
 
@@ -407,7 +430,8 @@
         handleCell.innerHTML = `
           <div class="handle-name">
             ${avatarHtml}
-            <a class="handle-link" href="https://instagram.com/${handle}" target="_blank" rel="noopener">@${handle}</a>
+            <a class="handle-link" href="${profileUrl(handle)}" target="_blank" rel="noopener">@${handle}</a>
+            ${platforms[handle] === "tiktok" ? '<span class="platform-tag">TikTok</span>' : ""}
             <span class="rate-badge" data-handle="${handle}"><b class="posted-count">0</b>/<span class="checked-count">0</span></span>
           </div>`;
         row.appendChild(handleCell);
@@ -424,7 +448,7 @@
             const msg = status.message.replace(/"/g, "&quot;");
             td.innerHTML = `<button type="button" class="cell error" data-msg="${msg}">${WARN_ICON}</button>`;
           } else if (status.cls === "posted") {
-            const href = status.permalink || `https://instagram.com/${handle}`;
+            const href = status.permalink || profileUrl(handle);
             td.innerHTML = `<a class="cell posted" href="${href}" target="_blank" rel="noopener" title="Posted ${d}">${CHECK_ICON}</a>`;
           } else {
             td.innerHTML = `<span class="cell missed" title="No post on ${d}">${X_ICON}</span>`;

@@ -74,5 +74,9 @@
     return count;
   }
 
-  return { classifyCell, computeHandleStats, computeOverallStats, countHandlesPostedEveryDay };
+  function isCompletePerfectStreak(postedCount, visibleDayCount) {
+    return visibleDayCount > 0 && postedCount === visibleDayCount;
+  }
+
+  return { classifyCell, computeHandleStats, computeOverallStats, countHandlesPostedEveryDay, isCompletePerfectStreak };
 });

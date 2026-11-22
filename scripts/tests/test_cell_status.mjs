@@ -142,3 +142,10 @@ test("countHandlesPostedEveryDay ignores error days when judging a streak", () =
   const count = CellStatus.countHandlesPostedEveryDay(["a"], days, Object.keys(days));
   assert.equal(count, 1, "a's error day must not break its otherwise-perfect streak");
 });
+
+test("isCompletePerfectStreak needs a post on every visible day, including days with no data yet", () => {
+  assert.equal(CellStatus.isCompletePerfectStreak(6, 14), false, "6/6 so far, 8 days still to come");
+  assert.equal(CellStatus.isCompletePerfectStreak(13, 14), false, "one miss");
+  assert.equal(CellStatus.isCompletePerfectStreak(14, 14), true);
+  assert.equal(CellStatus.isCompletePerfectStreak(0, 0), false, "nothing on screen is not a streak");
+});
