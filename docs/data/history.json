@@ -322,7 +322,49 @@
         "status": "ok"
       }
     },
-    "2026-11-22": {},
+    "2026-11-22": {
+      "_alexlago_": {
+        "posted": false,
+        "status": "ok"
+      },
+      "dingdongduong": {
+        "posted": false,
+        "status": "ok"
+      },
+      "efficient_movement": {
+        "posted": false,
+        "status": "ok"
+      },
+      "getlakhi": {
+        "posted": false,
+        "status": "ok"
+      },
+      "itsjisselrivera": {
+        "posted": false,
+        "status": "ok"
+      },
+      "karthik_g_vijay": {
+        "posted": false,
+        "status": "ok"
+      },
+      "meghchasesfreedom": {
+        "posted": false,
+        "status": "ok"
+      },
+      "seancacho": {
+        "posted": false,
+        "status": "ok"
+      },
+      "somafemme": {
+        "posted": false,
+        "status": "ok"
+      },
+      "tippi_madz": {
+        "permalink": "https://www.instagram.com/p/DgEMt-hxcOl/",
+        "posted": true,
+        "status": "ok"
+      }
+    },
     "2026-11-23": {},
     "2026-11-24": {},
     "2026-11-25": {},
@@ -359,5 +401,5 @@
   "platforms": {
     "meghchasesfreedom": "tiktok"
   },
-  "updated_at": "2026-11-22T07:39:20.415124-08:00"
+  "updated_at": "2026-11-23T11:32:16.187140-08:00"
 }
