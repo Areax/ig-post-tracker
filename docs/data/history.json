@@ -515,7 +515,54 @@
         "status": "ok"
       }
     },
-    "2026-11-26": {},
+    "2026-11-26": {
+      "_alexlago_": {
+        "posted": false,
+        "status": "ok"
+      },
+      "dingdongduong": {
+        "posted": false,
+        "status": "ok"
+      },
+      "efficient_movement": {
+        "permalink": "https://www.instagram.com/p/DgOfqRgBHDb/",
+        "posted": true,
+        "status": "ok"
+      },
+      "getlakhi": {
+        "posted": false,
+        "status": "ok"
+      },
+      "itsjisselrivera": {
+        "permalink": "https://www.instagram.com/p/DgNrjj5OqDs/",
+        "posted": true,
+        "status": "ok"
+      },
+      "karthik_g_vijay": {
+        "permalink": "https://www.instagram.com/p/DgOslprRoHE/",
+        "posted": true,
+        "status": "ok"
+      },
+      "meghchasesfreedom": {
+        "permalink": "https://www.tiktok.com/@meghchasesfreedom/video/7712585343396007181",
+        "posted": true,
+        "status": "ok"
+      },
+      "seancacho": {
+        "permalink": "https://www.instagram.com/p/DgO69KKqhw6/",
+        "posted": true,
+        "status": "ok"
+      },
+      "somafemme": {
+        "posted": false,
+        "status": "ok"
+      },
+      "tippi_madz": {
+        "permalink": "https://www.instagram.com/p/DgOGYooyMIN/",
+        "posted": true,
+        "status": "ok"
+      }
+    },
     "2026-11-27": {},
     "2026-11-28": {},
     "2026-11-29": {},
@@ -548,5 +595,5 @@
   "platforms": {
     "meghchasesfreedom": "tiktok"
   },
-  "updated_at": "2026-11-26T09:58:11.729838-08:00"
+  "updated_at": "2026-11-27T09:40:55.372053-08:00"
 }
