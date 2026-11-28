@@ -563,7 +563,53 @@
         "status": "ok"
       }
     },
-    "2026-11-27": {},
+    "2026-11-27": {
+      "_alexlago_": {
+        "posted": false,
+        "status": "ok"
+      },
+      "dingdongduong": {
+        "posted": false,
+        "status": "ok"
+      },
+      "efficient_movement": {
+        "message": "account is private or has no visible posts",
+        "status": "error"
+      },
+      "getlakhi": {
+        "posted": false,
+        "status": "ok"
+      },
+      "itsjisselrivera": {
+        "message": "account is private or has no visible posts",
+        "status": "error"
+      },
+      "karthik_g_vijay": {
+        "permalink": "https://www.instagram.com/p/DgRS6nqxWC0/",
+        "posted": true,
+        "status": "ok"
+      },
+      "meghchasesfreedom": {
+        "permalink": "https://www.tiktok.com/@meghchasesfreedom/video/7713044696708287758",
+        "posted": true,
+        "status": "ok"
+      },
+      "seancacho": {
+        "permalink": "https://www.instagram.com/p/DgRLgIMq-q_/",
+        "posted": true,
+        "status": "ok"
+      },
+      "somafemme": {
+        "permalink": "https://www.instagram.com/p/DgQQ-imsyDc/",
+        "posted": true,
+        "status": "ok"
+      },
+      "tippi_madz": {
+        "permalink": "https://www.instagram.com/p/DgQZrl-I7bK/",
+        "posted": true,
+        "status": "ok"
+      }
+    },
     "2026-11-28": {},
     "2026-11-29": {},
     "2026-11-30": {},
@@ -595,5 +641,5 @@
   "platforms": {
     "meghchasesfreedom": "tiktok"
   },
-  "updated_at": "2026-11-27T09:40:55.372053-08:00"
+  "updated_at": "2026-11-28T08:26:59.479411-08:00"
 }
